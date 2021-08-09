@@ -1,4 +1,4 @@
-=== Twenty Twenty ===
+=== Pray4Movement ===
 Contributors: the WordPress team
 Tested up to: 5.8
 Stable tag: 1.8
@@ -69,8 +69,8 @@ Initial release
 
 == Copyright ==
 
-Twenty Twenty WordPress Theme, Copyright 2019-2021 WordPress.org
-Twenty Twenty is distributed under the terms of the GNU GPL.
+Pray4Movement WordPress Theme, Copyright 2019-2021 WordPress.org
+Pray4Movement is distributed under the terms of the GNU GPL.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -82,10 +82,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
-Twenty Twenty is derived from the Chaplin Theme, Copyright 2019 Anders Norén
+Pray4Movement is derived from the Chaplin Theme, Copyright 2019 Anders Norén
 Chaplin Theme is distributed under the terms of the GNU GPL version 2.0
 
-Twenty Twenty bundles the following third-party resources:
+Pray4Movement bundles the following third-party resources:
 
 Illustrations by Tammie Lister
 License: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/
@@ -95,7 +95,7 @@ Copyright (c) 2016-2019 The Inter Project Authors (me@rsms.me)
 License: SIL Open Font License, 1.1, https://opensource.org/licenses/OFL-1.1
 Source: https://rsms.me/inter/
 
-Bespoke Icons Created For Twenty Twenty
+Bespoke Icons Created For Pray4Movement
 License: Creative Commons Zero (CC0), https://creativecommons.org/publicdomain/zero/1.0/
 List of bespoke icons:
 - Search icon
@@ -123,16 +123,16 @@ License: GPLv2
 Source: https://wordpress.org/themes/twentynineteen/
 Included as part of the following classes and functions:
 - TwentyTwenty_SVG_Icons
-- twentytwenty_the_theme_svg()
-- twentytwenty_get_theme_svg()
-- twentytwenty_nav_menu_social_icons()
+- pray4movement_the_theme_svg()
+- pray4movement_get_theme_svg()
+- pray4movement_nav_menu_social_icons()
 
 Code from Twenty Seventeen
 Copyright (c) 2016-2021 WordPress.org
 License: GPLv2
 Source: https://wordpress.org/themes/twentyseventeen/
 Included as part of the following classes and functions:
-- twentytwenty_unique_id()
+- pray4movement_unique_id()
 
 Underscores
 https://underscores.me/, (C) 2012-2021 Automattic, Inc., [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)

@@ -1,5 +1,5 @@
 {
-	"name": "twentytwenty",
+	"name": "pray4movement",
 	"version": "1.8.0",
 	"description": "Default WP Theme",
 	"author": "The WordPress Contributors",
@@ -9,7 +9,7 @@
 		"Theme",
 		"TwentyTwenty"
 	],
-	"homepage": "https://wordpress.org/themes/twentytwenty/",
+	"homepage": "https://wordpress.org/themes/pray4movement/",
 	"bugs": {
 		"url": "https://core.trac.wordpress.org/"
 	},

@@ -1,12 +1,12 @@
 <?php
 /**
- * Header file for the Twenty Twenty WordPress default theme.
+ * Header file for the Pray4Movement WordPress default theme.
  *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
  * @package WordPress
  * @subpackage Twenty_Twenty
- * @since Twenty Twenty 1.0
+ * @since Pray4Movement 1.0
  */
 
 ?><!DOCTYPE html>
@@ -48,9 +48,9 @@
 						<button class="toggle search-toggle mobile-search-toggle" data-toggle-target=".search-modal" data-toggle-body-class="showing-search-modal" data-set-focus=".search-modal .search-field" aria-expanded="false">
 							<span class="toggle-inner">
 								<span class="toggle-icon">
-									<?php twentytwenty_the_theme_svg( 'search' ); ?>
+									<?php pray4movement_the_theme_svg( 'search' ); ?>
 								</span>
-								<span class="toggle-text"><?php _ex( 'Search', 'toggle text', 'twentytwenty' ); ?></span>
+								<span class="toggle-text"><?php _ex( 'Search', 'toggle text', 'pray4movement' ); ?></span>
 							</span>
 						</button><!-- .search-toggle -->
 
@@ -60,10 +60,10 @@
 
 						<?php
 							// Site title or logo.
-							twentytwenty_site_logo();
+							pray4movement_site_logo();
 
 							// Site description.
-							twentytwenty_site_description();
+							pray4movement_site_description();
 						?>
 
 					</div><!-- .header-titles -->
@@ -71,9 +71,9 @@
 					<button class="toggle nav-toggle mobile-nav-toggle" data-toggle-target=".menu-modal"  data-toggle-body-class="showing-menu-modal" aria-expanded="false" data-set-focus=".close-nav-toggle">
 						<span class="toggle-inner">
 							<span class="toggle-icon">
-								<?php twentytwenty_the_theme_svg( 'ellipsis' ); ?>
+								<?php pray4movement_the_theme_svg( 'ellipsis' ); ?>
 							</span>
-							<span class="toggle-text"><?php _e( 'Menu', 'twentytwenty' ); ?></span>
+							<span class="toggle-text"><?php _e( 'Menu', 'pray4movement' ); ?></span>
 						</span>
 					</button><!-- .nav-toggle -->
 
@@ -85,7 +85,7 @@
 					if ( has_nav_menu( 'primary' ) || ! has_nav_menu( 'expanded' ) ) {
 						?>
 
-							<nav class="primary-menu-wrapper" aria-label="<?php echo esc_attr_x( 'Horizontal', 'menu', 'twentytwenty' ); ?>" role="navigation">
+							<nav class="primary-menu-wrapper" aria-label="<?php echo esc_attr_x( 'Horizontal', 'menu', 'pray4movement' ); ?>" role="navigation">
 
 								<ul class="primary-menu reset-list-style">
 
@@ -134,9 +134,9 @@
 
 								<button class="toggle nav-toggle desktop-nav-toggle" data-toggle-target=".menu-modal" data-toggle-body-class="showing-menu-modal" aria-expanded="false" data-set-focus=".close-nav-toggle">
 									<span class="toggle-inner">
-										<span class="toggle-text"><?php _e( 'Menu', 'twentytwenty' ); ?></span>
+										<span class="toggle-text"><?php _e( 'Menu', 'pray4movement' ); ?></span>
 										<span class="toggle-icon">
-											<?php twentytwenty_the_theme_svg( 'ellipsis' ); ?>
+											<?php pray4movement_the_theme_svg( 'ellipsis' ); ?>
 										</span>
 									</span>
 								</button><!-- .nav-toggle -->
@@ -153,8 +153,8 @@
 
 								<button class="toggle search-toggle desktop-search-toggle" data-toggle-target=".search-modal" data-toggle-body-class="showing-search-modal" data-set-focus=".search-modal .search-field" aria-expanded="false">
 									<span class="toggle-inner">
-										<?php twentytwenty_the_theme_svg( 'search' ); ?>
-										<span class="toggle-text"><?php _ex( 'Search', 'toggle text', 'twentytwenty' ); ?></span>
+										<?php pray4movement_the_theme_svg( 'search' ); ?>
+										<span class="toggle-text"><?php _ex( 'Search', 'toggle text', 'pray4movement' ); ?></span>
 									</span>
 								</button><!-- .search-toggle -->
 

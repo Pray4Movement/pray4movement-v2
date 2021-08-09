@@ -4,14 +4,14 @@
  *
  * Contains handlers to make Theme Customizer preview reload changes asynchronously.
  *
- * @since Twenty Twenty 1.0
+ * @since Pray4Movement 1.0
  */
 
 ( function( $, api, _ ) {
 	/**
 	 * Return a value for our partial refresh.
 	 *
-	 * @since Twenty Twenty 1.0
+	 * @since Pray4Movement 1.0
 	 *
 	 * @param {Object} partial  Current partial.
 	 *
@@ -33,7 +33,7 @@
 		/**
 		 * Override the refresh method.
 		 *
-		 * @since Twenty Twenty 1.0
+		 * @since Pray4Movement 1.0
 		 *
 		 * @return {jQuery.Promise} Resolved promise.
 		 */
@@ -59,7 +59,7 @@
 		/**
 		 * Input attributes.
 		 *
-		 * @since Twenty Twenty 1.0
+		 * @since Pray4Movement 1.0
 		 * @type {Object}
 		 */
 		attrs: {},
@@ -67,7 +67,7 @@
 		/**
 		 * Override the refresh method.
 		 *
-		 * @since Twenty Twenty 1.0
+		 * @since Pray4Movement 1.0
 		 *
 		 * @return {jQuery.Promise} Resolved promise.
 		 */
@@ -153,7 +153,7 @@
 	/**
 	 * Add styles to elements in the preview pane.
 	 *
-	 * @since Twenty Twenty 1.0
+	 * @since Pray4Movement 1.0
 	 *
 	 * @param {string} context The area for which we want to generate styles. Can be for example "content", "header" etc.
 	 *
@@ -162,12 +162,12 @@
 	function twentyTwentyGenerateColorA11yPreviewStyles( context ) {
 		// Get the accessible colors option.
 		var a11yColors = window.parent.wp.customize( 'accent_accessible_colors' ).get(),
-			stylesheedID = 'twentytwenty-customizer-styles-' + context,
+			stylesheedID = 'pray4movement-customizer-styles-' + context,
 			stylesheet = $( '#' + stylesheedID ),
 			styles = '';
 		// If the stylesheet doesn't exist, create it and append it to <head>.
 		if ( ! stylesheet.length ) {
-			$( '#twentytwenty-style-inline-css' ).after( '<style id="' + stylesheedID + '"></style>' );
+			$( '#pray4movement-style-inline-css' ).after( '<style id="' + stylesheedID + '"></style>' );
 			stylesheet = $( '#' + stylesheedID );
 		}
 		if ( ! _.isUndefined( a11yColors[ context ] ) ) {

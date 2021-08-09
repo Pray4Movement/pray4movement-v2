@@ -4,7 +4,7 @@
  *
  * Contains extra logic for our Customizer controls & settings.
  *
- * @since Twenty Twenty 1.0
+ * @since Pray4Movement 1.0
  */
 
 ( function() {
@@ -51,7 +51,7 @@
 	/**
 	 * Updates the value of the "accent_accessible_colors" setting.
 	 *
-	 * @since Twenty Twenty 1.0
+	 * @since Pray4Movement 1.0
 	 *
 	 * @param {string} context The area for which we want to get colors. Can be for example "content", "header" etc.
 	 * @param {string} backgroundColor The background color (HEX value).
@@ -102,7 +102,7 @@
 	/**
 	 * Shows or hides the "retina_logo" setting based on the given value.
 	 *
-	 * @since Twenty Twenty 1.3
+	 * @since Pray4Movement 1.3
 	 *
 	 * @param {boolean} visible The visible value.
 	 *
