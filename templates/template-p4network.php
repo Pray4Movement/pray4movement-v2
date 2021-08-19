@@ -62,7 +62,6 @@ get_header();
                     <div class="wp-block-columns">
                     <?php
                     foreach( $post_block as $p ) {
-                        dt_write_log($p);
                         $meta = get_post_meta($p->ID);
                         ?>
                         <div class="wp-block-column box-border"><!-- wp:group -->
