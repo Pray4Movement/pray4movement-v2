@@ -11,13 +11,13 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_Script_Loader' ) ) {
+if ( ! class_exists( 'Pray4_Movement_Script_Loader' ) ) {
 	/**
 	 * A class that provides a way to add `async` or `defer` attributes to scripts.
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_Script_Loader {
+	class Pray4_Movement_Script_Loader {
 
 		/**
 		 * Adds async/defer attributes to enqueued / registered scripts.

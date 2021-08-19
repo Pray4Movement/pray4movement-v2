@@ -142,7 +142,7 @@ function pray4movement_theme_support() {
 	 * Adds `async` and `defer` support for scripts registered or enqueued
 	 * by the theme.
 	 */
-	$loader = new TwentyTwenty_Script_Loader();
+	$loader = new Pray4_Movement_Script_Loader();
 	add_filter( 'script_loader_tag', array( $loader, 'filter_script_loader_tag' ), 10, 2 );
 
 }
@@ -182,6 +182,7 @@ require get_template_directory() . '/inc/custom-css.php';
 
 // Block Patterns.
 require get_template_directory() . '/inc/block-patterns.php';
+require get_template_directory() . '/functions/p4network-post-type.php';
 
 /**
  * Register and Enqueue Styles.
@@ -221,6 +222,10 @@ function pray4movement_register_scripts() {
 	wp_enqueue_script( 'pray4movement-js', get_template_directory_uri() . '/assets/js/index.js', array(), $theme_version, false );
 	wp_script_add_data( 'pray4movement-js', 'async', true );
 
+
+//    wp_enqueue_script( 'foundations-js', get_template_directory_uri() . '/foundation-sites/dist/js/foundation.min.js', array('jquery'), '20', false );
+//    wp_enqueue_style( 'foundations-css', get_template_directory_uri() . '/foundation-sites/dist/css/foundation.min.css', array(), '20' );
+
 }
 
 add_action( 'wp_enqueue_scripts', 'pray4movement_register_scripts' );
@@ -253,7 +258,7 @@ add_action( 'wp_print_footer_scripts', 'pray4movement_skip_link_focus_fix' );
  * @return void
  */
 function pray4movement_non_latin_languages() {
-	$custom_css = TwentyTwenty_Non_Latin_Languages::get_non_latin_css( 'front-end' );
+	$custom_css = Pray4_Movement_Non_Latin_Languages::get_non_latin_css( 'front-end' );
 
 	if ( $custom_css ) {
 		wp_add_inline_style( 'pray4movement-style', $custom_css );
@@ -424,7 +429,7 @@ function pray4movement_block_editor_styles() {
 	wp_add_inline_style( 'pray4movement-block-editor-styles', pray4movement_get_customizer_css( 'block-editor' ) );
 
 	// Add inline style for non-latin fonts.
-	wp_add_inline_style( 'pray4movement-block-editor-styles', TwentyTwenty_Non_Latin_Languages::get_non_latin_css( 'block-editor' ) );
+//	wp_add_inline_style( 'pray4movement-block-editor-styles', Pray4_Movement_Non_Latin_Languages::get_non_latin_css( 'block-editor' ) );
 
 	// Enqueue the editor script.
 	wp_enqueue_script( 'pray4movement-block-editor-script', get_theme_file_uri( '/assets/js/editor-script-block.js' ), array( 'wp-blocks', 'wp-dom' ), wp_get_theme()->get( 'Version' ), true );
@@ -483,7 +488,7 @@ add_filter( 'tiny_mce_before_init', 'pray4movement_add_classic_editor_customizer
  */
 function pray4movement_add_classic_editor_non_latin_styles( $mce_init ) {
 
-	$styles = TwentyTwenty_Non_Latin_Languages::get_non_latin_css( 'classic-editor' );
+//	$styles = Pray4_Movement_Non_Latin_Languages::get_non_latin_css( 'classic-editor' );
 
 	// Return if there are no styles to add.
 	if ( ! $styles ) {

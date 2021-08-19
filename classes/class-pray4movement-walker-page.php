@@ -7,14 +7,14 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_Walker_Page' ) ) {
+if ( ! class_exists( 'Pray4_Movement_Walker_Page' ) ) {
 	/**
 	 * CUSTOM PAGE WALKER
 	 * A custom walker for pages.
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_Walker_Page extends Walker_Page {
+	class Pray4_Movement_Walker_Page extends Walker_Page {
 
 		/**
 		 * Outputs the beginning of the current element in the tree.

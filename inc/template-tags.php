@@ -613,7 +613,7 @@ add_filter( 'nav_menu_item_args', 'pray4movement_add_sub_toggles_to_main_menu', 
 function pray4movement_nav_menu_social_icons( $item_output, $item, $depth, $args ) {
 	// Change SVG icon inside social links menu if there is supported URL.
 	if ( 'social' === $args->theme_location ) {
-		$svg = TwentyTwenty_SVG_Icons::get_social_link_svg( $item->url );
+		$svg = Pray4_Movement_SVG_Icons::get_social_link_svg( $item->url );
 		if ( empty( $svg ) ) {
 			$svg = pray4movement_get_theme_svg( 'link' );
 		}

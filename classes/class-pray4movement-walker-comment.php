@@ -7,14 +7,14 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_Walker_Comment' ) ) {
+if ( ! class_exists( 'Pray4_Movement_Walker_Comment' ) ) {
 	/**
 	 * CUSTOM COMMENT WALKER
 	 * A custom walker for comments, based on the walker in Twenty Nineteen.
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_Walker_Comment extends Walker_Comment {
+	class Pray4_Movement_Walker_Comment extends Walker_Comment {
 
 		/**
 		 * Outputs a comment in the HTML5 format.

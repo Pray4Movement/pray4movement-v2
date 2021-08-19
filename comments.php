@@ -60,7 +60,7 @@ if ( $comments ) {
 			<?php
 			wp_list_comments(
 				array(
-					'walker'      => new TwentyTwenty_Walker_Comment(),
+					'walker'      => new Pray4_Movement_Walker_Comment(),
 					'avatar_size' => 120,
 					'style'       => 'div',
 				)

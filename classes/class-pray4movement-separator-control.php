@@ -9,13 +9,13 @@
 
 if ( class_exists( 'WP_Customize_Control' ) ) {
 
-	if ( ! class_exists( 'TwentyTwenty_Separator_Control' ) ) {
+	if ( ! class_exists( 'Pray4_Movement_Separator_Control' ) ) {
 		/**
 		 * Separator Control.
 		 *
 		 * @since Pray4Movement 1.0
 		 */
-		class TwentyTwenty_Separator_Control extends WP_Customize_Control {
+		class Pray4_Movement_Separator_Control extends WP_Customize_Control {
 			/**
 			 * Render the hr.
 			 *

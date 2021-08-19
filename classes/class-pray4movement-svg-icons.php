@@ -7,14 +7,14 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_SVG_Icons' ) ) {
+if ( ! class_exists( 'Pray4_Movement_SVG_Icons' ) ) {
 	/**
 	 * SVG ICONS CLASS
 	 * Retrieve the SVG code for the specified icon. Based on a solution in Twenty Nineteen.
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_SVG_Icons {
+	class Pray4_Movement_SVG_Icons {
 		/**
 		 * GET SVG CODE
 		 * Get the SVG code for the specified icon

@@ -9,13 +9,13 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_Non_Latin_Languages' ) ) {
+if ( ! class_exists( 'Pray4_Movement_Non_Latin_Languages' ) ) {
 	/**
 	 * Language handling.
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_Non_Latin_Languages {
+	class Pray4_Movement_Non_Latin_Languages {
 
 		/**
 		 * Get custom CSS.

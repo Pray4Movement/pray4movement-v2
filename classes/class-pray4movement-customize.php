@@ -7,13 +7,13 @@
  * @since Pray4Movement 1.0
  */
 
-if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
+if ( ! class_exists( 'Pray4_Movement_Customize' ) ) {
 	/**
 	 * CUSTOMIZER SETTINGS
 	 *
 	 * @since Pray4Movement 1.0
 	 */
-	class TwentyTwenty_Customize {
+	class Pray4_Movement_Customize {
 
 		/**
 		 * Register customizer options.
@@ -329,7 +329,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 			);
 
 			$wp_customize->add_control(
-				new TwentyTwenty_Separator_Control(
+				new Pray4_Movement_Separator_Control(
 					$wp_customize,
 					'cover_template_separator_1',
 					array(
@@ -466,7 +466,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 	}
 
 	// Setup the Theme Customizer settings and controls.
-	add_action( 'customize_register', array( 'TwentyTwenty_Customize', 'register' ) );
+	add_action( 'customize_register', array( 'Pray4_Movement_Customize', 'register' ) );
 
 }
 

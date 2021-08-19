@@ -122,7 +122,7 @@ Copyright (c) 2018-2021 WordPress.org
 License: GPLv2
 Source: https://wordpress.org/themes/twentynineteen/
 Included as part of the following classes and functions:
-- TwentyTwenty_SVG_Icons
+- Pray4_Movement_SVG_Icons
 - pray4movement_the_theme_svg()
 - pray4movement_get_theme_svg()
 - pray4movement_nav_menu_social_icons()
