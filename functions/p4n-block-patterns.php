@@ -36,6 +36,7 @@ if ( function_exists( 'register_block_pattern' ) ) {
             'content'       => implode(
                 '',
                 array(
+                    '<!-- wp:media-text {"mediaId":128,"mediaLink":"/1900x1200_img_1/","mediaType":"image"} -->',
                     '<div class="wp-block-media-text alignwide is-stacked-on-mobile"><figure class="wp-block-media-text__media"><img src="https://via.placeholder.com/1024x647?text=Pray4 Graphic" alt="" class="wp-image-128 size-full"/></figure><div class="wp-block-media-text__content"><!-- wp:heading -->',
                     '<h2>Pray4Colorado</h2>',
                     '<!-- /wp:heading -->',
