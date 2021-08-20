@@ -181,7 +181,7 @@ require get_template_directory() . '/classes/class-pray4movement-non-latin-langu
 require get_template_directory() . '/inc/custom-css.php';
 
 // Block Patterns.
-require get_template_directory() . '/inc/block-patterns.php';
+require get_template_directory() . '/functions/p4n-block-patterns.php';
 require get_template_directory() . '/functions/p4network-post-type.php';
 
 /**
