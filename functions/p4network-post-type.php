@@ -47,45 +47,13 @@ class P4_Network_Post_Type
         add_action( 'init', [ $this, 'register_post_type' ] );
         add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
         add_action( 'save_post', [ $this, 'save_meta_box' ] );
-//        add_shortcode('network_list', [ $this, 'shortcode' ] );
 
     } // End __construct()
 
-    public function shortcode() {
-
-//        $content = '';
-//
-//        $args = array(
-//            'post_type' => $this->post_type,
-//            'post_status' => 'publish',
-//            'posts_per_page' => -1,
-//            'orderby' => 'post_date',
-//            'order' => 'DESC'
-//        );
-//        $list = new WP_Query( $args );
-//        if ( empty( $list->posts ) ) {
-//            return '';
-//        }
-//
-//        $posts = array_chunk( $list->posts, 3 );
-//        foreach( $posts as $post_block ) {
-//            $content .= '<div class="wp-block-columns">';
-//
-//            foreach( $post_block as $p ) {
-//                $content .= $p->post_title . ' <br>';
-//            }
-//
-//            $content .= '</div><!--wp-block-columns-->';
-//        }
-//
-//
-//        return $content;
-    }
-
     public function add_meta_box( $post_type ) {
         if ( $this->post_type === $post_type ) {
-            add_meta_box( $this->post_type . '_custom_fields', 'Network Fields', [ $this, 'meta_box_custom_fields'], $this->post_type, 'normal', 'high' );
-            add_meta_box( $this->post_type . '_instructions', 'Instructions', [ $this, 'meta_box_instructions'], $this->post_type, 'normal', 'low' );
+            add_meta_box( $this->post_type . '_custom_fields', 'Network Fields', [ $this, 'meta_box_custom_fields'], $this->post_type, 'side', 'high' );
+            add_meta_box( $this->post_type . '_instructions', 'Instructions', [ $this, 'meta_box_instructions'], $this->post_type, 'side', 'low' );
         }
     }
 
@@ -211,7 +179,7 @@ class P4_Network_Post_Type
                 'capability_type' => 'post',
                 'hierarchical' => false,
                 'show_in_rest' => true,
-                'supports' => array( 'title',  'thumbnail' )
+                'supports' => array( 'title', 'editor', 'thumbnail' )
             ) /* end of options */
         ); /* end of register post type */
     } // End register_post_type()
