@@ -28,7 +28,7 @@ if ( function_exists( 'register_block_pattern' ) ) {
 
     // Call to Action.
     register_block_pattern(
-        'pray4movement/call-to-action',
+        'pray4movement/single-page',
         array(
             'title'         => esc_html__( 'Pray4Movement Single Page', 'pray4movement' ),
             'categories'    => array( 'pray4movement' ),
@@ -36,19 +36,16 @@ if ( function_exists( 'register_block_pattern' ) ) {
             'content'       => implode(
                 '',
                 array(
-                    '<!-- wp:group {"align":"wide","style":{"color":{"background":"#ffffff"}}} -->',
-                    '<div class="wp-block-group alignwide has-background" style="background-color:#ffffff"><div class="wp-block-group__inner-container"><!-- wp:group -->',
-                    '<div class="wp-block-group"><div class="wp-block-group__inner-container"><!-- wp:heading {"align":"center"} -->',
-                    '<h2 class="has-text-align-center">' . esc_html__( 'Support the Museum and Get Exclusive Offers', 'pray4movement' ) . '</h2>',
+                    '<div class="wp-block-media-text alignwide is-stacked-on-mobile"><figure class="wp-block-media-text__media"><img src="https://via.placeholder.com/1024x647?text=Pray4 Graphic" alt="" class="wp-image-128 size-full"/></figure><div class="wp-block-media-text__content"><!-- wp:heading -->',
+                    '<h2>Pray4Colorado</h2>',
                     '<!-- /wp:heading -->',
-                    '<!-- wp:paragraph {"align":"center"} -->',
-                    '<p class="has-text-align-center">' . esc_html__( 'Members get access to exclusive exhibits and sales. Our memberships cost $99.99 and are billed annually.', 'pray4movement' ) . '</p>',
+                    '<!-- wp:paragraph -->',
+                    '<p>Praying for a disciple making movement in Colorado.</p>',
                     '<!-- /wp:paragraph -->',
-                    '<!-- wp:button {"align":"center","className":"is-style-outline"} -->',
-                    '<div class="wp-block-button aligncenter is-style-outline"><a class="wp-block-button__link" href="#">' . esc_html__( 'Become a Member', 'pray4movement' ) . '</a></div>',
-                    '<!-- /wp:button --></div></div>',
-                    '<!-- /wp:group --></div></div>',
-                    '<!-- /wp:group -->',
+                    '<!-- wp:genesis-blocks/gb-button {"buttonText":"View Website"} -->',
+                    '<div class="wp-block-genesis-blocks-gb-button gb-block-button"><a href="https://pray4colorado.org" class="gb-button gb-button-shape-rounded gb-button-size-medium" style="color:#ffffff;background-color:#3373dc">View Website</a></div>',
+                    '<!-- /wp:genesis-blocks/gb-button --></div></div>',
+                    '<!-- /wp:media-text -->',
                 )
             ),
         )
