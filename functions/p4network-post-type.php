@@ -179,7 +179,7 @@ class P4_Network_Post_Type
                 'capability_type' => 'post',
                 'hierarchical' => false,
                 'show_in_rest' => true,
-                'supports' => array( 'title', 'editor', 'thumbnail' )
+                'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt' )
             ) /* end of options */
         ); /* end of register post type */
     } // End register_post_type()
