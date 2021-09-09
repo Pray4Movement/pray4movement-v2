@@ -1,36 +1,38 @@
 <?php
 /**
- * The template for displaying the 404 template in the Pray4Movement theme.
+ * The template for displaying 404 (page not found) pages.
  *
- * @package WordPress
- * @subpackage Twenty_Twenty
- * @since Pray4Movement 1.0
+ * For more info: https://codex.wordpress.org/Creating_an_Error_404_Page
  */
 
-get_header();
-?>
+get_header(); ?>
 
-<main id="site-content" role="main">
+    <div class="content">
 
-	<div class="section-inner thin error404-content">
+        <div class="inner-content grid-x grid-margin-x grid-padding-x">
 
-		<h1 class="entry-title"><?php _e( 'Page Not Found', 'pray4movement' ); ?></h1>
+            <main class="main small-12 medium-8 large-8 cell" role="main">
 
-		<div class="intro-text"><p><?php _e( 'The page you were looking for could not be found. It might have been removed, renamed, or did not exist in the first place.', 'pray4movement' ); ?></p></div>
+                <article class="content-not-found">
 
-		<?php
-		get_search_form(
-			array(
-				'aria_label' => __( '404 not found', 'pray4movement' ),
-			)
-		);
-		?>
+                    <header class="article-header">
+                        <h1><?php esc_html_e( 'Epic 404 - Article Not Found', 'dtps' ); ?></h1>
+                    </header> <!-- end article header -->
 
-	</div><!-- .section-inner -->
+                    <section class="entry-content">
+                        <p><?php esc_html_e( 'The article you were looking for was not found, but maybe try looking again!', 'dtps' ); ?></p>
+                    </section> <!-- end article section -->
 
-</main><!-- #site-content -->
+                    <section class="search">
+                        <p><?php get_search_form(); ?></p>
+                    </section> <!-- end search section -->
 
-<?php get_template_part( 'template-parts/footer-menus-widgets' ); ?>
+                </article> <!-- end article -->
 
-<?php
-get_footer();
+            </main> <!-- end #main -->
+
+        </div> <!-- end #inner-content -->
+
+    </div> <!-- end #content -->
+
+<?php get_footer(); ?>
