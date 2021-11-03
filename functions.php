@@ -183,6 +183,7 @@ require get_template_directory() . '/inc/custom-css.php';
 // Block Patterns.
 require get_template_directory() . '/functions/p4n-block-patterns.php';
 require get_template_directory() . '/functions/p4network-post-type.php';
+require_once( get_template_directory() . '/functions/shortcodes.php' );
 
 /**
  * Register and Enqueue Styles.
