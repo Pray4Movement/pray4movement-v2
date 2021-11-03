@@ -5,54 +5,115 @@
  * This is the most generic template file in a WordPress theme
  * and one of the two required files for a theme (the other being style.css).
  * It is used to display a page when nothing more specific matches a query.
+ * E.g., it puts together the home page when no home.php file exists.
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package WordPress
+ * @subpackage Twenty_Twenty
+ * @since Pray4Movement 1.0
  */
 
-get_header(); ?>
+get_header();
+?>
 
-    <div class="content white-section">
+<main id="site-content" role="main">
 
-        <div class="inner-content grid-x grid-margin-x grid-padding-x padding-vertical-1">
+	<?php
 
-            <div class="cell medium-1"></div>
+	$archive_title    = '';
+	$archive_subtitle = '';
 
-            <main class="main small-12 medium-10 large-10 cell" role="main">
+	if ( is_search() ) {
+		global $wp_query;
 
-                <div class="grid-x grid-margin-x">
+		$archive_title = sprintf(
+			'%1$s %2$s',
+			'<span class="color-accent">' . __( 'Search:', 'pray4movement' ) . '</span>',
+			'&ldquo;' . get_search_query() . '&rdquo;'
+		);
 
-                    <div class="cell medium-8">
+		if ( $wp_query->found_posts ) {
+			$archive_subtitle = sprintf(
+				/* translators: %s: Number of search results. */
+				_n(
+					'We found %s result for your search.',
+					'We found %s results for your search.',
+					$wp_query->found_posts,
+					'pray4movement'
+				),
+				number_format_i18n( $wp_query->found_posts )
+			);
+		} else {
+			$archive_subtitle = __( 'We could not find any results for your search. You can give it another try through the search form below.', 'pray4movement' );
+		}
+	} elseif ( is_archive() && ! have_posts() ) {
+		$archive_title = __( 'Nothing Found', 'pray4movement' );
+	} elseif ( ! is_home() ) {
+		$archive_title    = get_the_archive_title();
+		$archive_subtitle = get_the_archive_description();
+	}
 
-                        <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+	if ( $archive_title || $archive_subtitle ) {
+		?>
 
-                            <!-- To see additional archive styles, visit the /parts directory -->
-                                <?php get_template_part( 'parts/loop', 'archive' ); ?>
+		<header class="archive-header has-text-align-center header-footer-group">
 
-                        <?php endwhile; ?>
+			<div class="archive-header-inner section-inner medium">
 
-                            <?php dtps_page_navi(); ?>
+				<?php if ( $archive_title ) { ?>
+					<h1 class="archive-title"><?php echo wp_kses_post( $archive_title ); ?></h1>
+				<?php } ?>
 
-                        <?php else : ?>
+				<?php if ( $archive_subtitle ) { ?>
+					<div class="archive-subtitle section-inner thin max-percentage intro-text"><?php echo wp_kses_post( wpautop( $archive_subtitle ) ); ?></div>
+				<?php } ?>
 
-                            <?php get_template_part( 'parts/content', 'missing' ); ?>
+			</div><!-- .archive-header-inner -->
 
-                        <?php endif; ?>
-                    </div>
+		</header><!-- .archive-header -->
 
-                    <div class="cell medium-4">
+		<?php
+	}
 
-                        <!-- other sidebar elements -->
-                        <?php get_sidebar(); ?>
+	if ( have_posts() ) {
 
+		$i = 0;
 
-                    </div>
+		while ( have_posts() ) {
+			$i++;
+			if ( $i > 1 ) {
+				echo '<hr class="post-separator styled-separator is-style-wide section-inner" aria-hidden="true" />';
+			}
+			the_post();
 
-                </div>
+			get_template_part( 'template-parts/content', get_post_type() );
 
-            </main> <!-- end #main -->
+		}
+	} elseif ( is_search() ) {
+		?>
 
-            <div class="cell medium-1"></div>
+		<div class="no-search-results-form section-inner thin">
 
-        </div> <!-- end #inner-content -->
+			<?php
+			get_search_form(
+				array(
+					'aria_label' => __( 'search again', 'pray4movement' ),
+				)
+			);
+			?>
 
-    </div> <!-- end #content -->
+		</div><!-- .no-search-results -->
 
-<?php get_footer(); ?>
+		<?php
+	}
+	?>
+
+	<?php get_template_part( 'template-parts/pagination' ); ?>
+
+</main><!-- #site-content -->
+
+<?php //get_template_part( 'template-parts/footer-menus-widgets' ); ?>
+
+<?php
+get_footer();
