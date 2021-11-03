@@ -4,7 +4,6 @@ if ( !function_exists( "dt_cached_api_call")){
     function dt_cached_api_call( $url ){
         $data = get_transient( "dt_cached_" . esc_url( $url ) );
         if ( empty( $data ) ){
-            $url = "http://ramadandemo.p4m.local/wp-json/campaign_app/v1/24hour/campaign_info?action=get&parts%5Broot%5D=campaign_app&parts%5Btype%5D=24hour&parts%5Bpublic_key%5D=bb7569b7f3ac9a0a6e984eb357b853d0100b8666d5fae8b266f2a3d8564e0e03&parts%5Bmeta_key%5D=campaign_app_24hour_magic_key&parts%5Bpost_id%5D=69&parts%5Blang%5D=en_US";
             $response = wp_remote_get( $url );
             if ( is_wp_error( $response ) ){
                 return $response;
