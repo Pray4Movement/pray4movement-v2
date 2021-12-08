@@ -145,6 +145,11 @@ function pray4movement_theme_support() {
 	$loader = new Pray4_Movement_Script_Loader();
 	add_filter( 'script_loader_tag', array( $loader, 'filter_script_loader_tag' ), 10, 2 );
 
+    /**
+     * dt-mapping
+     */
+    require_once( 'dt-mapping/loader.php' );
+    new DT_Mapping_Module_Loader();
 }
 
 add_action( 'after_setup_theme', 'pray4movement_theme_support' );
