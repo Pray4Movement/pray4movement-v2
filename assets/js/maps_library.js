@@ -100,33 +100,11 @@ let mapbox_library_api = {
       </style>
       <div id="map-wrapper">
         <div id='map'></div>
-        <div id='legend' class='legend'>
-          <div id="legend-bar" class="grid-x grid-margin-x grid-padding-x">
-            <div class="cell small-2 center info-bar-font">
-                ${window.lodash.escape( this.title )}
-            </div>
-            <div id="map-type" class="border-left">
-              <button class="button small ${mapbox_library_api.current_map_type === 'cluster' ? 'selected-select-button': ' empty-select-button' }"
-                id="cluster">
-                <img src="/dt-assets/images/dots.svg">
-              </button>
-              <button class="button small ${mapbox_library_api.current_map_type === 'points' ? 'selected-select-button': ' empty-select-button' }"
-                id="points">
-                <img src="/dt-assets/images/dot.svg">
-              </button>
-              <button class="button small ${mapbox_library_api.current_map_type === 'area' ? 'selected-select-button': ' empty-select-button' }"
-                id="area">
-                <img src="/dt-assets/images/location_shape.svg">
-              </button>
-            </div>
-          </div>
-        </div>
-        <div id="spinner">${spinner_html}</div>
         <div id="geocode-details" class="geocode-details">
-          <span id="geocode-details-title">${window.lodash.escape( this.title )}</span>
+          <h3 id="geocode-details-title" style="text-align:center; color:#dc3822; font-size:2em; margin: 5px">${window.lodash.escape( this.title )}</h3>
           <span class="close-details" style="float:right;"><i class="fi-x"></i></span>
           <hr style="margin:10px 5px;">
-          <div id="geocode-details-content"></div>
+          <div id="geocode-details-content" style="margin-top:15px"></div>
         </div>
       </div>
     `)
@@ -567,7 +545,7 @@ let area_map = {
               'paint': {
                 'fill-color': {
                   property: 'value',
-                  stops: [[0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(155, 200, 254)'], [highest_value, 'rgb(37, 82, 154)']]
+                  stops: [[0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(255,204,205)'], [highest_value, 'rgb(220,56,34)']]
                 },
                 'fill-opacity': 0.75,
                 'fill-outline-color': '#707070',

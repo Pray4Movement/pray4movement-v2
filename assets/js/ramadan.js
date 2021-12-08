@@ -16,7 +16,11 @@ jQuery(document).ready(function($) {
             content_html += `<li>No prayer initiatives here yet</li>`
         }
         initiatives.forEach(initiative=>{
-            content_html += `<li>${window.lodash.escape(initiative.label)}</li>`
+            if ( initiative.link){
+                content_html += `<li><a href="${window.lodash.escape(initiative.link)}">${window.lodash.escape(initiative.label)}</a></li>`
+            } else {
+                content_html += `<li>${window.lodash.escape(initiative.label)}</li>`
+            }
         })
         content_html += `</ul>`;
 

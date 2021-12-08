@@ -60,7 +60,7 @@ function p4m_map_shortcode( $atts ){
                 'map_mirror' => dt_get_location_grid_mirror( true ),
                 'menu_slug' => 'prayer_initiatives',
                 'post_type' => 'prayer_initiatives',
-                'title' => "Title",
+                'title' => "Select a country",
                 'geocoder_url' => trailingslashit( get_stylesheet_directory_uri() ),
                 'geocoder_nonce' => wp_create_nonce( 'wp_rest' ),
                 'rest_base_url' => "p4m/maps",
@@ -124,7 +124,7 @@ function p4m_map_stats( WP_REST_Request $request = null ){
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
         ];
-        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args );
+        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, DAY_IN_SECONDS );
         return json_decode( $response, true );
     }
     return [];

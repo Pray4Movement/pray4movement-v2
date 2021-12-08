@@ -56,6 +56,9 @@
     right: 10px;
     z-index: 2;
 }
+#geocode-details ul {
+    margin:0;
+}
 .geocode-details {
     background-color: #fff;
     border-radius: 3px;
