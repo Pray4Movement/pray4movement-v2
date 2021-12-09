@@ -150,7 +150,7 @@ function p4m_ramadan_campaign_list(){
         </thead>
         <tbody>
             <?php foreach ( $initiatives as $initiative ) :
-                $link = $initiative["campaign_link"] ?? $initiative["initiative_link"];
+                $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
                 if ( !empty($initiative["campaign_progress"]) && is_numeric( $initiative["campaign_progress"] )){
                     $initiative["campaign_progress"] .= '%';
                 }
