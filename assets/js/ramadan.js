@@ -18,6 +18,9 @@ jQuery(document).ready(function($) {
             if ( initiative.campaign_progress && !isNaN(initiative.campaign_progress)){
                 initiative.campaign_progress = ` - ${initiative.campaign_progress}%`
             }
+            if ( !initiative.campaign_progress && initiative.status === "forming" ){
+                initiative.campaign_progress = ` - Setup in progress`
+            }
             if ( link ){
                 content_html += `<li>
                     <a target="_blank" href="${window.lodash.escape(link)}">
@@ -25,7 +28,7 @@ jQuery(document).ready(function($) {
                     </a>
                 </li>`
             } else {
-                content_html += `<li>${window.lodash.escape(initiative.label)}</li>`
+                content_html += `<li>${window.lodash.escape(initiative.label)} ${window.lodash.escape(initiative.campaign_progress)}</li>`
             }
         })
         content_html += `</ul>`;

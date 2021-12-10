@@ -10,7 +10,7 @@ if ( !function_exists( "dt_cached_api_call")){
                 $response = wp_remote_post( $url, $args );
             }
             if ( is_wp_error( $response ) || isset( $response["response"]["code"] ) && $response["response"]["code"] !== 200 ){
-                return $response;
+                return false;
             }
             $data = wp_remote_retrieve_body( $response );
 
@@ -64,12 +64,10 @@ function p4m_map_shortcode( $atts ){
                 'geocoder_url' => trailingslashit( get_stylesheet_directory_uri() ),
                 'geocoder_nonce' => wp_create_nonce( 'wp_rest' ),
                 'rest_base_url' => "p4m/maps",
-                'rest_url' => 'cluster_geojson',
+
                 'totals_rest_url' => 'p4m-map-stats',
                 'list_by_grid_rest_url' => 'p4m-map-stats-data',
-                'points_rest_url' => 'points_geojson',
 
-                'split_by' => [],
             ],
         ]
     );
@@ -88,7 +86,7 @@ function p4m_map_shortcode( $atts ){
             'root' => esc_url_raw( rest_url() ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
             'data' => [
-                'locations' => p4m_map_stats()
+                'locations' => p4m_map_stats_ramadan()
             ],
         ]
     );
@@ -111,7 +109,7 @@ function p4m_map_stats_endpoints(){
 }
 add_action( 'rest_api_init', 'p4m_map_stats_endpoints' );
 
-function p4m_map_stats( WP_REST_Request $request = null ){
+function p4m_map_stats_ramadan( ){
 
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
@@ -119,7 +117,7 @@ function p4m_map_stats( WP_REST_Request $request = null ){
         $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
         $args = [
             'method' => 'POST',
-            'body' => [ "post_type" => "prayer_initiatives" ],
+            'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "247_campaign" ] ] ],
             'headers' => [
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
@@ -131,7 +129,7 @@ function p4m_map_stats( WP_REST_Request $request = null ){
 }
 
 function p4m_ramadan_campaign_list(){
-    $initiative_locations = p4m_map_stats();
+    $initiative_locations = p4m_map_stats_ramadan();
     $initiatives = [];
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
@@ -145,16 +143,22 @@ function p4m_ramadan_campaign_list(){
         <thead>
             <tr>
                 <th>Initiative</th>
+                <th>Focus</th>
                 <th>Progress</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ( $initiatives as $initiative ) :
                 $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
-                if ( !empty($initiative["campaign_progress"]) && is_numeric( $initiative["campaign_progress"] )){
+                if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) ){
                     $initiative["campaign_progress"] .= '%';
                 }
-
+                if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "forming" ){
+                    $initiative["campaign_progress"] = "Setup in progress";
+                }
+                if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "active" ){
+                    $initiative["campaign_progress"] = "0%";
+                }
                 ?>
             <tr>
                 <?php if ( !empty($link) ) : ?>
@@ -162,6 +166,17 @@ function p4m_ramadan_campaign_list(){
                 <?php else : ?>
                     <td><?php echo esc_html( $initiative["label"] ); ?></td>
                 <?php endif; ?>
+                <td>
+                    <?php
+                        if ( !empty( $initiative["people_group"] ) ){
+                            echo esc_html( $initiative["people_group"] );
+                        } else if ( !empty( $initiative["location"] ) ){
+                            echo esc_html( $initiative["location"] );
+                        } else{
+                            echo esc_html( $initiative["label"] );
+                        }
+                    ?>
+                </td>
                 <td><?php echo esc_html( $initiative["campaign_progress"] ); ?></td>
             </tr>
             <?php endforeach;  ?>

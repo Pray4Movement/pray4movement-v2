@@ -450,6 +450,12 @@ let area_map = {
     area_map.behind_layer = behind_layer
     area_map.grid_data =  window.p4m_ramadan.data.locations ||
         await makeRequest( "POST", mapbox_library_api.obj.settings.totals_rest_url, { post_type: mapbox_library_api.obj.settings.post_type, query: mapbox_library_api.query_args || {}} , mapbox_library_api.obj.settings.rest_base_url )
+    Object.keys(area_map.grid_data).forEach(key=>{
+        area_map.grid_data[key].in_formation = !area_map.grid_data[key].initiatives.find(i=>i.status==='active');
+        if ( area_map.grid_data[key].in_formation ){
+            area_map.grid_data[key].count = -1
+        }
+    })
     await area_map.load_layer()
     // load new layer on event
     mapbox_library_api.map.on('zoomend', function() {
@@ -545,7 +551,7 @@ let area_map = {
               'paint': {
                 'fill-color': {
                   property: 'value',
-                  stops: [[0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(255,204,205)'], [highest_value, 'rgb(220,56,34)']]
+                  stops: [[-1, 'rgba(255,200,73,0.35)'], [0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(255,204,205)'], [highest_value, 'rgb(220,56,34)']]
                 },
                 'fill-opacity': 0.75,
                 'fill-outline-color': '#707070',
