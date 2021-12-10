@@ -138,7 +138,11 @@ function p4m_ramadan_campaign_list(){
     $initiatives = [];
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
-            $initiatives[] = $initiative;
+            if ( !isset( $initiatives[$initiative["initiative_id"]])){
+                $initiatives[$initiative["initiative_id"]] = $initiative;
+            } else {
+                $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
+            }
         }
     }
 
