@@ -1,9 +1,9 @@
 <?php
 
 if ( !function_exists( "dt_cached_api_call")){
-    function dt_cached_api_call( $url, $type = "GET", $args = [], $duration = HOUR_IN_SECONDS ){
+    function dt_cached_api_call( $url, $type = "GET", $args = [], $duration = HOUR_IN_SECONDS, $use_cache = true ){
         $data = get_transient( "dt_cached_" . esc_url( $url ) );
-        if ( empty( $data ) ){
+        if ( !$use_cache || empty( $data ) ){
             if ( $type === "GET" ){
                 $response = wp_remote_get( $url );
             } else {
@@ -91,7 +91,11 @@ function p4m_map_shortcode( $atts ){
         ]
     );
 
-    return "<div id='chart' style='max-width: 100%; height: 500px'></div>";
+    $return = "<div id='chart' style='max-width: 100%; height: 500px'></div>";
+    if ( is_user_logged_in() ){
+        $return .= "<div style='text-align: center'><button id='refresh_map_data'>refresh data</button></div>";
+    }
+    return $return;
 
 }
 add_shortcode( "p4m-map", "p4m_map_shortcode" );
@@ -102,14 +106,14 @@ function p4m_map_stats_endpoints(){
     register_rest_route(
         $namespace, '/p4m-map-stats', [
             'methods'  => 'POST',
-            'callback' => "p4m_map_stats",
+            'callback' => "p4m_map_stats_ramadan",
             'permission_callback' => '__return_true'
         ]
     );
 }
 add_action( 'rest_api_init', 'p4m_map_stats_endpoints' );
 
-function p4m_map_stats_ramadan( ){
+function p4m_map_stats_ramadan( WP_REST_Request $request = null ){
 
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
@@ -122,7 +126,8 @@ function p4m_map_stats_ramadan( ){
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
         ];
-        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, DAY_IN_SECONDS );
+        $refresh = WP_DEBUG || ( $request && isset( $request->get_params()["refresh"] ) );
+        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, DAY_IN_SECONDS, !$refresh );
         return json_decode( $response, true );
     }
     return [];

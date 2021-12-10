@@ -36,4 +36,9 @@ jQuery(document).ready(function($) {
         let content = $('#geocode-details-content')
         content.html( content_html);
     }
+    $('#refresh_map_data').on('click', ()=>{
+        makeRequest( "POST", mapbox_library_api.obj.settings.totals_rest_url, { refresh: true } , mapbox_library_api.obj.settings.rest_base_url ).then(()=>{
+            location.reload()
+        })
+    })
 })
