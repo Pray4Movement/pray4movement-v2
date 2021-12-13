@@ -298,6 +298,7 @@ function pm4_initiatives_list( $atts ){
         <thead>
         <tr>
             <th>Initiative</th>
+            <th>Focus</th>
         </tr>
         </thead>
         <tbody>
@@ -310,6 +311,17 @@ function pm4_initiatives_list( $atts ){
                 <?php else : ?>
                     <td><?php echo esc_html( $initiative["label"] ); ?></td>
                 <?php endif; ?>
+                <td>
+                    <?php
+                    if ( !empty( $initiative["people_group"] ) ){
+                        echo esc_html( $initiative["people_group"] );
+                    } else if ( !empty( $initiative["location"] ) ){
+                        echo esc_html( $initiative["location"] );
+                    } else{
+                        echo esc_html( $initiative["label"] );
+                    }
+                    ?>
+                </td>
 
             </tr>
         <?php endforeach;  ?>
