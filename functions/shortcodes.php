@@ -96,9 +96,9 @@ function p4m_map_shortcode( $atts ){
     if ( $type === "ramadan" ){
         $map_data = p4m_map_stats_ramadan();
     } elseif ( $type === "world-networks" ){
-        $map_data = pm4_map_stats_world_networks();
+        $map_data = p4m_map_stats_world_networks();
     } elseif ( $type === "usa-states" ){
-        $map_data = pm4_map_stats_usa_states();
+        $map_data = p4m_map_stats_usa_states();
         $grid_response = Disciple_Tools_Mapping_Queries::get_children_by_grid_id( "100364199" );
         $country_grid_ids = $grid_response;
     }
@@ -146,7 +146,9 @@ function refresh_stats(WP_REST_Request $request = null){
     if ( $type === "ramadan"){
         p4m_map_stats_ramadan( true );
     } elseif ( $type === "world-networks" ){
-        pm4_map_stats_world_networks( true );
+        p4m_map_stats_world_networks( true );
+    } elseif ( $type === "usa-states" ){
+        p4m_map_stats_usa_states( true );
     }
 }
 
@@ -170,7 +172,7 @@ function p4m_map_stats_ramadan( $refresh = false ){
     return [];
 }
 
-function pm4_map_stats_world_networks(  $refresh = false ){
+function p4m_map_stats_world_networks(  $refresh = false ){
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
         $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
@@ -189,7 +191,7 @@ function pm4_map_stats_world_networks(  $refresh = false ){
     return [];
 }
 
-function pm4_map_stats_usa_states( $refresh = false ){
+function p4m_map_stats_usa_states( $refresh = false ){
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
         $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
