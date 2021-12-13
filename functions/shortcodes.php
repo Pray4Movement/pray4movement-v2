@@ -65,7 +65,7 @@ function p4m_map_shortcode( $atts ){
             'settings' => [
                 'map_key' => DT_Mapbox_API::get_key(),
                 'map_mirror' => dt_get_location_grid_mirror( true ),
-                'menu_slug' => $type,
+                'menu_slug' => $type . ( $small ? "-small" : '' ),
                 'post_type' => 'prayer_initiatives',
                 'title' => "Select a country",
                 'geocoder_url' => trailingslashit( get_stylesheet_directory_uri() ),
