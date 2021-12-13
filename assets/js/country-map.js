@@ -8,8 +8,8 @@ jQuery(document).ready(function($) {
        }
        return 'admin1'
    }
-    window.mapbox_library_api.map.setCenter([-106.24998712991953, 37.28946327585241])
-    window.mapbox_library_api.map.setZoom(3.15);
+    window.mapbox_library_api.map.setCenter([-119.6737077761656, 47.856600497757086])
+    window.mapbox_library_api.map.setZoom(2.61);
     window.mapbox_library_api.area_map.load_detail_panel = function(location_id, name){
         let location_data = window.p4m_ramadan.data.locations[location_id] || []
         let initiatives = location_data.initiatives || []

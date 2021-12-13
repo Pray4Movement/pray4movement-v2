@@ -100,6 +100,7 @@ function p4m_map_shortcode( $atts ){
     } elseif ( $type === "usa-states" ){
         $map_data = p4m_map_stats_usa_states();
         $grid_response = Disciple_Tools_Mapping_Queries::get_children_by_grid_id( "100364199" );
+        $grid_response = array_merge( $grid_response, Disciple_Tools_Mapping_Queries::get_children_by_grid_id( "100041471" ) );
         $country_grid_ids = $grid_response;
     }
 
@@ -198,7 +199,7 @@ function p4m_map_stats_usa_states( $refresh = false ){
         $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
         $args = [
             'method' => 'POST',
-            'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "ongoing" ], 'location_grid' => [ "100364199" ] ] ],
+            'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "ongoing" ], 'location_grid' => [ "100364199", "100041471" ] ] ],
             'headers' => [
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
