@@ -105,7 +105,7 @@ let mapbox_library_api = {
           <h3 id="geocode-details-title" style="text-align:center; color:#dc3822; font-size:2em; margin: 5px">${window.lodash.escape( this.title )}</h3>
           <span class="close-details" style="float:right;"><i class="fi-x"></i></span>
           <hr style="margin:10px 5px;">
-          <div id="geocode-details-content" style="margin-top:15px; max-height: 350px; overflow-y: scroll"></div>
+          <div id="geocode-details-content" style="margin-top:15px; max-height: 300px; overflow-y: scroll"></div>
         </div>
       </div>
     `)
