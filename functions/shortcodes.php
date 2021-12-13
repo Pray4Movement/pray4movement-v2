@@ -280,7 +280,7 @@ function p4m_ramadan_campaign_list(){
 add_shortcode( "p4m-ramadan-campaign-list", "p4m_ramadan_campaign_list" );
 
 function pm4_initiatives_list( $atts ){
-    $initiative_locations = p4m_map_stats_ramadan();
+    $initiative_locations = p4m_map_stats_world_networks();
     $initiatives = [];
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
