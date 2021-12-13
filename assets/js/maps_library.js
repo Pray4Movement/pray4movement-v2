@@ -87,7 +87,7 @@ let mapbox_library_api = {
       <style>
         #map-wrapper {
             position: relative;
-            height: ${window.innerHeight - 100}px;
+            height: ${window.dt_mapbox_metrics.settings.small ? 350 : 500}px;
             width:100%;
         }
         #map {
@@ -96,12 +96,12 @@ let mapbox_library_api = {
             left: 0;
             z-index: 1;
             width:100%;
-            height: ${window.innerHeight - 100}px;
+            height: ${window.dt_mapbox_metrics.settings.small ? 350 : 500}px;
         }
       </style>
       <div id="map-wrapper">
         <div id='map'></div>
-        <div id="geocode-details" class="geocode-details">
+        <div id="geocode-details" class="geocode-details" ${window.dt_mapbox_metrics.settings.small ? 'style="display:none"' : ''}>
           <h3 id="geocode-details-title" style="text-align:center; color:#dc3822; font-size:2em; margin: 5px">${window.lodash.escape( this.title )}</h3>
           <span class="close-details" style="float:right;"><i class="fi-x"></i></span>
           <hr style="margin:10px 5px;">
@@ -172,9 +172,13 @@ let mapbox_library_api = {
       container: 'map',
       style: 'mapbox://styles/mapbox/light-v10',
       center: mapbox_library_api.center,
-      minZoom: 1,
-      zoom: 1.8
+      minZoom: .5,
+      zoom: window.dt_mapbox_metrics.settings.small ? 0.5 : 1.8
     });
+    if ( window.dt_mapbox_metrics.settings.small ){
+        mapbox_library_api.map.scrollZoom.disable();
+        mapbox_library_api.map.dragPan.disable();
+    }
     // SET BOUNDS
     let map_bounds_token = this.obj.settings.post_type + this.obj.settings.menu_slug
     let map_start = get_map_start( map_bounds_token )

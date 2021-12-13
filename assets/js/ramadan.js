@@ -42,16 +42,19 @@ jQuery(document).ready(function($) {
         })
     })
 
-    $('#geocode-details').prepend(`
-        <div style="margin-bottom: 10px">
-        <span style="vertical-align: middle">
-            <span style="height:20px;width:20px;border:1px solid;background-color:#FFCCCDFF;display: inline-block;vertical-align: middle"></span>
-            Active Initiatives
-       </span>
-       <span style="vertical-align: middle">
-            <span style="height:20px;width:20px;border:1px solid;background-color:rgba(255,200,73,0.35);display: inline-block;vertical-align: middle"></span>
-            Planned Initiatives
-       </span>
-       </div>
-    `)
+
+    if ( !window.p4m_ramadan.small ){
+        $('#geocode-details').prepend(`
+            <div style="margin-bottom: 10px">
+            <span style="vertical-align: middle">
+                <span style="height:20px;width:20px;border:1px solid;background-color:#FFCCCDFF;display: inline-block;vertical-align: middle"></span>
+                Active Initiatives
+           </span>
+           <span style="vertical-align: middle">
+                <span style="height:20px;width:20px;border:1px solid;background-color:rgba(255,200,73,0.35);display: inline-block;vertical-align: middle"></span>
+                Planned Initiatives
+           </span>
+           </div>
+        `)
+    }
 })

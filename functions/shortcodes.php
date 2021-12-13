@@ -40,6 +40,8 @@ add_shortcode( '247-partner', 'shortcode_247_partner' );
 
 function p4m_map_shortcode( $atts ){
 
+    $small = isset( $atts["size"] );
+
     $type = "ramadan";
     if ( isset( $atts["type"])){
         $type = $atts["type"];
@@ -72,6 +74,7 @@ function p4m_map_shortcode( $atts ){
 
                 'totals_rest_url' => 'p4m-map-stats',
                 'list_by_grid_rest_url' => 'p4m-map-stats-data',
+                "small" => $small
 
             ],
         ]
@@ -112,12 +115,13 @@ function p4m_map_shortcode( $atts ){
                 'locations' => $map_data,
                 'country_grid_ids' => $country_grid_ids,
             ],
-            "type" => $type
+            "type" => $type,
+            "small" => $small
         ]
     );
 
-    $return = "<div id='chart' style='max-width: 100%; height: 500px'></div>";
-    if ( is_user_logged_in() ){
+    $return = "<div id='chart' style='max-width: 100%;'></div>";
+    if ( is_user_logged_in() && !$small){
         $return .= "<div style='text-align: center'><button id='refresh_map_data'>refresh data</button></div>";
     }
     return $return;
