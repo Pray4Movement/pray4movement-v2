@@ -302,7 +302,7 @@ function pm4_initiatives_list( $atts ){
         </thead>
         <tbody>
         <?php foreach ( $initiatives as $initiative ) :
-            $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : "";
+            $link = !empty( $initiative["initiative_link"] ) ? $initiative["initiative_link"] : "";
             ?>
             <tr>
                 <?php if ( !empty($link) ) : ?>
