@@ -40,6 +40,11 @@ add_shortcode( '247-partner', 'shortcode_247_partner' );
 
 function p4m_map_shortcode( $atts ){
 
+    $type = "ramadan";
+    if ( isset( $atts["type"])){
+        $type = $atts["type"];
+    }
+
     DT_Mapbox_API::load_mapbox_header_scripts();
 
     wp_enqueue_style( 'p4m_map_styles',get_template_directory_uri() .  '/assets/css/map.css'  );
@@ -71,23 +76,42 @@ function p4m_map_shortcode( $atts ){
             ],
         ]
     );
+    $map = "ramadan.js";
+    if ( $type === "usa-states" ){
+        $map = "country-map.js";
+    }
     wp_enqueue_script( 'p4m_ramadan',
-        get_template_directory_uri() .  '/assets/js/ramadan.js',
+        get_template_directory_uri() .  '/assets/js/' . $map,
         [
             'jquery',
             'lodash',
             'dt_mapbox_script'
         ],
-        filemtime( get_theme_file_path() .  '/assets/js/ramadan.js' ),
+        filemtime( get_theme_file_path() .  '/assets/js/'  . $map ),
         true
     );
+
+    $map_data = [];
+    $country_grid_ids =[];
+    if ( $type === "ramadan" ){
+        $map_data = p4m_map_stats_ramadan();
+    } elseif ( $type === "world-networks" ){
+        $map_data = pm4_map_stats_world_networks();
+    } elseif ( $type === "usa-states" ){
+        $map_data = pm4_map_stats_usa_states();
+        $grid_response = Disciple_Tools_Mapping_Queries::get_children_by_grid_id( "100364199" );
+        $country_grid_ids = $grid_response;
+    }
+
     wp_localize_script(
         'p4m_ramadan', 'p4m_ramadan', [
             'root' => esc_url_raw( rest_url() ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
             'data' => [
-                'locations' => p4m_map_stats_ramadan()
+                'locations' => $map_data,
+                'country_grid_ids' => $country_grid_ids,
             ],
+            "type" => $type
         ]
     );
 
@@ -106,14 +130,27 @@ function p4m_map_stats_endpoints(){
     register_rest_route(
         $namespace, '/p4m-map-stats', [
             'methods'  => 'POST',
-            'callback' => "p4m_map_stats_ramadan",
+            'callback' => "refresh_stats",
             'permission_callback' => '__return_true'
         ]
     );
 }
 add_action( 'rest_api_init', 'p4m_map_stats_endpoints' );
 
-function p4m_map_stats_ramadan( WP_REST_Request $request = null ){
+function refresh_stats(WP_REST_Request $request = null){
+    $params = $request->get_params();
+    $type = "ramadan";
+    if ( isset( $params["type"])){
+        $type = $params["type"];
+    }
+    if ( $type === "ramadan"){
+        p4m_map_stats_ramadan( true );
+    } elseif ( $type === "world-networks" ){
+        pm4_map_stats_world_networks( true );
+    }
+}
+
+function p4m_map_stats_ramadan( $refresh = false ){
 
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
@@ -126,8 +163,46 @@ function p4m_map_stats_ramadan( WP_REST_Request $request = null ){
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
         ];
-        $refresh = WP_DEBUG || ( $request && isset( $request->get_params()["refresh"] ) );
+        $refresh = WP_DEBUG || $refresh;
         $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, DAY_IN_SECONDS, !$refresh );
+        return json_decode( $response, true );
+    }
+    return [];
+}
+
+function pm4_map_stats_world_networks(  $refresh = false ){
+    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
+    if ( !empty( $site_link_settings ) ){
+        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
+        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+        $args = [
+            'method' => 'POST',
+            'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "ongoing" ] ] ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $transfer_token,
+            ],
+        ];
+        $refresh = WP_DEBUG || $refresh;
+        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals?type=ongoing", "POST", $args, DAY_IN_SECONDS, !$refresh );
+        return json_decode( $response, true );
+    }
+    return [];
+}
+
+function pm4_map_stats_usa_states( $refresh = false ){
+    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
+    if ( !empty( $site_link_settings ) ){
+        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
+        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+        $args = [
+            'method' => 'POST',
+            'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "ongoing" ], 'location_grid' => [ "100364199" ] ] ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $transfer_token,
+            ],
+        ];
+        $refresh = WP_DEBUG || $refresh;
+        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_country_grid_totals?type=ongoing", "POST", $args, DAY_IN_SECONDS, !$refresh );
         return json_decode( $response, true );
     }
     return [];

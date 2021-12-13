@@ -74,6 +74,7 @@ let mapbox_library_api = {
   title: window.dt_mapbox_metrics.settings.title,
   map: null,
   spinner: null,
+  center:[2, 46],
   setup_container: function (){
     if ( this.container_set_up ){ return; }
     if ( typeof window.dt_mapbox_metrics.settings === undefined ) { return; }
@@ -170,7 +171,7 @@ let mapbox_library_api = {
     mapbox_library_api.map = new window.mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/light-v10',
-      center: [2, 46],
+      center: mapbox_library_api.center,
       minZoom: 1,
       zoom: 1.8
     });
