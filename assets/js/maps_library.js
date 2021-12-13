@@ -74,7 +74,7 @@ let mapbox_library_api = {
   title: window.dt_mapbox_metrics.settings.title,
   map: null,
   spinner: null,
-  center:[2, 46],
+  center:[16.4, 28.3],
   setup_container: function (){
     if ( this.container_set_up ){ return; }
     if ( typeof window.dt_mapbox_metrics.settings === undefined ) { return; }
