@@ -159,17 +159,22 @@ function p4m_ramadan_campaign_list(){
         <tbody>
             <?php foreach ( $initiatives as $initiative ) :
                 $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
+                $background_color = "white";
                 if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) ){
+                    if ( $initiative["campaign_progress"] > 0){
+                        $background_color = "#FFCCCDFF";
+                    }
                     $initiative["campaign_progress"] .= '%';
                 }
                 if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "forming" ){
+                    $background_color = "#FFC84959";
                     $initiative["campaign_progress"] = "Setup in progress";
                 }
                 if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "active" ){
                     $initiative["campaign_progress"] = "0%";
                 }
                 ?>
-            <tr>
+            <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
                 <?php if ( !empty($link) ) : ?>
                     <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
                 <?php else : ?>
