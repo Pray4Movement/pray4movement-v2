@@ -278,3 +278,46 @@ function p4m_ramadan_campaign_list(){
     return ob_get_clean();
 }
 add_shortcode( "p4m-ramadan-campaign-list", "p4m_ramadan_campaign_list" );
+
+function pm4_initiatives_list( $atts ){
+    $initiative_locations = p4m_map_stats_ramadan();
+    $initiatives = [];
+    foreach ( $initiative_locations as $location_id => $location_data ){
+        foreach ( $location_data["initiatives"] as $initiative ){
+            if ( !isset( $initiatives[$initiative["initiative_id"]])){
+                $initiatives[$initiative["initiative_id"]] = $initiative;
+            } else {
+                $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
+            }
+        }
+    }
+
+    ob_start();
+    ?>
+    <table>
+        <thead>
+        <tr>
+            <th>Initiative</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ( $initiatives as $initiative ) :
+            $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : "";
+            ?>
+            <tr>
+                <?php if ( !empty($link) ) : ?>
+                    <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
+                <?php else : ?>
+                    <td><?php echo esc_html( $initiative["label"] ); ?></td>
+                <?php endif; ?>
+
+            </tr>
+        <?php endforeach;  ?>
+        </tbody>
+    </table>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( "p4m-initiatives-list", "pm4_initiatives_list" );

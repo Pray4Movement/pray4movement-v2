@@ -497,7 +497,7 @@ function pray4movement_add_classic_editor_non_latin_styles( $mce_init ) {
 //	$styles = Pray4_Movement_Non_Latin_Languages::get_non_latin_css( 'classic-editor' );
 
 	// Return if there are no styles to add.
-	if ( ! $styles ) {
+	if ( ! isset( $styles ) ) {
 		return $mce_init;
 	}
 
