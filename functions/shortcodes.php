@@ -155,6 +155,7 @@ function refresh_stats(WP_REST_Request $request = null){
     } elseif ( $type === "usa-states" ){
         p4m_map_stats_usa_states( true );
     }
+    return true;
 }
 
 function p4m_map_stats_ramadan( $refresh = false ){
