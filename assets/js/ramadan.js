@@ -15,6 +15,7 @@ jQuery(document).ready(function($) {
         }
         initiatives.forEach(initiative=>{
             let link = window.p4m_ramadan.type === "ramadan" ? ( initiative.campaign_link || initiative.initiative_link ) : ( initiative.initiative_link || initiative.campaign_link );
+            let progress = ''
             if ( window.p4m_ramadan.type === "ramadan" ){
                 if ( initiative.campaign_progress && !isNaN(initiative.campaign_progress)){
                     initiative.campaign_progress = ` - ${initiative.campaign_progress}%`
@@ -22,15 +23,16 @@ jQuery(document).ready(function($) {
                 if ( !initiative.campaign_progress && initiative.status === "forming" ){
                     initiative.campaign_progress = ` - Setup in progress`
                 }
+                progress = initiative.campaign_progress;
             }
             if ( link ){
                 content_html += `<li>
                     <a target="_blank" href="${window.lodash.escape(link)}">
-                        ${window.lodash.escape(initiative.label)} ${window.lodash.escape(initiative.campaign_progress)}
+                        ${window.lodash.escape(initiative.label)} ${window.lodash.escape(progress)}
                     </a>
                 </li>`
             } else {
-                content_html += `<li>${window.lodash.escape(initiative.label)} ${window.lodash.escape(initiative.campaign_progress)}</li>`
+                content_html += `<li>${window.lodash.escape(initiative.label)} ${window.lodash.escape(progress)}</li>`
             }
         })
         content_html += `</ul>`;
