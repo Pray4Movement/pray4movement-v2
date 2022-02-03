@@ -15,11 +15,13 @@ jQuery(document).ready(function($) {
         }
         initiatives.forEach(initiative=>{
             let link = window.p4m_ramadan.type === "ramadan" ? ( initiative.campaign_link || initiative.initiative_link ) : ( initiative.initiative_link || initiative.campaign_link );
-            if ( initiative.campaign_progress && !isNaN(initiative.campaign_progress)){
-                initiative.campaign_progress = ` - ${initiative.campaign_progress}%`
-            }
-            if ( !initiative.campaign_progress && initiative.status === "forming" ){
-                initiative.campaign_progress = ` - Setup in progress`
+            if ( window.p4m_ramadan.type === "ramadan" ){
+                if ( initiative.campaign_progress && !isNaN(initiative.campaign_progress)){
+                    initiative.campaign_progress = ` - ${initiative.campaign_progress}%`
+                }
+                if ( !initiative.campaign_progress && initiative.status === "forming" ){
+                    initiative.campaign_progress = ` - Setup in progress`
+                }
             }
             if ( link ){
                 content_html += `<li>
