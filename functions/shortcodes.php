@@ -234,7 +234,7 @@ function p4m_ramadan_campaign_list(){
     <table>
         <thead>
             <tr>
-                <th>Initiative</th>
+                <th>Campaign</th>
                 <th>Focus</th>
                 <th>Progress</th>
             </tr>
