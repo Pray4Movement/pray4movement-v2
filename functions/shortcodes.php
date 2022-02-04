@@ -229,8 +229,24 @@ function p4m_ramadan_campaign_list(){
         }
     }
 
+    $with_progress = 0;
+    $active = 0;
+    $setup_in_progress = 0;
+    foreach ( $initiatives as $initiative ){
+        if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) && $initiative["campaign_progress"] > 0 ){
+            $with_progress++;
+        } else if ( $initiative["status"] === "active") {
+            $active++;
+        } else {
+            $setup_in_progress++;
+        }
+    }
+
     ob_start();
     ?>
+    <p>
+    Out of <?php echo esc_html( sizeof( $initiatives ) ); ?> Campaigns, <?php echo esc_html( $active + $with_progress ); ?> are active, <?php echo esc_html( $with_progress ); ?> are with progress, and <?php echo esc_html( $setup_in_progress ); ?> are being set up
+    </p>
     <table>
         <thead>
             <tr>
