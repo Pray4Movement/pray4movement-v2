@@ -33,7 +33,7 @@ function shortcode_247_partner( $atts, $content = null ) {
             }
         }
     }
-	return '<span>' . $content . $coverage . '</span>';
+    return '<span>' . $content . $coverage . '</span>';
 }
 add_shortcode( '247-partner', 'shortcode_247_partner' );
 
@@ -122,7 +122,7 @@ function p4m_map_shortcode( $atts ){
 
     $return = "<div id='chart' style='max-width: 100%;'></div>";
     if ( is_user_logged_in() && !$small){
-        $return .= "<div style='text-align: center'><button id='refresh_map_data'>refresh data</button></div>";
+        $return .= "<div style='text-align: right'><button id='refresh_map_data' style='background-color: white; color: #dc3822; text-transform: lowercase;'>refresh data</button></div>";
     }
     return $return;
 
@@ -244,8 +244,43 @@ function p4m_ramadan_campaign_list(){
 
     ob_start();
     ?>
-    <p>
-    Out of <?php echo esc_html( sizeof( $initiatives ) ); ?> Campaigns, <?php echo esc_html( $active + $with_progress ); ?> are active, <?php echo esc_html( $with_progress ); ?> are with progress, and <?php echo esc_html( $setup_in_progress ); ?> are being set up
+    <p>    
+    <!-- CAMPAIGNS STATUS: START -->
+    <style>
+        .metrics-table {
+            text-align: center;
+            border: none;
+            width: 80% !important;
+        }
+        .metrics-table tbody{
+            border: none;
+        }
+        .metrics-table th {
+            text-transform: uppercase;
+            font-weight: 700;
+            border: none;
+            color: #dc3822;
+            font-size: 4.8rem;
+        }
+
+        .metrics-table td {
+            font-size: 32px;
+            font-weight: 700;
+            border: none;
+            vertical-align: top;
+        }
+    </style>
+    <table class="metrics-table">
+        <tr>
+            <th>Our Goal</th>
+            <th>Active Campaigns</th>
+        </tr>
+        <tr>
+            <td>100+<br>Campaigns</td>
+            <td><?php echo esc_html( $active + $with_progress ); ?></td>
+        </tr>
+    </table>
+    <!-- CAMPAIGNS STATUS: END -->
     </p>
     <table>
         <thead>
