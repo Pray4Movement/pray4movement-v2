@@ -229,6 +229,18 @@ function p4m_ramadan_campaign_list(){
         }
     }
 
+    $sort = "country";
+    if ( isset( $_GET["sort_table"] ) ) {
+        $sort = sanitize_text_field( wp_unslash( $_GET["sort_table"] ) );
+    }
+
+    uasort( $initiatives, function ( $a, $b ) use ( $sort ){
+        return $a[$sort] <=> $b[$sort];
+    });
+    if ( $sort === "campaign_progress" ){
+        $initiatives = array_reverse( $initiatives );
+    }
+
     $with_progress = 0;
     $active = 0;
     $setup_in_progress = 0;
@@ -244,8 +256,6 @@ function p4m_ramadan_campaign_list(){
 
     ob_start();
     ?>
-    <p>    
-    <!-- CAMPAIGNS STATUS: START -->
     <style>
         .metrics-table {
             text-align: center;
@@ -269,7 +279,14 @@ function p4m_ramadan_campaign_list(){
             border: none;
             vertical-align: top;
         }
+        .sort-button {
+            padding: 5px 7px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
     </style>
+    <!-- CAMPAIGNS STATUS: START -->
+    <p>
     <table class="metrics-table">
         <tr>
             <th>Our Goal</th>
@@ -286,8 +303,8 @@ function p4m_ramadan_campaign_list(){
         <thead>
             <tr>
                 <th>Campaign</th>
-                <th>Focus</th>
-                <th>Progress</th>
+                <th><form> Focus <button class="sort-button" name="sort_table" value="country">&#9650;</button></form></th>
+                <th><form> Progress <button class="sort-button" name="sort_table" value="campaign_progress">&#9660;</button></form></th>
             </tr>
         </thead>
         <tbody>
@@ -316,13 +333,15 @@ function p4m_ramadan_campaign_list(){
                 <?php endif; ?>
                 <td>
                     <?php
-                        if ( !empty( $initiative["people_group"] ) ){
-                            echo esc_html( $initiative["people_group"] );
-                        } else if ( !empty( $initiative["location"] ) ){
-                            echo esc_html( $initiative["location"] );
-                        } else{
-                            echo esc_html( $initiative["label"] );
-                        }
+                    if ( !empty( $initiative["people_group"] ) ){
+                        echo esc_html( $initiative["people_group"] );
+                    } else if ( !empty( $initiative["location"] ) ){
+                        echo esc_html( $initiative["location"] );
+                    } else if ( $initiative["country"] === "other" ){
+                        echo "World/other";
+                    } else {
+                        echo esc_html( $initiative["label"] );
+                    }
                     ?>
                 </td>
                 <td><?php echo esc_html( $initiative["campaign_progress"] ); ?></td>
