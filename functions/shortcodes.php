@@ -229,7 +229,7 @@ function p4m_ramadan_campaign_list(){
         }
     }
 
-    $sort = "country";
+    $sort = "country_name";
     if ( isset( $_GET["sort_table"] ) ) {
         $sort = sanitize_text_field( wp_unslash( $_GET["sort_table"] ) );
     }
@@ -304,7 +304,7 @@ function p4m_ramadan_campaign_list(){
             <tr>
                 <th style="width:60px"></th>
                 <th>Campaign</th>
-                <th><form> Focus <button class="sort-button" name="sort_table" value="country">&#9650;</button></form></th>
+                <th><form> Focus <button class="sort-button" name="sort_table" value="country_name">&#9650;</button></form></th>
                 <th><form> Progress <button class="sort-button" name="sort_table" value="campaign_progress">&#9660;</button></form></th>
             </tr>
         </thead>
