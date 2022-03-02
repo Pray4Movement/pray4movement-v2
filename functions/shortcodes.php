@@ -302,13 +302,17 @@ function p4m_ramadan_campaign_list(){
     <table>
         <thead>
             <tr>
+                <th style="width:60px"></th>
                 <th>Campaign</th>
                 <th><form> Focus <button class="sort-button" name="sort_table" value="country">&#9650;</button></form></th>
                 <th><form> Progress <button class="sort-button" name="sort_table" value="campaign_progress">&#9660;</button></form></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ( $initiatives as $initiative ) :
+            <?php
+            $row_index = 0;
+            foreach ( $initiatives as $initiative ) :
+                $row_index++;
                 $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
                 $background_color = "white";
                 if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) ){
@@ -326,6 +330,9 @@ function p4m_ramadan_campaign_list(){
                 }
                 ?>
             <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
+                <td>
+                    <?php echo esc_html( $row_index ); ?>.
+                </td>
                 <?php if ( !empty($link) ) : ?>
                     <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
                 <?php else : ?>
