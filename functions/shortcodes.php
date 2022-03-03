@@ -244,7 +244,12 @@ function p4m_ramadan_campaign_list(){
     $with_progress = 0;
     $active = 0;
     $setup_in_progress = 0;
+    $time_committed = 0;
     foreach ( $initiatives as $initiative ){
+        if ( isset( $initiative["minutes_committed"] ) ){
+            $time_committed += (int) $initiative["minutes_committed"];
+        }
+
         if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) && $initiative["campaign_progress"] > 0 ){
             $with_progress++;
         } else if ( $initiative["status"] === "active") {
@@ -253,6 +258,8 @@ function p4m_ramadan_campaign_list(){
             $setup_in_progress++;
         }
     }
+    $days_committed = round( $time_committed / 60 / 24, 2) % 365;
+    $years_committed = floor( $time_committed / 60 / 24 / 365 ) ;
 
     ob_start();
     ?>
@@ -291,10 +298,21 @@ function p4m_ramadan_campaign_list(){
         <tr>
             <th>Our Goal</th>
             <th>Active Campaigns</th>
+            <?php if ( !empty( $time_committed ) ) :?>
+            <th>Prayer Time Committed</th>
+            <?php endif; ?>
         </tr>
         <tr>
             <td>100+<br>Campaigns</td>
             <td><?php echo esc_html( $active + $with_progress ); ?></td>
+            <?php if ( !empty( $time_committed ) ) :?>
+            <td>
+                <?php if ( !empty( $years_committed ) ) :?>
+                    <?php echo esc_html( $years_committed ); ?> years <br>
+                <?php endif; ?>
+                <?php echo esc_html( $days_committed ); ?> days
+            </td>
+            <?php endif; ?>
         </tr>
     </table>
     <!-- CAMPAIGNS STATUS: END -->
