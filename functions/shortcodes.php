@@ -301,15 +301,11 @@ function p4m_ramadan_campaign_list(){
     <!-- CAMPAIGNS STATUS: START -->
     <div class="ramadan-stats">
         <div>
-            <div class="stats-title"><h4>Our Goal</h4></div>
-            <div class="stats-content">100+ Campaigns</div>
+            <div class="stats-title"><h4>Active 24/7 campaigns</h4></div>
+            <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?><br> goal: 100+</div>
         </div>
         <div>
-            <div class="stats-title"><h4>Active Campaigns</h4></div>
-            <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?></div>
-        </div>
-        <div>
-            <div class="stats-title"><h4>Time Committed</h4></div>
+            <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <?php if ( !empty( $years_committed ) ) :
                     echo esc_html( $years_committed . " years <br>" );
