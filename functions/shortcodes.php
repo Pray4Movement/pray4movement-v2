@@ -264,66 +264,71 @@ function p4m_ramadan_campaign_list(){
     ob_start();
     ?>
     <style>
-        .metrics-table {
-            text-align: center;
-            border: none;
-            width: 80% !important;
-        }
-        .metrics-table tbody{
-            border: none;
-        }
-        .metrics-table th {
-            text-transform: uppercase;
-            font-weight: 700;
-            border: none;
-            color: #dc3822;
-            font-size: 4.8rem;
-        }
-
-        .metrics-table td {
-            font-size: 32px;
-            font-weight: 700;
-            border: none;
-            vertical-align: top;
-        }
         .sort-button {
             padding: 5px 7px;
             border-radius: 5px;
-            font-size: 1rem;
+            background-color: transparent;
+            color: black;
+            text-transform: none;
+        }
+        .ramadan-stats {
+            display: flex; flex-direction: row;
+            justify-content: space-around;
+        }
+        .ramadan-stats div {
+            flex-basis: 33%;
+        }
+        .ramadan-stats .stats-title {
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #dc3822;
+            font-size: 3rem;
+            min-height: 90px
+        }
+        .ramadan-stats .stats-content {
+            font-weight: bold;
+        }
+        .ramadan-stats div div {
+            text-align: center;
+        }
+        @media (max-width: 782px) {
+           .ramadan-stats {
+               flex-direction: column;
+           }
+           .ramadan-stats .stats-title {
+                min-height: 30px
+           }
         }
     </style>
     <!-- CAMPAIGNS STATUS: START -->
-    <p>
-    <table class="metrics-table">
-        <tr>
-            <th>Our Goal</th>
-            <th>Active Campaigns</th>
-            <?php if ( !empty( $time_committed ) ) :?>
-            <th>Prayer Time Committed</th>
-            <?php endif; ?>
-        </tr>
-        <tr>
-            <td>100+<br>Campaigns</td>
-            <td><?php echo esc_html( $active + $with_progress ); ?></td>
-            <?php if ( !empty( $time_committed ) ) :?>
-            <td>
-                <?php if ( !empty( $years_committed ) ) :?>
-                    <?php echo esc_html( $years_committed ); ?> years <br>
-                <?php endif; ?>
-                <?php echo esc_html( $days_committed ); ?> days
-            </td>
-            <?php endif; ?>
-        </tr>
-    </table>
+    <div class="ramadan-stats">
+        <div>
+            <div class="stats-title">Our Goal</div>
+            <div class="stats-content">100+ Campaigns</div>
+        </div>
+        <div>
+            <div class="stats-title">Active Campaigns</div>
+            <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?></div>
+        </div>
+        <div>
+            <div class="stats-title">Prayer Time Committed</div>
+            <div class="stats-content">
+                <?php if ( !empty( $years_committed ) ) :
+                    echo esc_html( $years_committed . " years <br>" );
+                endif;
+                echo esc_html( $days_committed ); ?> days
+            </div>
+        </div>
+    </div>
     <!-- CAMPAIGNS STATUS: END -->
-    </p>
-    <table>
+
+    <table id="campaigns-list">
         <thead>
             <tr>
                 <th style="width:60px"></th>
-                <th>Campaign</th>
-                <th><form> Focus <button class="sort-button" name="sort_table" value="country_name">&#9650;</button></form></th>
-                <th><form> Progress <button class="sort-button" name="sort_table" value="campaign_progress">&#9660;</button></form></th>
+                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
+                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="country_name">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
+                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress">Progress <span style="color:#dc3822">&#9660;</span></button></form></th>
             </tr>
         </thead>
         <tbody>
