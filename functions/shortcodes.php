@@ -280,10 +280,11 @@ function p4m_ramadan_campaign_list(){
         }
         .ramadan-stats .stats-title {
             text-transform: uppercase;
-            font-weight: 700;
             color: #dc3822;
             font-size: 3rem;
-            min-height: 90px
+        }
+        .ramadan-stats .stats-title h4 {
+            margin: 10px 0;
         }
         .ramadan-stats .stats-content {
             font-weight: bold;
@@ -295,23 +296,20 @@ function p4m_ramadan_campaign_list(){
            .ramadan-stats {
                flex-direction: column;
            }
-           .ramadan-stats .stats-title {
-                min-height: 30px
-           }
         }
     </style>
     <!-- CAMPAIGNS STATUS: START -->
     <div class="ramadan-stats">
         <div>
-            <div class="stats-title">Our Goal</div>
+            <div class="stats-title"><h4>Our Goal</h4></div>
             <div class="stats-content">100+ Campaigns</div>
         </div>
         <div>
-            <div class="stats-title">Active Campaigns</div>
+            <div class="stats-title"><h4>Active Campaigns</h4></div>
             <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?></div>
         </div>
         <div>
-            <div class="stats-title">Prayer Time Committed</div>
+            <div class="stats-title"><h4>Time Committed</h4></div>
             <div class="stats-content">
                 <?php if ( !empty( $years_committed ) ) :
                     echo esc_html( $years_committed . " years <br>" );
