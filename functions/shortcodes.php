@@ -172,7 +172,7 @@ function p4m_map_stats_ramadan( $refresh = false ){
             ],
         ];
         $refresh = WP_DEBUG || $refresh;
-        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, DAY_IN_SECONDS, !$refresh );
+        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, HOUR_IN_SECONDS, !$refresh );
         return json_decode( $response, true ) ?? [];
     }
     return [];
