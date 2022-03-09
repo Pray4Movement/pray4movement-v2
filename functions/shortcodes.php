@@ -219,6 +219,7 @@ function p4m_map_stats_usa_states( $refresh = false ){
 function p4m_ramadan_campaign_list( $args ){
     $initiative_locations = p4m_map_stats_ramadan();
     $initiatives = [];
+    $total_percent = 0;
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
             if ( !isset( $initiatives[$initiative["initiative_id"]])){
@@ -226,25 +227,12 @@ function p4m_ramadan_campaign_list( $args ){
             } else {
                 $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
             }
+            $total_percent += (int) $initiative["campaign_progress"];
         }
     }
 
-    //80 campaigns to 100%
-    $number_of_initiatives_to_complete = 80;
-    if ( isset( $args["initiatives_goal_stat"] ) ){
-        $number_of_initiatives_to_complete = (int) sanitize_text_field( wp_unslash( $args["initiatives_goal_stat"] ) );
-    }
-    $goal_initiatives =  array_values( $initiatives );
-    uasort( $goal_initiatives, function ( $a, $b ){
-        return $b["campaign_progress"] <=> $a["campaign_progress"];
-    });
-    $total_percent = 0;
-    foreach (  array_values( $goal_initiatives ) as $index => $gi ){
-        if ( $index < $number_of_initiatives_to_complete ){
-            $total_percent += (int) $gi["campaign_progress"];
-        }
-    }
-    $goal_progress = round( $total_percent / $number_of_initiatives_to_complete, 2 );
+
+    $goal_progress = round( $total_percent / sizeof( $initiatives ), 2 );
 
 
 
@@ -324,6 +312,11 @@ function p4m_ramadan_campaign_list( $args ){
             <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?><br> goal: 100+</div>
         </div>
         <div>
+            <div class="stats-title"><h4>100% Coverage Status</h4></div>
+            <div class="stats-content"><?php echo esc_html( $goal_progress ); ?>%</div>
+        </div>
+
+        <div>
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <?php if ( !empty( $years_committed ) ) :
@@ -332,12 +325,6 @@ function p4m_ramadan_campaign_list( $args ){
                 echo esc_html( $days_committed ); ?> days
             </div>
         </div>
-        <?php if ( isset( $args["initiatives_goal_stat"] ) ) :?>
-        <div>
-            <div class="stats-title"><h4><?php echo esc_html( $number_of_initiatives_to_complete ); ?> campaigns to 100%</h4></div>
-            <div class="stats-content"><?php echo esc_html( $goal_progress ); ?>%</div>
-        </div>
-        <?php endif; ?>
     </div>
     <!-- CAMPAIGNS STATUS: END -->
 
