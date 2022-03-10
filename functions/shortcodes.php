@@ -308,14 +308,13 @@ function p4m_ramadan_campaign_list( $args ){
     <!-- CAMPAIGNS STATUS: START -->
     <div class="ramadan-stats">
         <div>
-            <div class="stats-title"><h4>Active 24/7 campaigns</h4></div>
-            <div class="stats-content"><?php echo esc_html( $active + $with_progress ); ?><br> goal: 100+</div>
+            <div class="stats-title"><h4>24/7 prayer goal</h4></div>
+            <div class="stats-content">100% coverage for 100+ campaigns</div>
         </div>
         <div>
-            <div class="stats-title"><h4>100% Coverage Status</h4></div>
-            <div class="stats-content"><?php echo esc_html( $goal_progress ); ?>%</div>
+            <div class="stats-title"><h4>Current Status</h4></div>
+            <div class="stats-content"><?php echo esc_html( $goal_progress ); ?>% coverage of <?php echo esc_html( $active + $with_progress ); ?> campaigns</div>
         </div>
-
         <div>
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
