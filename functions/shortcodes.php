@@ -1,6 +1,6 @@
 <?php
 
-if ( !function_exists( "dt_cached_api_call")){
+if ( !function_exists( "dt_cached_api_call" ) ){
     function dt_cached_api_call( $url, $type = "GET", $args = [], $duration = HOUR_IN_SECONDS, $use_cache = true ){
         $data = get_transient( "dt_cached_" . esc_url( $url ) );
         if ( !$use_cache || empty( $data ) ){
@@ -43,13 +43,13 @@ function p4m_map_shortcode( $atts ){
     $small = isset( $atts["size"] );
 
     $type = "ramadan";
-    if ( isset( $atts["type"])){
+    if ( isset( $atts["type"] ) ){
         $type = $atts["type"];
     }
 
     DT_Mapbox_API::load_mapbox_header_scripts();
 
-    wp_enqueue_style( 'p4m_map_styles',get_template_directory_uri() .  '/assets/css/map.css'  );
+    wp_enqueue_style( 'p4m_map_styles', get_template_directory_uri() . '/assets/css/map.css' );
     // Map starter Script
     wp_enqueue_script( 'dt_mapbox_script',
         get_template_directory_uri() .  '/assets/js/maps_library.js',
@@ -121,7 +121,7 @@ function p4m_map_shortcode( $atts ){
     );
 
     $return = "<div id='chart' style='max-width: 100%;'></div>";
-    if ( is_user_logged_in() && !$small){
+    if ( is_user_logged_in() && !$small ){
         $return .= "<div style='text-align: right'><button id='refresh_map_data' style='background-color: white; color: #dc3822; text-transform: lowercase;'>refresh data</button></div>";
     }
     return $return;
@@ -142,13 +142,13 @@ function p4m_map_stats_endpoints(){
 }
 add_action( 'rest_api_init', 'p4m_map_stats_endpoints' );
 
-function refresh_stats(WP_REST_Request $request = null){
+function refresh_stats( WP_REST_Request $request = null ){
     $params = $request->get_params();
     $type = "ramadan";
-    if ( isset( $params["type"])){
+    if ( isset( $params["type"] ) ){
         $type = $params["type"];
     }
-    if ( $type === "ramadan"){
+    if ( $type === "ramadan" ){
         p4m_map_stats_ramadan( true );
     } elseif ( $type === "world-networks" ){
         p4m_map_stats_world_networks( true );
@@ -178,7 +178,7 @@ function p4m_map_stats_ramadan( $refresh = false ){
     return [];
 }
 
-function p4m_map_stats_world_networks(  $refresh = false ){
+function p4m_map_stats_world_networks( $refresh = false ){
     $site_link_settings = get_option( "p4m_map_site_link_data", [] );
     if ( !empty( $site_link_settings ) ){
         $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
@@ -222,7 +222,7 @@ function p4m_ramadan_campaign_list( $args ){
     $total_percent = 0;
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
-            if ( !isset( $initiatives[$initiative["initiative_id"]])){
+            if ( !isset( $initiatives[$initiative["initiative_id"]] ) ){
                 $initiatives[$initiative["initiative_id"]] = $initiative;
             } else {
                 $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
@@ -259,14 +259,14 @@ function p4m_ramadan_campaign_list( $args ){
 
         if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) && $initiative["campaign_progress"] > 0 ){
             $with_progress++;
-        } else if ( $initiative["status"] === "active") {
+        } else if ( $initiative["status"] === "active" ){
             $active++;
         } else {
             $setup_in_progress++;
         }
     }
-    $days_committed = round( $time_committed / 60 / 24, 2) % 365;
-    $years_committed = floor( $time_committed / 60 / 24 / 365 ) ;
+    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
+    $years_committed = floor( $time_committed / 60 / 24 / 365 );
 
     ob_start();
     ?>
@@ -319,9 +319,9 @@ function p4m_ramadan_campaign_list( $args ){
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <?php if ( !empty( $years_committed ) ) :
-                    echo esc_html( $years_committed . " years " );
+                    echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) );
                 endif;
-                echo esc_html( $days_committed ); ?> days
+                echo esc_html( ' ' . $days_committed ); ?> days
             </div>
         </div>
     </div>
@@ -344,7 +344,7 @@ function p4m_ramadan_campaign_list( $args ){
                 $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
                 $background_color = "white";
                 if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) ){
-                    if ( $initiative["campaign_progress"] > 0){
+                    if ( $initiative["campaign_progress"] > 0 ){
                         $background_color = "#FFCCCDFF";
                     }
                     $initiative["campaign_progress"] .= '%';
@@ -361,7 +361,7 @@ function p4m_ramadan_campaign_list( $args ){
                 <td>
                     <?php echo esc_html( $row_index ); ?>.
                 </td>
-                <?php if ( !empty($link) ) : ?>
+                <?php if ( !empty( $link ) ) : ?>
                     <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
                 <?php else : ?>
                     <td><?php echo esc_html( $initiative["label"] ); ?></td>
@@ -395,7 +395,7 @@ function pm4_initiatives_list( $atts ){
     $initiatives = [];
     foreach ( $initiative_locations as $location_id => $location_data ){
         foreach ( $location_data["initiatives"] as $initiative ){
-            if ( !isset( $initiatives[$initiative["initiative_id"]])){
+            if ( !isset( $initiatives[$initiative["initiative_id"]] ) ){
                 $initiatives[$initiative["initiative_id"]] = $initiative;
             } else {
                 $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
@@ -417,7 +417,7 @@ function pm4_initiatives_list( $atts ){
             $link = !empty( $initiative["initiative_link"] ) ? $initiative["initiative_link"] : "";
             ?>
             <tr>
-                <?php if ( !empty($link) ) : ?>
+                <?php if ( !empty( $link ) ) : ?>
                     <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
                 <?php else : ?>
                     <td><?php echo esc_html( $initiative["label"] ); ?></td>
@@ -428,7 +428,7 @@ function pm4_initiatives_list( $atts ){
                         echo esc_html( $initiative["people_group"] );
                     } else if ( !empty( $initiative["location"] ) ){
                         echo esc_html( $initiative["location"] );
-                    } else{
+                    } else {
                         echo esc_html( $initiative["label"] );
                     }
                     ?>
