@@ -319,7 +319,7 @@ function p4m_ramadan_campaign_list( $args ){
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <?php if ( !empty( $years_committed ) ) :
-                    echo esc_html( $years_committed . " years <br>" );
+                    echo esc_html( $years_committed . " years " );
                 endif;
                 echo esc_html( $days_committed ); ?> days
             </div>
