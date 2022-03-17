@@ -312,7 +312,7 @@ function p4m_ramadan_campaign_list( $args ){
            .show-mobile {
                display: inline-block;
            }
-           table {
+           #campaigns-list table {
                font-size: 14px;
            }
            .campaign-list-wrapper {
