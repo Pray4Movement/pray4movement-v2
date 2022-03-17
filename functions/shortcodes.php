@@ -299,9 +299,24 @@ function p4m_ramadan_campaign_list( $args ){
         .ramadan-stats div div {
             text-align: center;
         }
+        .show-mobile {
+            display: none;
+        }
         @media (max-width: 782px) {
            .ramadan-stats {
                flex-direction: column;
+           }
+           .hide-mobile {
+               display: none;
+           }
+           .show-mobile {
+               display: inline-block;
+           }
+           table {
+               font-size: 14px;
+           }
+           .campaign-list-wrapper {
+               overflow-x: scroll;
            }
         }
     </style>
@@ -326,15 +341,15 @@ function p4m_ramadan_campaign_list( $args ){
         </div>
     </div>
     <!-- CAMPAIGNS STATUS: END -->
-
-    <table id="campaigns-list">
+    <div class="campaign-list-wrapper">
+    <table id="campaigns-list" style="overflow-x:scroll">
         <thead>
             <tr>
-                <th style="width:60px"></th>
+                <th style="width:60px" class="hide-mobile"></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="country_name">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
-                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress">Progress <span style="color:#dc3822">&#9660;</span></button></form></th>
-                <th><button type="button" class="sort-button">Prayer Fuel</button></th>
+                <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
+                <th style="min-width: 80px; white-space: pre-wrap"><button type="button" class="sort-button">Prayer Fuel</button></th>
             </tr>
         </thead>
         <tbody>
@@ -370,8 +385,8 @@ function p4m_ramadan_campaign_list( $args ){
                 }
                 ?>
                 <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
-                    <td>
-                        <?php echo esc_html( $row_index ); ?>.
+                    <td class="hide-mobile">
+                        <?php echo esc_html( $row_index ); ?><span class="hide-mobile">.</span>
                     </td>
                     <?php if ( !empty( $link ) ) : ?>
                         <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
@@ -397,6 +412,7 @@ function p4m_ramadan_campaign_list( $args ){
             <?php endforeach;  ?>
         </tbody>
     </table>
+    </div>
     <?php
 
     return ob_get_clean();
