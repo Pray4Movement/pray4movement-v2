@@ -318,6 +318,9 @@ function p4m_ramadan_campaign_list( $args ){
            .campaign-list-wrapper {
                overflow-x: scroll;
            }
+           .wrap-header {
+               white-space: pre-wrap;
+           }
         }
     </style>
     <!-- CAMPAIGNS STATUS: START -->
@@ -349,7 +352,7 @@ function p4m_ramadan_campaign_list( $args ){
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="country_name">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
-                <th style="min-width: 80px; white-space: pre-wrap"><button type="button" class="sort-button">Prayer Fuel</button></th>
+                <th style="min-width: 80px;" class="wrap-header"><button type="button" class="sort-button">Prayer Fuel</button></th>
             </tr>
         </thead>
         <tbody>
