@@ -334,12 +334,16 @@ function p4m_ramadan_campaign_list( $args ){
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="country_name">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress">Progress <span style="color:#dc3822">&#9660;</span></button></form></th>
+                <th><button type="button" class="sort-button">Prayer Fuel</button></th>
             </tr>
         </thead>
         <tbody>
             <?php
             $row_index = 0;
+            $languages = p4m_languages_list();
+
             foreach ( $initiatives as $initiative ) :
+                $flags = '';
                 $row_index++;
                 $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
                 $background_color = "white";
@@ -356,31 +360,37 @@ function p4m_ramadan_campaign_list( $args ){
                 if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "active" ){
                     $initiative["campaign_progress"] = "0%";
                 }
-                ?>
-            <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
-                <td>
-                    <?php echo esc_html( $row_index ); ?>.
-                </td>
-                <?php if ( !empty( $link ) ) : ?>
-                    <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
-                <?php else : ?>
-                    <td><?php echo esc_html( $initiative["label"] ); ?></td>
-                <?php endif; ?>
-                <td>
-                    <?php
-                    if ( !empty( $initiative["people_group"] ) ){
-                        echo esc_html( $initiative["people_group"] );
-                    } else if ( !empty( $initiative["location"] ) ){
-                        echo esc_html( $initiative["location"] );
-                    } else if ( $initiative["country"] === "other" ){
-                        echo "World/other";
-                    } else {
-                        echo esc_html( $initiative["label"] );
+                foreach ( $initiative["prayer_fuel_languages"] ?? [] as $installed_fuel ){
+                    if ( !empty( $languages[$installed_fuel]['flag'] ) ){
+                        $flags .= $languages[$installed_fuel]['flag'];
                     }
-                    ?>
-                </td>
-                <td><?php echo esc_html( $initiative["campaign_progress"] ); ?></td>
-            </tr>
+                }
+                ?>
+                <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
+                    <td>
+                        <?php echo esc_html( $row_index ); ?>.
+                    </td>
+                    <?php if ( !empty( $link ) ) : ?>
+                        <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
+                    <?php else : ?>
+                        <td><?php echo esc_html( $initiative["label"] ); ?></td>
+                    <?php endif; ?>
+                    <td>
+                        <?php
+                        if ( !empty( $initiative["people_group"] ) ){
+                            echo esc_html( $initiative["people_group"] );
+                        } else if ( !empty( $initiative["location"] ) ){
+                            echo esc_html( $initiative["location"] );
+                        } else if ( $initiative["country"] === "other" ){
+                            echo "World/other";
+                        } else {
+                            echo esc_html( $initiative["label"] );
+                        }
+                        ?>
+                    </td>
+                    <td><?php echo esc_html( $initiative["campaign_progress"] ); ?></td>
+                    <td><?php echo esc_html( $flags ); ?></td>
+                </tr>
             <?php endforeach;  ?>
         </tbody>
     </table>
@@ -389,6 +399,40 @@ function p4m_ramadan_campaign_list( $args ){
     return ob_get_clean();
 }
 add_shortcode( "p4m-ramadan-campaign-list", "p4m_ramadan_campaign_list" );
+
+
+function p4m_languages_list(){
+    $translations = [
+        'en_US' => [
+            'language' => 'en_US',
+            'english_name' => 'English (United States)',
+            'native_name' => 'English',
+            'flag' => '🇺🇸',
+            'prayer_fuel' => true
+        ],
+        'es_ES' => [
+            'language' => 'es_ES',
+            'english_name' => 'Spanish (Spain)',
+            'native_name' => 'Español',
+            'flag' => '🇪🇸',
+            'prayer_fuel' => true
+        ],
+        'fr_FR' => [
+            'language' => 'fr_FR',
+            'english_name' => 'French (France)',
+            'native_name' => 'Français',
+            'flag' => '🇫🇷'
+        ],
+        'pt_PT' => [
+            'language' => 'pt_PT',
+            'english_name' => 'Portuguese',
+            'native_name' => 'Português',
+            'flag' => '🇵🇹',
+            'prayer_fuel' => true
+        ],
+    ];
+    return $translations;
+}
 
 function pm4_initiatives_list( $atts ){
     $initiative_locations = p4m_map_stats_world_networks();
