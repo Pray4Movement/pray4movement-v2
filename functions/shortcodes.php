@@ -351,6 +351,9 @@ function p4m_ramadan_campaign_list( $args ){
                     if ( $initiative["campaign_progress"] > 0 ){
                         $background_color = "#FFCCCDFF";
                     }
+                    if ( $initiative["campaign_progress"] >= 100 ){
+                        $background_color = "lightgreen";
+                    }
                     $initiative["campaign_progress"] .= '%';
                 }
                 if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "forming" ){
