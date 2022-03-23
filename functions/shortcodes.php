@@ -265,6 +265,7 @@ function p4m_ramadan_campaign_list( $args ){
             $setup_in_progress++;
         }
     }
+    $hours_committed = round( $time_committed / 60, 2 );
     $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
     $years_committed = floor( $time_committed / 60 / 24 / 365 );
 
@@ -323,6 +324,29 @@ function p4m_ramadan_campaign_list( $args ){
            }
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // Your code to run since DOM is loaded and ready
+            let years = '<?php echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) . esc_html( ' ' . $days_committed ) .  ' days' ); ?>';
+            let hours = '<?php echo esc_html( number_format( $hours_committed ) ) ?> hours';
+            let current = 'hours';
+            jQuery(document).ready(function ($) {
+                setInterval(()=>{
+                    if ( current === 'years' ){
+                        $(".p4m-carousel").fadeOut(function() {
+                          $(this).text(years)
+                        }).fadeIn();
+                        current = 'days'
+                    } else {
+                        $(".p4m-carousel").fadeOut(function() {
+                            $(this).text(hours)
+                        }).fadeIn();
+                        current = 'years'
+                    }
+                }, 3000)
+            })
+        });
+    </script>
     <!-- CAMPAIGNS STATUS: START -->
     <div class="ramadan-stats">
         <div>
@@ -336,10 +360,12 @@ function p4m_ramadan_campaign_list( $args ){
         <div>
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
-                <?php if ( !empty( $years_committed ) ) :
-                    echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) );
-                endif;
-                echo esc_html( ' ' . $days_committed ); ?> days
+                <span class="p4m-carousel">
+                    <?php if ( !empty( $years_committed ) ) :
+                        echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) );
+                    endif;
+                    echo esc_html( ' ' . $days_committed ); ?> days
+                </span>
             </div>
         </div>
     </div>
