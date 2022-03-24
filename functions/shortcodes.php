@@ -450,6 +450,7 @@ add_shortcode( "p4m-ramadan-campaign-list", "p4m_ramadan_campaign_list" );
 
 
 function p4m_languages_list(){
+    //flags from https://www.alt-codes.net/flags
     $translations = [
         'en_US' => [
             'language' => 'en_US',
@@ -478,6 +479,26 @@ function p4m_languages_list(){
             'flag' => '🇵🇹',
             'prayer_fuel' => true
         ],
+        'id_ID' => [
+            'language' => "id_ID",
+            'english_name' => 'Indonesian',
+            'native_name' => 'Bahasa Indonesia',
+            'flag' => '🇮🇩',
+            'prayer_fuel' => true
+        ],
+        'nl_NL' => [
+            'language' => "nl_NL",
+            'english_name' => 'Dutch',
+            'native_name' => 'Nederlands',
+            'flag' => '🇳🇱',
+        ],
+        'ar_EG' => [
+            'language' => 'ar_EG',
+            'english_name' => 'Arabic',
+            'native_name' => 'العربية',
+            'flag' => '🇪🇬',
+            'prayer_fuel' => true
+        ]
     ];
     return $translations;
 }
