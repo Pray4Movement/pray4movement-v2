@@ -179,10 +179,12 @@ function p4m_stats( WP_REST_Request $request = null ){
                 $countries_prayed_for[] = $location["name"];
             }
             foreach ( $location["initiatives"] as $initiative ){
-                $total_prayer_time_minutes += $initiative["minutes_committed"] ?? 0;
-                $active_campaigns++;
-                if ( !empty( $initiative["prayers_count"] ) ){
-                    $number_of_prayers += $initiative["prayers_count"];
+                if ( $initiative["status"] === "active" ){
+                    $total_prayer_time_minutes += $initiative["minutes_committed"] ?? 0;
+                    $active_campaigns++;
+                    if ( !empty( $initiative["prayers_count"] ) ){
+                        $number_of_prayers += $initiative["prayers_count"];
+                    }
                 }
             }
         }
