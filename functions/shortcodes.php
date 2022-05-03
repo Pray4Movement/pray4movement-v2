@@ -169,22 +169,31 @@ function refresh_stats( WP_REST_Request $request = null ){
 function p4m_stats( WP_REST_Request $request = null ){
     $type = "ramadan";
     if ( $type === "ramadan" ){
-        $ram_stats = p4m_map_stats_ramadan( false );
+        $initiative_locations = p4m_map_stats_ramadan( false );
         $active_campaigns = 0;
         $total_prayer_time_minutes = 0;
         $countries_prayed_for = [];
         $number_of_prayers = 0;
-        foreach ( $ram_stats as $location_key => $location ){
-            if ( !empty( $location["name"] ) ){
-                $countries_prayed_for[] = $location["name"];
+
+        $initiatives = [];
+        foreach ( $initiative_locations as $location_id => $location_data ){
+            if ( !empty( $location_data["name"] ) ){
+                $countries_prayed_for[] = $location_data["name"];
             }
-            foreach ( $location["initiatives"] as $initiative ){
-                if ( $initiative["status"] === "active" ){
-                    $total_prayer_time_minutes += $initiative["minutes_committed"] ?? 0;
-                    $active_campaigns++;
-                    if ( !empty( $initiative["prayers_count"] ) ){
-                        $number_of_prayers += $initiative["prayers_count"];
-                    }
+            foreach ( $location_data["initiatives"] as $initiative ){
+                if ( !isset( $initiatives[$initiative["initiative_id"]] ) ){
+                    $initiatives[$initiative["initiative_id"]] = $initiative;
+                } else {
+                    $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
+                }
+            }
+        }
+        foreach ( $initiatives as $initiative ){
+            if ( $initiative["status"] === "active" ){
+                $total_prayer_time_minutes += $initiative["minutes_committed"] ?? 0;
+                $active_campaigns++;
+                if ( !empty( $initiative["prayers_count"] ) ){
+                    $number_of_prayers += $initiative["prayers_count"];
                 }
             }
         }
