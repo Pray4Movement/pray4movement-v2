@@ -72,8 +72,8 @@ function p4m_map_shortcode( $atts ){
                 'geocoder_nonce' => wp_create_nonce( 'wp_rest' ),
                 'rest_base_url' => "p4m/maps",
 
-                'totals_rest_url' => 'p4m-map-stats',
-                'list_by_grid_rest_url' => 'p4m-map-stats-data',
+                'totals_rest_url' => 'p4m-refresh-stats',
+                'list_by_grid_rest_url' => 'p4m-refresh-stats-data',
                 "small" => $small
 
             ],
@@ -133,9 +133,18 @@ add_shortcode( "p4m-map", "p4m_map_shortcode" );
 function p4m_map_stats_endpoints(){
     $namespace = 'p4m/maps';
     register_rest_route(
-        $namespace, '/p4m-map-stats', [
+        $namespace, '/p4m-refresh-stats', [
             'methods'  => 'POST',
             'callback' => "refresh_stats",
+            'permission_callback' => function(){
+                return is_user_logged_in();
+            }
+        ]
+    );
+    register_rest_route(
+        $namespace, '/p4m-stats', [
+            'methods'  => 'GET',
+            'callback' => "p4m_stats",
             'permission_callback' => '__return_true'
         ]
     );
@@ -154,6 +163,35 @@ function refresh_stats( WP_REST_Request $request = null ){
         p4m_map_stats_world_networks( true );
     } elseif ( $type === "usa-states" ){
         p4m_map_stats_usa_states( true );
+    }
+    return true;
+}
+function p4m_stats( WP_REST_Request $request = null ){
+    $type = "ramadan";
+    if ( $type === "ramadan" ){
+        $ram_stats = p4m_map_stats_ramadan( false );
+        $active_campaigns = 0;
+        $total_prayer_time_minutes = 0;
+        $countries_prayed_for = [];
+        $number_of_prayers = 0;
+        foreach ( $ram_stats as $location_key => $location ){
+            if ( !empty( $location["name"] ) ){
+                $countries_prayed_for[] = $location["name"];
+            }
+            foreach ( $location["initiatives"] as $initiative ){
+                $total_prayer_time_minutes += $initiative["minutes_committed"] ?? 0;
+                $active_campaigns++;
+                if ( !empty( $initiative["prayers_count"] ) ){
+                    $number_of_prayers += $initiative["prayers_count"];
+                }
+            }
+        }
+        return [
+            "campaigns" => $active_campaigns,
+            "minutes_prayed" => $total_prayer_time_minutes,
+            "countries_prayed_for" => sizeof( array_unique( $countries_prayed_for ) ),
+            "prayers_count" => $number_of_prayers,
+        ];
     }
     return true;
 }
@@ -218,6 +256,9 @@ function p4m_map_stats_usa_states( $refresh = false ){
 
 function p4m_ramadan_campaign_list( $args ){
     $initiative_locations = p4m_map_stats_ramadan();
+    if ( empty( $initiative_locations ) ){
+        return;
+    }
     $initiatives = [];
     $total_percent = 0;
     foreach ( $initiative_locations as $location_id => $location_data ){
