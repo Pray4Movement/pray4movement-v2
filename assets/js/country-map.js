@@ -85,8 +85,8 @@ jQuery(document).ready(function($) {
                         // add data to geojson properties
                         let highest_value = 1
                         jQuery.each(geojson.features, function (i, v) {
-                            if (area_map.grid_data[geojson.features[i].properties.id]) {
-                                geojson.features[i].properties.value = parseInt(area_map.grid_data[geojson.features[i].properties.id].count)
+                            if (area_map.grid_data[geojson.features[i].properties.grid_id]) {
+                                geojson.features[i].properties.value = parseInt(area_map.grid_data[geojson.features[i].properties.grid_id].count)
                             } else {
                                 geojson.features[i].properties.value = 0
                             }
