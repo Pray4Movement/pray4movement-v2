@@ -5,7 +5,7 @@ if ( !function_exists( "dt_cached_api_call" ) ){
         $data = get_transient( "dt_cached_" . esc_url( $url ) );
         if ( !$use_cache || empty( $data ) ){
             if ( $type === "GET" ){
-                $response = wp_remote_get( $url );
+                $response = wp_remote_get( $url, $args );
             } else {
                 $response = wp_remote_post( $url, $args );
             }
@@ -609,3 +609,256 @@ function pm4_initiatives_list( $atts ){
 }
 
 add_shortcode( "p4m-initiatives-list", "pm4_initiatives_list" );
+
+
+function p4m_get_all_campaigns( $refresh = false ){
+    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
+    if ( !empty( $site_link_settings ) ){
+        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
+        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+        $args = [
+            'method' => 'GET',
+            'body' => [],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $transfer_token,
+            ],
+        ];
+        $refresh = strpos( home_url(), "pray4movement" ) !== false && $refresh;
+        $response = dt_cached_api_call(
+            "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
+            "GET", $args,
+            MINUTE_IN_SECONDS * 5,
+            !$refresh );
+        return json_decode( $response, true ) ?? [];
+    }
+    return [];
+}
+
+
+add_shortcode( 'p4m-campaigns-list', function ( $atts ){
+
+    $campaigns = p4m_get_all_campaigns();
+
+    $focus = isset( $atts['focus'] ) ? esc_attr( wp_unslash( $atts['focus'] ) ) : '';
+
+    $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $focus ){
+        return empty( $focus ) || in_array( $focus, $campaign["focus"] ?? [] );
+    } );
+
+    foreach ( $campaigns as &$c ){
+        $c['focus'] = $c['people_group'];
+        $campaign_locations = "";
+        foreach ( $c["location_grid"] ?? [] as $location ){
+            if ( !empty( $campaign_locations ) ){
+                $campaign_locations .= ", ";
+            }
+            $campaign_locations .= $location["label"];
+        }
+        if ( empty( $c['focus'] ) ){
+            $c['focus'] = $campaign_locations;
+        }
+    }
+
+    $sort = "label";
+    if ( isset( $_GET["sort_table"] ) ) {
+        $sort = sanitize_text_field( wp_unslash( $_GET["sort_table"] ) );
+    }
+
+    uasort( $campaigns, function ( $a, $b ) use ( $sort ){
+        return $a[$sort] <=> $b[$sort];
+    });
+    if ( $sort === "campaign_progress" ){
+        $campaigns = array_reverse( $campaigns );
+    }
+
+    ob_start();
+    ?>
+    <style>
+        .sort-button {
+            padding: 5px 7px;
+            border-radius: 5px;
+            background-color: transparent;
+            color: black;
+            text-transform: none;
+        }
+        .show-mobile {
+            display: none;
+        }
+        @media (max-width: 782px) {
+            .hide-mobile {
+                display: none;
+            }
+            .show-mobile {
+                display: inline-block;
+            }
+            #campaigns-list table {
+                font-size: 14px;
+            }
+            .campaign-list-wrapper {
+                overflow-x: scroll;
+            }
+            .wrap-header {
+                white-space: pre-wrap;
+            }
+        }
+    </style>
+    <div class="campaign-list-wrapper">
+        <table id="campaigns-list" style="overflow-x:scroll">
+            <thead>
+            <tr>
+                <th style="width:60px" class="hide-mobile"></th>
+                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
+                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
+                <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
+                <th style="min-width: 80px;" class="wrap-header"><button type="button" class="sort-button">Prayer Fuel</button></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+                $row_index = 0;
+                $languages = p4m_languages_list();
+                foreach ( $campaigns as $campaign ) :
+                    $flags = '';
+                    $row_index++;
+                    $background_color = "white";
+                    if ( !empty( $campaign["campaign_progress"] ) && is_numeric( $campaign["campaign_progress"] ) ){
+                        if ( $campaign["campaign_progress"] > 0 ){
+                            $background_color = "#FFCCCDFF";
+                        }
+                        if ( $campaign["campaign_progress"] >= 100 ){
+                            $background_color = "lightgreen";
+                        }
+                        $campaign["campaign_progress"] .= '%';
+                    }
+                    foreach ( $campaign["prayer_fuel_languages"] ?? [] as $installed_fuel ){
+                        if ( !empty( $languages[$installed_fuel]['flag'] ) ){
+                            $flags .= $languages[$installed_fuel]['flag'];
+                        }
+                    }
+
+                    ?>
+                    <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
+                        <td class="hide-mobile">
+                            <?php echo esc_html( $row_index ); ?><span class="hide-mobile">.</span>
+                        </td>
+                        <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                            <td><a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>"> <?php echo esc_html( $campaign["label"] ); ?></a></td>
+                        <?php else : ?>
+                            <td><?php echo esc_html( $campaign["label"] ); ?></td>
+                        <?php endif; ?>
+                        <td><?php echo esc_html( $campaign['focus'] ); ?></td>
+                        <td><?php echo esc_html( $campaign["campaign_progress"] ); ?></td>
+                        <td><?php echo esc_html( $flags ); ?></td>
+                    </tr>
+                <?php endforeach;  ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+
+    return ob_get_clean();
+
+} );
+
+add_shortcode('p4m-campaigns-map', function ( $atts ){
+
+    $campaigns = p4m_get_all_campaigns();
+
+    $focus = isset( $atts['focus'] ) ? esc_attr( wp_unslash( $atts['focus'] ) ) : '';
+
+    $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $focus ){
+        return empty( $focus ) || in_array( $focus, $campaign["focus"] ?? [] );
+    } );
+
+    $small = isset( $atts["size"] );
+
+
+    DT_Mapbox_API::load_mapbox_header_scripts();
+
+    wp_enqueue_style( 'p4m_map_styles', get_template_directory_uri() . '/assets/css/map.css' );
+    // Map starter Script
+    wp_enqueue_script( 'dt_mapbox_script',
+        get_template_directory_uri() .  '/assets/js/maps_library.js',
+        [
+            'jquery',
+            'lodash'
+        ],
+        filemtime( get_theme_file_path() .  '/assets/js/maps_library.js' ),
+        true
+    );
+    wp_localize_script(
+        'dt_mapbox_script', 'dt_mapbox_metrics', [
+            'settings' => [
+                'map_key' => DT_Mapbox_API::get_key(),
+                'map_mirror' => dt_get_location_grid_mirror( true ),
+                'menu_slug' => $focus . ( $small ? "-small" : '' ),
+                'post_type' => 'prayer_initiatives',
+                'title' => "Click a country",
+                'geocoder_url' => trailingslashit( get_stylesheet_directory_uri() ),
+                'geocoder_nonce' => wp_create_nonce( 'wp_rest' ),
+                'rest_base_url' => "p4m/maps",
+
+                'totals_rest_url' => 'p4m-refresh-stats',
+                'list_by_grid_rest_url' => 'p4m-refresh-stats-data',
+                "small" => $small
+
+            ],
+        ]
+    );
+    $map = "ramadan.js";
+
+    wp_enqueue_script( 'p4m_ramadan',
+        get_template_directory_uri() .  '/assets/js/' . $map,
+        [
+            'jquery',
+            'lodash',
+            'dt_mapbox_script'
+        ],
+        filemtime( get_theme_file_path() .  '/assets/js/'  . $map ),
+        true
+    );
+
+    $map_data = [];
+    $country_grid_ids =[];
+
+    foreach( $campaigns as $campaign ){
+        foreach( $campaign['location_grid'] as $location_grid ){
+            if ( !isset( $map_data[$location_grid['country_id']])){
+                $map_data[$location_grid['country_id']] = [
+                    'grid_id' => $location_grid['country_id'],
+                    'count' => 0,
+                    'name' => $location_grid['country_name'],
+                    'initiatives' => []
+                ];
+            }
+            $map_data[$location_grid['country_id']]['count']++;
+            $map_data[$location_grid['country_id']]['initiatives'][] = [
+                'label' => $campaign['label'],
+                'link' => $campaign['campaign_link'],
+                'progress' => $campaign['campaign_progress'],
+                'prayer_fuel_languages' => $campaign['prayer_fuel_languages'] ?? [],
+            ];
+        }
+    }
+
+
+    wp_localize_script(
+        'p4m_ramadan', 'p4m_ramadan', [
+            'root' => esc_url_raw( rest_url() ),
+            'nonce' => wp_create_nonce( 'wp_rest' ),
+            'data' => [
+                'locations' => $map_data,
+                'country_grid_ids' => $country_grid_ids,
+            ],
+            "type" => $focus,
+            "small" => $small
+        ]
+    );
+
+    $return = "<div id='chart' style='max-width: 100%;'></div>";
+    if ( is_user_logged_in() && !$small ){
+        $return .= "<div style='text-align: right'><button id='refresh_map_data' style='background-color: white; color: #dc3822; text-transform: lowercase;'>refresh data</button></div>";
+    }
+    return $return;
+
+});
