@@ -14,17 +14,8 @@ jQuery(document).ready(function($) {
             content_html += `<li>No prayer initiatives here yet</li>`
         }
         initiatives.forEach(initiative=>{
-            let link = window.p4m_ramadan.type === "ramadan" ? ( initiative.campaign_link || initiative.initiative_link ) : ( initiative.initiative_link || initiative.campaign_link );
-            let progress = ''
-            if ( window.p4m_ramadan.type === "ramadan" ){
-                if ( initiative.campaign_progress && !isNaN(initiative.campaign_progress)){
-                    initiative.campaign_progress = ` - ${initiative.campaign_progress}%`
-                }
-                if ( !initiative.campaign_progress && initiative.status === "forming" ){
-                    initiative.campaign_progress = ` - Setup in progress`
-                }
-                progress = initiative.campaign_progress;
-            }
+            let link = initiative.link
+            let progress = initiative.progress > 0 ? ` - ${initiative.progress}%` : ''
             if ( link ){
                 content_html += `<li>
                     <a target="_blank" href="${window.lodash.escape(link)}">
@@ -51,7 +42,7 @@ jQuery(document).ready(function($) {
         $('#geocode-details').prepend(`
             <div style="margin-bottom: 10px">
             <span style="vertical-align: middle">
-                <span style="height:20px;width:20px;border:1px solid;background-color:#FFCCCDFF;display: inline-block;vertical-align: middle"></span>
+                <span style="height:20px;width:20px;border:1px solid;background-color:#1AB221FF;display: inline-block;vertical-align: middle"></span>
                 Active Initiatives
            </span>
            <span style="vertical-align: middle">

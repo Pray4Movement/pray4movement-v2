@@ -556,7 +556,7 @@ let area_map = {
               'paint': {
                 'fill-color': {
                   property: 'value',
-                  stops: [[-1, 'rgba(255,200,73,0.35)'], [0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(255,204,205)'], [highest_value, 'rgb(220,56,34)']]
+                  stops: [[-1, 'rgba(255,200,73,0.35)'], [0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(207,255,204)'], [highest_value, 'rgb(26,178,33)']]
                 },
                 'fill-opacity': 0.75,
                 'fill-outline-color': '#707070',

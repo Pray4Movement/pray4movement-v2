@@ -758,10 +758,10 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                     $background_color = "white";
                     if ( !empty( $campaign["campaign_progress"] ) && is_numeric( $campaign["campaign_progress"] ) ){
                         if ( $campaign["campaign_progress"] > 0 ){
-                            $background_color = "#FFCCCDFF";
+                            $background_color = "lightgreen";
                         }
                         if ( $campaign["campaign_progress"] >= 100 ){
-                            $background_color = "lightgreen";
+                            $background_color = "gold";
                         }
                         $campaign["campaign_progress"] .= '%';
                     }
