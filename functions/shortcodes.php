@@ -19,6 +19,19 @@ if ( !function_exists( "dt_cached_api_call" ) ){
         return $data;
     }
 }
+if ( ! function_exists( 'dt_recursive_sanitize_array' ) ) {
+    function dt_recursive_sanitize_array( array $array ) : array {
+        foreach ( $array as $key => &$value ) {
+            if ( is_array( $value ) ) {
+                $value = dt_recursive_sanitize_array( $value );
+            }
+            else {
+                $value = sanitize_text_field( wp_unslash( $value ) );
+            }
+        }
+        return $array;
+    }
+}
 
 function shortcode_247_partner( $atts, $content = null ) {
 
@@ -623,7 +636,7 @@ function p4m_get_all_campaigns( $refresh = false ){
                 'Authorization' => 'Bearer ' . $transfer_token,
             ],
         ];
-        $refresh = strpos( home_url(), "pray4movement" ) !== false && $refresh;
+        $refresh = strpos( home_url(), "pray4movement" ) === false || $refresh;
         $response = dt_cached_api_call(
             "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
@@ -634,16 +647,24 @@ function p4m_get_all_campaigns( $refresh = false ){
     return [];
 }
 
+function filter_campaigns( $campaigns, $atts ){
+    $atts = dt_recursive_sanitize_array( $atts );
+    $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $atts ){
+        $in_filter = empty( $atts['focus'] ) || in_array( $atts['focus'], $campaign["focus"] ?? [] );
+        if ( !empty( $atts['start_date'] ) ){
+            $in_filter = $in_filter && ( $campaign["start_date"] >= strtotime( $atts['start_date'] ) );
+        }
+        return $in_filter;
+    } );
+    return $campaigns;
+
+}
+
 
 add_shortcode( 'p4m-campaigns-list', function ( $atts ){
 
     $campaigns = p4m_get_all_campaigns();
-
-    $focus = isset( $atts['focus'] ) ? esc_attr( wp_unslash( $atts['focus'] ) ) : '';
-
-    $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $focus ){
-        return empty( $focus ) || in_array( $focus, $campaign["focus"] ?? [] );
-    } );
+    $campaigns = filter_campaigns( $campaigns, $atts );
 
     foreach ( $campaigns as &$c ){
         $c['focus'] = $c['people_group'];
@@ -763,12 +784,9 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
 add_shortcode('p4m-campaigns-map', function ( $atts ){
 
     $campaigns = p4m_get_all_campaigns();
-
     $focus = isset( $atts['focus'] ) ? esc_attr( wp_unslash( $atts['focus'] ) ) : '';
 
-    $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $focus ){
-        return empty( $focus ) || in_array( $focus, $campaign["focus"] ?? [] );
-    } );
+    $campaigns = filter_campaigns( $campaigns, $atts );
 
     $small = isset( $atts["size"] );
 
@@ -822,7 +840,7 @@ add_shortcode('p4m-campaigns-map', function ( $atts ){
     $country_grid_ids =[];
 
     foreach( $campaigns as $campaign ){
-        foreach( $campaign['location_grid'] as $location_grid ){
+        foreach( $campaign['location_grid'] ?? [] as $location_grid ){
             if ( !isset( $map_data[$location_grid['country_id']])){
                 $map_data[$location_grid['country_id']] = [
                     'grid_id' => $location_grid['country_id'],
