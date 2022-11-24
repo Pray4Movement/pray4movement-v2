@@ -155,6 +155,15 @@ function p4m_map_stats_endpoints(){
         ]
     );
     register_rest_route(
+        $namespace, '/p4m-campaigns-refresh-stats', [
+            'methods'  => 'POST',
+            'callback' => "refresh_campaigns",
+            'permission_callback' => function(){
+                return is_user_logged_in();
+            }
+        ]
+    );
+    register_rest_route(
         $namespace, '/p4m-stats', [
             'methods'  => 'GET',
             'callback' => "p4m_stats",
@@ -164,6 +173,11 @@ function p4m_map_stats_endpoints(){
 }
 add_action( 'rest_api_init', 'p4m_map_stats_endpoints' );
 
+
+function refresh_campaigns(){
+    p4m_get_all_campaigns( true );
+    return true;
+}
 function refresh_stats( WP_REST_Request $request = null ){
     $params = $request->get_params();
     $type = "ramadan";
@@ -815,15 +829,13 @@ add_shortcode('p4m-campaigns-map', function ( $atts ){
                 'geocoder_url' => trailingslashit( get_stylesheet_directory_uri() ),
                 'geocoder_nonce' => wp_create_nonce( 'wp_rest' ),
                 'rest_base_url' => "p4m/maps",
-
-                'totals_rest_url' => 'p4m-refresh-stats',
-                'list_by_grid_rest_url' => 'p4m-refresh-stats-data',
+                'totals_rest_url' => 'p4m-campaigns-refresh-stats',
                 "small" => $small
 
             ],
         ]
     );
-    $map = "ramadan.js";
+    $map = "campaigns-map.js";
 
     wp_enqueue_script( 'p4m_ramadan',
         get_template_directory_uri() .  '/assets/js/' . $map,
@@ -855,6 +867,7 @@ add_shortcode('p4m-campaigns-map', function ( $atts ){
                 'link' => $campaign['campaign_link'],
                 'progress' => $campaign['campaign_progress'],
                 'prayer_fuel_languages' => $campaign['prayer_fuel_languages'] ?? [],
+                'status' => $campaign['status']['key'] ?? '',
             ];
         }
     }
