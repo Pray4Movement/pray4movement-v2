@@ -662,12 +662,14 @@ function p4m_get_all_campaigns( $refresh = false ){
 }
 
 function filter_campaigns( $campaigns, $atts ){
+    if ( empty( $atts ) ){
+        $atts = [];
+    }
     $atts = dt_recursive_sanitize_array( $atts );
     $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $atts ){
         $in_filter = empty( $atts['focus'] ) || in_array( $atts['focus'], $campaign["focus"] ?? [] );
-        if ( !empty( $atts['start_date'] ) ){
-            $in_filter = $in_filter && ( $campaign["start_date"] >= strtotime( $atts['start_date'] ) );
-        }
+        $in_filter = $in_filter && ( empty( $atts['type'] ) || $atts['type'] === $campaign["campaign_type"]['key'] ?? '' );
+        $in_filter = $in_filter && ( empty( $atts['start_date'] ) || $campaign["start_date"] >= strtotime( $atts['start_date'] ) );
         return $in_filter;
     } );
     return $campaigns;
