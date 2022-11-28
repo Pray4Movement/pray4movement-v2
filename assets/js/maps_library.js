@@ -455,12 +455,7 @@ let area_map = {
     area_map.behind_layer = behind_layer
     area_map.grid_data =  window.p4m_ramadan.data.locations ||
         await makeRequest( "POST", mapbox_library_api.obj.settings.totals_rest_url, { post_type: mapbox_library_api.obj.settings.post_type, query: mapbox_library_api.query_args || {}} , mapbox_library_api.obj.settings.rest_base_url )
-    Object.keys(area_map.grid_data).forEach(key=>{
-        area_map.grid_data[key].in_formation = !area_map.grid_data[key].initiatives.find(i=>i.status==='active');
-        if ( area_map.grid_data[key].in_formation ){
-            area_map.grid_data[key].count = -1
-        }
-    })
+
     await area_map.load_layer()
     // load new layer on event
     mapbox_library_api.map.on('zoomend', function() {
@@ -471,16 +466,6 @@ let area_map = {
       if ( mapbox_library_api.current_map_type !== 'area'){return;}
       area_map.load_layer()
     })
-    // mapbox_library_api.map.on('click', function( e, a ) {
-    //     console.log(mapbox_library_api);
-    //     console.log(e)
-    //     console.log(a)
-    //   if ( mapbox_library_api.current_map_type !== 'area'){return;}
-    //   // this section increments up the result on level because
-    //   // it corresponds better to the viewable user intent for details
-    //   let level = mapbox_library_api.get_level()
-    //   area_map.load_detail_panel( e.lngLat.lng, e.lngLat.lat, level )
-    // })
   },
   load_layer: async function ( level = null){
     mapbox_library_api.spinner.show()
@@ -556,7 +541,7 @@ let area_map = {
               'paint': {
                 'fill-color': {
                   property: 'value',
-                  stops: [[-1, 'rgba(255,200,73,0.35)'], [0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(207,255,204)'], [highest_value, 'rgb(26,178,33)']]
+                  stops: [[-1, 'rgb(255,204,205)'], [0, 'rgba(0, 0, 0, 0)'], [1, 'rgb(207,255,204)'], [highest_value, 'rgb(26,178,33)']]
                 },
                 'fill-opacity': 0.75,
                 'fill-outline-color': '#707070',
