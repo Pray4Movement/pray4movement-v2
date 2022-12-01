@@ -683,6 +683,8 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
     $campaigns = p4m_get_all_campaigns();
     $campaigns = filter_campaigns( $campaigns, $atts );
 
+    $total_percent = 0;
+    $time_committed = 0;
     foreach ( $campaigns as &$c ){
         $c['focus'] = $c['people_group'];
         $campaign_locations = "";
@@ -695,7 +697,14 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
         if ( empty( $c['focus'] ) ){
             $c['focus'] = $campaign_locations;
         }
+        $total_percent += (int) $c['campaign_progress'];
+        $time_committed += $c['minutes_committed'];
     }
+    $goal_progress = round( $total_percent / sizeof( $campaigns ), 2 );
+    $hours_committed = round( $time_committed / 60, 2 );
+    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
+    $years_committed = floor( $time_committed / 60 / 24 / 365 );
+
 
     $sort = "label";
     if ( isset( $_GET["sort_table"] ) ) {
@@ -722,6 +731,27 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
         .show-mobile {
             display: none;
         }
+        .campaigns-stats {
+            display: flex; flex-direction: row;
+            justify-content: space-around;
+        }
+        .campaigns-stats div {
+            flex-basis: 33%;
+        }
+        .campaigns-stats .stats-title {
+            text-transform: uppercase;
+            color: #dc3822;
+            font-size: 3rem;
+        }
+        .campaigns-stats .stats-title h4 {
+            margin: 10px 0;
+        }
+        .campaigns-stats .stats-content {
+            font-weight: bold;
+        }
+        .campaigns-stats div div {
+            text-align: center;
+        }
         @media (max-width: 782px) {
             .hide-mobile {
                 display: none;
@@ -738,8 +768,37 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
             .wrap-header {
                 white-space: pre-wrap;
             }
+            .campaigns-stats {
+                flex-direction: column;
+            }
         }
+
     </style>
+    <!-- CAMPAIGNS STATUS: START -->
+    <div class='campaigns-stats'>
+        <div>
+            <div class='stats-title'><h4>24/7 prayer goal</h4></div>
+            <div class='stats-content'>100% coverage for 100+ campaigns</div>
+        </div>
+        <div>
+            <div class='stats-title'><h4>Current Status</h4></div>
+            <div class='stats-content'><?php echo esc_html( $goal_progress ); ?>% coverage
+                of <?php echo esc_html( sizeof( $campaigns ) ); ?> campaigns
+            </div>
+        </div>
+        <div>
+            <div class="stats-title"><h4>Total Time Committed</h4></div>
+            <div class="stats-content">
+                <span class="p4m-carousel">
+                    <?php if ( !empty( $years_committed ) ) :
+                        echo esc_html( $years_committed . ' year' . ( $years_committed > 1 ? 's' : '' ) );
+                    endif;
+                    echo esc_html( ' ' . $days_committed ); ?> days
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- CAMPAIGNS STATUS: END -->
     <div class="campaign-list-wrapper">
         <table id="campaigns-list" style="overflow-x:scroll">
             <thead>
