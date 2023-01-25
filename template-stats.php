@@ -9,9 +9,10 @@ $use_cache = !isset( $_GET['nocache'] );
 $campaigns_data = get_transient( 'p4m-campaigns-stats' );
 if ( empty( $campaigns_data ) || !$use_cache ) {
     $campaigns_data = [
-        'campaigns' => p4m_get_all_campaigns( false ),
+        'campaigns' => p4m_get_all_campaigns( true ),
         'time' => time(),
     ];
+    set_transient( 'p4m-campaigns-stats', $campaigns_data, DAY_IN_SECONDS );
 }
 $campaigns = $campaigns_data['campaigns'];
 
@@ -94,7 +95,7 @@ $stats['locations']['count'] = count( $locations );
 
             <br>
             <br>
-            <p>Stats as of <?php echo esc_html( ( time() - $campaigns_data['time'] ) / 60  ); ?> hours ago</p>
+            <p>Stats as of <?php echo esc_html( round( ( time() - $campaigns_data['time'] ) / 60 / 60, 1 ) ); ?> hour(s) ago</p>
         </div>
     </main><!-- .site-main -->
 
