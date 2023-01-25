@@ -59,6 +59,7 @@ $stats['locations']['count'] = count( $locations );
         transition: 0.3s;
         border-radius: 5px;
         margin: 10px;
+        flex-basis: 30%;
     }
 
     .card:hover {
