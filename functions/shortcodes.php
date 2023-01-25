@@ -677,6 +677,17 @@ function filter_campaigns( $campaigns, $atts ){
 
 }
 
+function p4m_display_minutes( $time_committed ){
+    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
+    $years_committed = floor( $time_committed / 60 / 24 / 365 );
+    $string = "";
+    if ( !empty( $years_committed ) ){
+        $string .= $years_committed . ' year' . ( $years_committed > 1 ? 's' : '' );
+    }
+    $string .= ' ' . $days_committed . ' day' .( $days_committed > 1 ? 's' : '' );
+    return $string;
+}
+
 
 add_shortcode( 'p4m-campaigns-list', function ( $atts ){
 
@@ -701,9 +712,6 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
         $time_committed += $c['minutes_committed'];
     }
     $goal_progress = round( $total_percent / sizeof( $campaigns ), 2 );
-    $hours_committed = round( $time_committed / 60, 2 );
-    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
-    $years_committed = floor( $time_committed / 60 / 24 / 365 );
 
 
     $sort = "label";
@@ -790,10 +798,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <span class="p4m-carousel">
-                    <?php if ( !empty( $years_committed ) ) :
-                        echo esc_html( $years_committed . ' year' . ( $years_committed > 1 ? 's' : '' ) );
-                    endif;
-                    echo esc_html( ' ' . $days_committed ); ?> days
+                    <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
                 </span>
             </div>
         </div>
