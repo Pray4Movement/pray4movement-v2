@@ -812,7 +812,8 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
-                <th style="min-width: 80px;" class="wrap-header"><button type="button" class="sort-button">Prayer Fuel</button></th>
+                <th style="min-width: 80px;" class="wrap-header hide-mobile"><button type="button" class="sort-button">Prayer Fuel</button></th>
+                <th style="min-width: 70px;">Join<span class="hide-mobile"> in Prayer</span></th>
             </tr>
             </thead>
             <tbody>
@@ -843,14 +844,25 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                         <td class="hide-mobile">
                             <?php echo esc_html( $row_index ); ?><span class="hide-mobile">.</span>
                         </td>
-                        <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
-                            <td><a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>"> <?php echo esc_html( $campaign["label"] ); ?></a></td>
-                        <?php else : ?>
-                            <td><?php echo esc_html( $campaign["label"] ); ?></td>
-                        <?php endif; ?>
+                        <td>
+                            <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                                <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>"> <?php echo esc_html( $campaign["label"] ); ?></a>
+                            <?php else : ?>
+                                <?php echo esc_html( $campaign["label"] ); ?>
+                            <?php endif; ?>
+                            <span class="show-mobile"><?php echo esc_html( $flags ); ?></span>
+
+                        </td>
                         <td><?php echo esc_html( $campaign['focus'] ); ?></td>
                         <td><?php echo esc_html( $campaign["campaign_progress"] ); ?></td>
-                        <td><?php echo esc_html( $flags ); ?></td>
+                        <td class="hide-mobile"><?php echo esc_html( $flags ); ?></td>
+                        <td>
+                            <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                            <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>#sign-up">
+                                <span class="hide-mobile">Sign Up to </span>Pray
+                            </a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach;  ?>
             </tbody>
