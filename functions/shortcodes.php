@@ -711,7 +711,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
         $total_percent += (int) $c['campaign_progress'];
         $time_committed += $c['minutes_committed'];
     }
-    $goal_progress = round( $total_percent / sizeof( $campaigns ), 2 );
+    $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
 
     $sort = "label";
@@ -867,6 +867,9 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                 <?php endforeach;  ?>
             </tbody>
         </table>
+        <div style="text-align: center">
+            Don’t see a city, country, or people groups you have on your heart? Champion one with us <a href="https://campaigns.pray4movement.org/">here</a>.
+        </div>
     </div>
     <?php
 
