@@ -31,6 +31,11 @@
 
 
 					</div><!-- .footer-credits -->
+                    <div>
+                        <p>
+                            <a href="/about">About</a> | <a href="/join">Join</a> | <a href="/give">Give</a>
+                        </p>
+                    </div>
 
 					<a class="to-the-top" href="#site-header">
 						<span class="to-the-top-long">
