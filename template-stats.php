@@ -79,7 +79,7 @@ $stats['locations']['count'] = count( $locations );
 <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
         <div class="page-inner-wrapper">
-            <h1>Stats</h1>
+            <h1>Prayer Stats</h1>
 
             <div class="cards">
                 <? foreach ($stats as $stat) : ?>
@@ -99,6 +99,7 @@ $stats['locations']['count'] = count( $locations );
         </div>
 
 
+        <h3>Prayer Campaign Locations</h3>
         <?php echo do_shortcode( '[p4m-campaigns-map][/p4m-campaigns-map]' ); ?>
     </main><!-- .site-main -->
 
