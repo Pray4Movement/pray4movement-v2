@@ -19,8 +19,8 @@ $campaigns = $campaigns_data['campaigns'];
 
 
 $stats = [
-    'prayer_committed' => [ 'count' => 0, 'label' => 'Total Prayer Committed', 'desc' => 'Total time committed to pray for all campaigns past and scheduled' ],
-    'warriors' => [ 'count' => 0, 'label' => 'People Prayed', 'desc' => 'The same user on different campaigns is counted multiple times' ],
+    'prayer_committed' => [ 'count' => 0, 'label' => 'Total Time Prayed and Time Committed', 'desc' => 'Total time committed to pray for all campaigns past and scheduled' ],
+    'warriors' => [ 'count' => 0, 'label' => 'Intercessors', 'desc' => 'This number may be too high because some people may pray for multiple campaigns, or it may be too low because sometimes groups are praying together and we’re only counting them as individuals.' ],
     'campaigns' => [ 'count' => count( $campaigns ), 'label' => 'Campaigns', 'desc' => 'Total number of campaigns' ],
     'locations' => [ 'count' => 0, 'label' => 'Countries', 'desc' => 'Countries with a campaign' ],
 ];
@@ -97,6 +97,9 @@ $stats['locations']['count'] = count( $locations );
             <br>
             <p>Stats as of <?php echo esc_html( round( ( time() - $campaigns_data['time'] ) / 60 / 60, 1 ) ); ?> hour(s) ago</p>
         </div>
+
+
+        <?php echo do_shortcode( '[p4m-campaigns-map][/p4m-campaigns-map]' ); ?>
     </main><!-- .site-main -->
 
 </div><!-- .content-area -->
