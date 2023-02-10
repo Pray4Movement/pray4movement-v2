@@ -6480,3 +6480,58 @@ a.to-the-top > * {
     }
 }
 
+
+
+/*P4M lists*/
+
+.sort-button {
+    padding: 5px 7px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: black;
+    text-transform: none;
+}
+.show-mobile {
+    display: none;
+}
+.campaigns-stats {
+    display: flex; flex-direction: row;
+    justify-content: space-around;
+}
+.campaigns-stats div {
+    flex-basis: 33%;
+}
+.campaigns-stats .stats-title {
+    text-transform: uppercase;
+    color: #dc3822;
+    font-size: 3rem;
+}
+.campaigns-stats .stats-title h4 {
+    margin: 10px 0;
+}
+.campaigns-stats .stats-content {
+    font-weight: bold;
+}
+.campaigns-stats div div {
+    text-align: center;
+}
+@media (max-width: 782px) {
+    .hide-mobile {
+        display: none;
+    }
+    .show-mobile {
+        display: inline-block;
+    }
+    #campaigns-list table {
+        font-size: 14px;
+    }
+    .campaign-list-wrapper {
+        overflow-x: scroll;
+    }
+    .wrap-header {
+        white-space: pre-wrap;
+    }
+    .campaigns-stats {
+        flex-direction: column;
+    }
+}

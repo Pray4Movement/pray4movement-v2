@@ -292,234 +292,152 @@ function p4m_map_stats_usa_states( $refresh = false ){
     return [];
 }
 
-function p4m_ramadan_campaign_list( $args ){
-    $initiative_locations = p4m_map_stats_ramadan();
-    if ( empty( $initiative_locations ) ){
-        return;
-    }
-    $initiatives = [];
+function p4m_ramadan_campaign_list( $atts ){
+    $campaigns = p4m_get_all_campaigns();
+    $campaigns = filter_campaigns( $campaigns, $atts );
+
     $total_percent = 0;
-    foreach ( $initiative_locations as $location_id => $location_data ){
-        foreach ( $location_data["initiatives"] as $initiative ){
-            if ( !isset( $initiatives[$initiative["initiative_id"]] ) ){
-                $initiatives[$initiative["initiative_id"]] = $initiative;
-            } else {
-                $initiatives[$initiative["initiative_id"]]["location"] .= ( ", " . $initiative["location"] );
-            }
-            $total_percent += (int) $initiative["campaign_progress"];
-        }
-    }
-
-
-    $goal_progress = round( $total_percent / sizeof( $initiatives ), 2 );
-
-
-
-    $sort = "country_name";
-    if ( isset( $_GET["sort_table"] ) ) {
-        $sort = sanitize_text_field( wp_unslash( $_GET["sort_table"] ) );
-    }
-
-    uasort( $initiatives, function ( $a, $b ) use ( $sort ){
-        return $a[$sort] <=> $b[$sort];
-    });
-    if ( $sort === "campaign_progress" ){
-        $initiatives = array_reverse( $initiatives );
-    }
-
-    $with_progress = 0;
-    $active = 0;
-    $setup_in_progress = 0;
     $time_committed = 0;
-    foreach ( $initiatives as $initiative ){
-        if ( isset( $initiative["minutes_committed"] ) ){
-            $time_committed += (int) $initiative["minutes_committed"];
+    foreach ( $campaigns as &$c ){
+        $c['focus'] = $c['people_group'];
+        $campaign_locations = '';
+        foreach ( $c['location_grid'] ?? [] as $location ){
+            if ( !empty( $campaign_locations ) ){
+                $campaign_locations .= ', ';
+            }
+            $campaign_locations .= $location['label'];
         }
-
-        if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) && $initiative["campaign_progress"] > 0 ){
-            $with_progress++;
-        } else if ( $initiative["status"] === "active" ){
-            $active++;
-        } else {
-            $setup_in_progress++;
+        if ( empty( $c['focus'] ) ){
+            $c['focus'] = $campaign_locations;
         }
+        $total_percent += (int)$c['campaign_progress'];
+        $time_committed += $c['minutes_committed'];
     }
-    $hours_committed = round( $time_committed / 60, 2 );
-    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
-    $years_committed = floor( $time_committed / 60 / 24 / 365 );
+    $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
+
+
+    $sort = 'label';
+    if ( isset( $_GET['sort_table'] ) ){
+        $sort = sanitize_text_field( wp_unslash( $_GET['sort_table'] ) );
+    }
+
+    uasort( $campaigns, function ( $a, $b ) use ( $sort ){
+        return $a[$sort] <=> $b[$sort];
+    } );
+    if ( $sort === 'campaign_progress' ){
+        $campaigns = array_reverse( $campaigns );
+    }
 
     ob_start();
     ?>
-    <style>
-        .sort-button {
-            padding: 5px 7px;
-            border-radius: 5px;
-            background-color: transparent;
-            color: black;
-            text-transform: none;
-        }
-        .ramadan-stats {
-            display: flex; flex-direction: row;
-            justify-content: space-around;
-        }
-        .ramadan-stats div {
-            flex-basis: 33%;
-        }
-        .ramadan-stats .stats-title {
-            text-transform: uppercase;
-            color: #dc3822;
-            font-size: 3rem;
-        }
-        .ramadan-stats .stats-title h4 {
-            margin: 10px 0;
-        }
-        .ramadan-stats .stats-content {
-            font-weight: bold;
-        }
-        .ramadan-stats div div {
-            text-align: center;
-        }
-        .show-mobile {
-            display: none;
-        }
-        @media (max-width: 782px) {
-           .ramadan-stats {
-               flex-direction: column;
-           }
-           .hide-mobile {
-               display: none;
-           }
-           .show-mobile {
-               display: inline-block;
-           }
-           #campaigns-list table {
-               font-size: 14px;
-           }
-           .campaign-list-wrapper {
-               overflow-x: scroll;
-           }
-           .wrap-header {
-               white-space: pre-wrap;
-           }
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-            // Your code to run since DOM is loaded and ready
-            let years = '<?php echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) . esc_html( ' ' . $days_committed ) .  ' days' ); ?>';
-            let hours = '<?php echo esc_html( number_format( $hours_committed ) ) ?> hours';
-            let current = 'hours';
-            jQuery(document).ready(function ($) {
-                setInterval(()=>{
-                    if ( current === 'years' ){
-                        $(".p4m-carousel").fadeOut(function() {
-                          $(this).text(years)
-                        }).fadeIn();
-                        current = 'days'
-                    } else {
-                        $(".p4m-carousel").fadeOut(function() {
-                            $(this).text(hours)
-                        }).fadeIn();
-                        current = 'years'
-                    }
-                }, 3000)
-            })
-        });
-    </script>
     <!-- CAMPAIGNS STATUS: START -->
-    <div class="ramadan-stats">
+    <div class='campaigns-stats'>
         <div>
-            <div class="stats-title"><h4>24/7 prayer goal</h4></div>
-            <div class="stats-content">100% coverage for 100+ campaigns</div>
+            <div class='stats-title'><h4>24/7 prayer goal</h4></div>
+            <div class='stats-content'>100% coverage for 100+ campaigns</div>
         </div>
         <div>
-            <div class="stats-title"><h4>Current Status</h4></div>
-            <div class="stats-content"><?php echo esc_html( $goal_progress ); ?>% coverage of <?php echo esc_html( $active + $with_progress ); ?> campaigns</div>
+            <div class='stats-title'><h4>Current Status</h4></div>
+            <div class='stats-content'><?php echo esc_html( $goal_progress ); ?>% coverage
+                of <?php echo esc_html( sizeof( $campaigns ) ); ?> campaigns
+            </div>
         </div>
         <div>
             <div class="stats-title"><h4>Total Time Committed</h4></div>
             <div class="stats-content">
                 <span class="p4m-carousel">
-                    <?php if ( !empty( $years_committed ) ) :
-                        echo esc_html( $years_committed . " year" . ( $years_committed > 1 ? 's' : '' ) );
-                    endif;
-                    echo esc_html( ' ' . $days_committed ); ?> days
+                    <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
                 </span>
             </div>
         </div>
     </div>
     <!-- CAMPAIGNS STATUS: END -->
     <div class="campaign-list-wrapper">
-    <table id="campaigns-list" style="overflow-x:scroll">
-        <thead>
+        <table id="campaigns-list" style="overflow-x:scroll">
+            <thead>
             <tr>
                 <th style="width:60px" class="hide-mobile"></th>
-                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
-                <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="country_name">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
-                <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
-                <th style="min-width: 80px;" class="wrap-header"><button type="button" class="sort-button">Prayer Fuel</button></th>
+                <th>
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="label">Campaign <span
+                                style="color:#dc3822">&#9650;</span></button>
+                    </form>
+                </th>
+                <th>
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span>
+                        </button>
+                    </form>
+                </th>
+                <th style="min-width: 66px">
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="campaign_progress"><span
+                                class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span
+                                style="color:#dc3822">&#9660;</span></button>
+                    </form>
+                </th>
+                <th style="min-width: 80px;" class="wrap-header hide-mobile">
+                    <button type="button" class="sort-button">Prayer Fuel</button>
+                </th>
+                <th style="min-width: 70px;">Join<span class="hide-mobile"> in Prayer</span></th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <?php
             $row_index = 0;
             $languages = p4m_languages_list();
-
-            foreach ( $initiatives as $initiative ) :
+            foreach ( $campaigns as $campaign ) :
                 $flags = '';
                 $row_index++;
-                $link = !empty( $initiative["campaign_link"] ) ? $initiative["campaign_link"] : $initiative["initiative_link"];
-                $background_color = "white";
-                if ( !empty( $initiative["campaign_progress"] ) && is_numeric( $initiative["campaign_progress"] ) ){
-                    if ( $initiative["campaign_progress"] > 0 ){
-                        $background_color = "#FFCCCDFF";
+                $background_color = 'white';
+                if ( !empty( $campaign['campaign_progress'] ) && is_numeric( $campaign['campaign_progress'] ) ){
+                    if ( $campaign['campaign_progress'] > 0 ){
+                        $background_color = 'lightyellow';
                     }
-                    if ( $initiative["campaign_progress"] >= 100 ){
-                        $background_color = "lightgreen";
+                    if ( $campaign['campaign_progress'] >= 100 ){
+                        $background_color = 'lightgreen';
                     }
-                    $initiative["campaign_progress"] .= '%';
+                    $campaign['campaign_progress'] .= '%';
                 }
-                if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "forming" ){
-                    $background_color = "#FFC84959";
-                    $initiative["campaign_progress"] = "Setup in progress";
-                }
-                if ( empty( $initiative["campaign_progress"] ) && $initiative["status"] === "active" ){
-                    $initiative["campaign_progress"] = "0%";
-                }
-                foreach ( $initiative["prayer_fuel_languages"] ?? [] as $installed_fuel ){
+                foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
                     if ( !empty( $languages[$installed_fuel]['flag'] ) ){
                         $flags .= $languages[$installed_fuel]['flag'];
                     }
                 }
+
                 ?>
                 <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
                     <td class="hide-mobile">
                         <?php echo esc_html( $row_index ); ?><span class="hide-mobile">.</span>
                     </td>
-                    <?php if ( !empty( $link ) ) : ?>
-                        <td><a target="_blank" href="<?php echo esc_html( $link ); ?>"> <?php echo esc_html( $initiative["label"] ); ?></a></td>
-                    <?php else : ?>
-                        <td><?php echo esc_html( $initiative["label"] ); ?></td>
-                    <?php endif; ?>
                     <td>
-                        <?php
-                        if ( !empty( $initiative["people_group"] ) ){
-                            echo esc_html( $initiative["people_group"] );
-                        } else if ( !empty( $initiative["location"] ) ){
-                            echo esc_html( $initiative["location"] );
-                        } else if ( $initiative["country"] === "other" ){
-                            echo "World/other";
-                        } else {
-                            echo esc_html( $initiative["label"] );
-                        }
-                        ?>
+                        <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                            <a target="_blank"
+                               href="<?php echo esc_html( $campaign['campaign_link'] ); ?>"> <?php echo esc_html( $campaign['label'] ); ?></a>
+                        <?php else : ?>
+                            <?php echo esc_html( $campaign['label'] ); ?>
+                        <?php endif; ?>
+                        <span class="show-mobile"><?php echo esc_html( $flags ); ?></span>
+
                     </td>
-                    <td><?php echo esc_html( $initiative["campaign_progress"] ); ?></td>
-                    <td><?php echo esc_html( $flags ); ?></td>
+                    <td><?php echo esc_html( $campaign['focus'] ); ?></td>
+                    <td><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
+                    <td class="hide-mobile"><?php echo esc_html( $flags ); ?></td>
+                    <td>
+                        <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                            <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>#sign-up">
+                                <span class="hide-mobile">Sign Up to </span>Pray
+                            </a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
-            <?php endforeach;  ?>
-        </tbody>
-    </table>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div style="text-align: center">
+            Don’t see a city, country, or people groups you have on your heart? Champion one with us <a
+                href="https://campaigns.pray4movement.org/">here</a>.
+        </div>
     </div>
     <?php
 
@@ -666,11 +584,13 @@ function filter_campaigns( $campaigns, $atts ){
         $atts = [];
     }
     $atts = dt_recursive_sanitize_array( $atts );
+
     $campaigns = array_filter( $campaigns, function ( $campaign ) use ( $atts ){
         $in_filter = empty( $atts['focus'] ) || in_array( $atts['focus'], $campaign["focus"] ?? [] );
         $in_filter = $in_filter && ( empty( $atts['type'] ) || $atts['type'] === $campaign["campaign_type"]['key'] ?? '' );
         $in_filter = $in_filter && ( empty( $atts['start_date'] ) || $campaign["start_date"] >= strtotime( $atts['start_date'] ) );
         $in_filter = $in_filter && ( empty( $atts['end_date'] ) || $campaign["end_date"] <= strtotime( $atts['end_date'] ) );
+        $in_filter = $in_filter && ( empty( $atts['scheduled'] ) || $campaign["end_date"] > time() );
         return $in_filter;
     } );
     return $campaigns;
@@ -694,10 +614,8 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
     $campaigns = p4m_get_all_campaigns();
     $campaigns = filter_campaigns( $campaigns, $atts );
 
-    $total_percent = 0;
-    $time_committed = 0;
     foreach ( $campaigns as &$c ){
-        $c['focus'] = $c['people_group'];
+        $c['location_focus'] = $c['people_group'];
         $campaign_locations = "";
         foreach ( $c["location_grid"] ?? [] as $location ){
             if ( !empty( $campaign_locations ) ){
@@ -705,13 +623,10 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
             }
             $campaign_locations .= $location["label"];
         }
-        if ( empty( $c['focus'] ) ){
-            $c['focus'] = $campaign_locations;
+        if ( empty( $c['location_focus'] ) ){
+            $c['location_focus'] = $campaign_locations;
         }
-        $total_percent += (int) $c['campaign_progress'];
-        $time_committed += $c['minutes_committed'];
     }
-    $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
 
     $sort = "label";
@@ -728,82 +643,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
 
     ob_start();
     ?>
-    <style>
-        .sort-button {
-            padding: 5px 7px;
-            border-radius: 5px;
-            background-color: transparent;
-            color: black;
-            text-transform: none;
-        }
-        .show-mobile {
-            display: none;
-        }
-        .campaigns-stats {
-            display: flex; flex-direction: row;
-            justify-content: space-around;
-        }
-        .campaigns-stats div {
-            flex-basis: 33%;
-        }
-        .campaigns-stats .stats-title {
-            text-transform: uppercase;
-            color: #dc3822;
-            font-size: 3rem;
-        }
-        .campaigns-stats .stats-title h4 {
-            margin: 10px 0;
-        }
-        .campaigns-stats .stats-content {
-            font-weight: bold;
-        }
-        .campaigns-stats div div {
-            text-align: center;
-        }
-        @media (max-width: 782px) {
-            .hide-mobile {
-                display: none;
-            }
-            .show-mobile {
-                display: inline-block;
-            }
-            #campaigns-list table {
-                font-size: 14px;
-            }
-            .campaign-list-wrapper {
-                overflow-x: scroll;
-            }
-            .wrap-header {
-                white-space: pre-wrap;
-            }
-            .campaigns-stats {
-                flex-direction: column;
-            }
-        }
 
-    </style>
-    <!-- CAMPAIGNS STATUS: START -->
-    <div class='campaigns-stats'>
-        <div>
-            <div class='stats-title'><h4>24/7 prayer goal</h4></div>
-            <div class='stats-content'>100% coverage for 100+ campaigns</div>
-        </div>
-        <div>
-            <div class='stats-title'><h4>Current Status</h4></div>
-            <div class='stats-content'><?php echo esc_html( $goal_progress ); ?>% coverage
-                of <?php echo esc_html( sizeof( $campaigns ) ); ?> campaigns
-            </div>
-        </div>
-        <div>
-            <div class="stats-title"><h4>Total Time Committed</h4></div>
-            <div class="stats-content">
-                <span class="p4m-carousel">
-                    <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
-                </span>
-            </div>
-        </div>
-    </div>
-    <!-- CAMPAIGNS STATUS: END -->
     <div class="campaign-list-wrapper">
         <table id="campaigns-list" style="overflow-x:scroll">
             <thead>
@@ -812,8 +652,18 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
-                <th style="min-width: 80px;" class="wrap-header hide-mobile"><button type="button" class="sort-button">Prayer Fuel</button></th>
-                <th style="min-width: 70px;">Join<span class="hide-mobile"> in Prayer</span></th>
+                <th>
+                    <form action='#campaigns-list'>
+                        <button class='sort-button' name='sort_table' value='focus'>Type <span style='color:#dc3822'>&#9650;</span>
+                        </button>
+                    </form>
+                </th>
+                <th>
+                    <form action='#campaigns-list'>
+                        <button class='sort-button' name='sort_table' value='start_date'>Start <span style='color:#dc3822'>&#9650;</span>
+                        </button>
+                    </form>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -853,16 +703,11 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                             <span class="show-mobile"><?php echo esc_html( $flags ); ?></span>
 
                         </td>
-                        <td><?php echo esc_html( $campaign['focus'] ); ?></td>
+                        <td><?php echo esc_html( $campaign['location_focus'] ); ?></td>
                         <td><?php echo esc_html( $campaign["campaign_progress"] ); ?></td>
-                        <td class="hide-mobile"><?php echo esc_html( $flags ); ?></td>
-                        <td>
-                            <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
-                            <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>#sign-up">
-                                <span class="hide-mobile">Sign Up to </span>Pray
-                            </a>
-                            <?php endif; ?>
-                        </td>
+                        <td><?php echo esc_html( join(', ', $campaign["focus"] ?? '' ) ); ?></td>
+                        <td><?php echo esc_html( date_i18n( 'Y-m-d', $campaign["start_date"] ) ); ?></td>
+
                     </tr>
                 <?php endforeach;  ?>
             </tbody>
