@@ -79,7 +79,7 @@ $stats['minutes_of_prayer']['value'] = p4m_display_minutes( $stats['minutes_of_p
 <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
         <div class="page-inner-wrapper">
-            <h1>Prayer Stats</h1>
+            <h2>Prayer Stats</h2>
 
             <div class="p4m-cards">
                 <? foreach ( $stats as $stat ) : ?>
