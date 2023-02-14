@@ -9,36 +9,26 @@ $use_cache = !isset( $_GET['nocache'] );
 $campaigns_data = get_transient( 'p4m-campaigns-stats' );
 if ( empty( $campaigns_data ) || !$use_cache ) {
     $campaigns_data = [
-        'campaigns' => p4m_get_all_campaigns( true ),
+        'stats' => apply_filters( 'go_stats_endpoint', [] ),
         'time' => time(),
     ];
-    set_transient( 'p4m-campaigns-stats', $campaigns_data, DAY_IN_SECONDS );
-}
-$campaigns = $campaigns_data['campaigns'];
-
-
-
-$stats = [
-    'prayer_committed' => [ 'count' => 0, 'label' => 'Total Time Prayed and Time Committed', 'desc' => 'Total time committed to pray for all campaigns past and scheduled' ],
-    'warriors' => [ 'count' => 0, 'label' => 'Intercessors', 'desc' => 'This number may be too high because some people may pray for multiple campaigns, or it may be too low because sometimes groups are praying together and we’re only counting them as individuals.' ],
-    'campaigns' => [ 'count' => count( $campaigns ), 'label' => 'Campaigns', 'desc' => 'Total number of campaigns' ],
-    'locations' => [ 'count' => 0, 'label' => 'Countries', 'desc' => 'Countries with a campaign' ],
-];
-
-$locations = [];
-
-foreach( $campaigns as $campaign ) {
-    $stats['prayer_committed']['count'] += $campaign['minutes_committed'];
-    $stats['warriors']['count'] += $campaign['prayers_count'];
-    foreach( $campaign['location_grid'] ?? [] as $location ) {
-        if ( !in_array( $location['country_id'], $locations ) ) {
-            $locations[] = $location['country_id'];
+    $prayer_global_request = wp_remote_post( 'https://prayer.global/wp-json/go/v1/stats' );
+    if ( !is_wp_error( $prayer_global_request ) ) {
+        $prayer_global = json_decode( $prayer_global_request['body'], true );
+        if ( !empty( $prayer_global ) ) {
+            $campaigns_data['prayer_global'] = $prayer_global;
         }
     }
+
+    set_transient( 'p4m-campaigns-stats', $campaigns_data, DAY_IN_SECONDS );
 }
 
-$stats['prayer_committed']['count'] = p4m_display_minutes( $stats['prayer_committed']['count'] );
-$stats['locations']['count'] = count( $locations );
+$stats = $campaigns_data['stats'];
+if ( isset( $campaigns_data['prayer_global']['minutes_of_prayer']['value'] ) ){
+    $stats['minutes_of_prayer']['value'] = $stats['minutes_of_prayer']['value'] +  $campaigns_data['prayer_global']['minutes_of_prayer']['value'];
+    $stats['minutes_of_prayer']['description'] = 'Total time committed to pray for all past and upcoming campaigns and on Prayer.Global';
+}
+$stats['minutes_of_prayer']['value'] = p4m_display_minutes( $stats['minutes_of_prayer']['value'] );
 
 ?>
 
@@ -50,29 +40,39 @@ $stats['locations']['count'] = count( $locations );
         margin:auto;
         min-height: 100vh;
     }
-    .cards {
+    .p4m-cards {
         display: flex;
         flex-wrap: wrap;
     }
 
-    .card {
+    .p4m-card {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
         border-radius: 5px;
         margin: 10px;
         flex-basis: 30%;
     }
+    @media only screen and (max-width: 768px) {
+        .p4m-card {
+            flex-basis: 100%;
+        }
+    }
 
-    .card:hover {
+    .p4m-card:hover {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
 
-    .card-container {
+    .p4m-card-container {
         padding: 16px;
     }
     .p4m-stat-desc {
         font-size: 1rem;
         color: #666;
+    }
+    .p4m-card-title {
+        font-size: 2rem;
+        margin-top: 10px;
+        min-height: 30px;
     }
 </style>
 
@@ -81,13 +81,13 @@ $stats['locations']['count'] = count( $locations );
         <div class="page-inner-wrapper">
             <h1>Prayer Stats</h1>
 
-            <div class="cards">
-                <? foreach ($stats as $stat) : ?>
-                    <div class="card">
-                        <div class="card-container">
-                            <h4><b><? echo esc_html( $stat['count'] ) ?></b></h4>
-                            <p><? echo esc_html( $stat['label'] ) ?></p>
-                            <p class="p4m-stat-desc"><? echo esc_html( $stat['desc']  ?? '')  ?></p>
+            <div class="p4m-cards">
+                <? foreach ( $stats as $stat ) : ?>
+                    <div class="p4m-card">
+                        <div class="p4m-card-container">
+                            <h4 class="p4m-card-title"><? echo esc_html( $stat['label'] ) ?></h4>
+                            <p><strong><? echo esc_html( $stat['value'] ) ?></strong></p>
+                            <p class="p4m-stat-desc"><? echo esc_html( $stat['description']  ?? '')  ?></p>
                         </div>
                     </div>
                 <? endforeach; ?>
