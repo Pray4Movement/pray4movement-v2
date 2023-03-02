@@ -6515,6 +6515,13 @@ a.to-the-top > * {
 .campaigns-stats div div {
     text-align: center;
 }
+.video-icon {
+    height: 1.5em;
+    margin-top: 5px;
+}
+.video-button {
+    display: inline;
+}
 @media (max-width: 782px) {
     .hide-mobile {
         display: none;
@@ -6533,5 +6540,8 @@ a.to-the-top > * {
     }
     .campaigns-stats {
         flex-direction: column;
+    }
+    #campaigns-list {
+        font-size: 14px;
     }
 }
