@@ -433,10 +433,10 @@ function p4m_ramadan_campaign_list( $atts ){
                     </td>
                     <td>
                         <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
-                            <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>#sign-up">
+                            <a target="_blank" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>#sign-up" style="display: block">
                                 <span class="hide-mobile">Sign Up to </span>Pray</a>
                                 <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
-                                    <span class="show-mobile" style="display: inline">
+                                    <span class="show-mobile">
                                         <a target="_blank" class="video-button" href="<?php echo esc_html( $campaign['promo_video'] ); ?>">
                                             <img class="video-icon" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/video.svg' ) ?>"/>
                                         </a>
