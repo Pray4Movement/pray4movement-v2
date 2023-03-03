@@ -15,8 +15,8 @@ if ( empty( $campaigns_data ) || !$use_cache ) {
     $prayer_global_request = wp_remote_post( 'https://prayer.global/wp-json/go/v1/stats' );
     if ( !is_wp_error( $prayer_global_request ) ) {
         $prayer_global = json_decode( $prayer_global_request['body'], true );
-        if ( !empty( $prayer_global ) ) {
-            $campaigns_data['prayer_global'] = $prayer_global;
+        if ( !empty( $prayer_global ) && !empty( $prayer_global['stats'] ) ) {
+            $campaigns_data['prayer_global'] = $prayer_global['stats'];
         }
     }
 
