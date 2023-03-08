@@ -24,10 +24,6 @@ if ( empty( $campaigns_data ) || !$use_cache ) {
 }
 
 $stats = $campaigns_data['stats'];
-if ( isset( $campaigns_data['prayer_global']['minutes_of_prayer']['value'] ) ){
-    $stats['minutes_of_prayer']['value'] = $stats['minutes_of_prayer']['value'] +  $campaigns_data['prayer_global']['minutes_of_prayer']['value'];
-    $stats['minutes_of_prayer']['description'] = 'Total time committed to pray for all past and upcoming campaigns and on Prayer.Global';
-}
 $stats['minutes_of_prayer']['value'] = p4m_display_minutes( $stats['minutes_of_prayer']['value'] );
 
 ?>
