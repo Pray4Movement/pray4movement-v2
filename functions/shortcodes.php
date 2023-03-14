@@ -509,7 +509,9 @@ function p4m_languages_list(){
             'native_name' => 'العربية',
             'flag' => '🇪🇬',
             'prayer_fuel' => true
-        ]
+        ],
+        'es_419' => [ 'label' => 'Spanish (Latin America)', 'native_name' => 'Español (America Latina)', 'flag' => '🇨🇴', 'rtl' => false ],
+
     ];
     return $translations;
 }
