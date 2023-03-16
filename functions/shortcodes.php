@@ -305,7 +305,7 @@ function p4m_ramadan_campaign_list( $atts ){
             if ( !empty( $campaign_locations ) ){
                 $campaign_locations .= ', ';
             }
-            $campaign_locations .= $location['label'];
+            $campaign_locations .= $location['matched_search'] ?? $location['label'];
         }
         if ( empty( $c['focus'] ) ){
             $c['focus'] = $campaign_locations;
