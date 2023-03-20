@@ -324,7 +324,7 @@ function p4m_ramadan_campaign_list( $atts ){
     uasort( $campaigns, function ( $a, $b ) use ( $sort ){
         return $a[$sort] <=> $b[$sort];
     } );
-    if ( $sort === 'campaign_progress' ){
+    if ( $sort === 'campaign_progress' || $sort === 'minutes_committed' ){
         $campaigns = array_reverse( $campaigns );
     }
 
@@ -562,16 +562,26 @@ function filter_campaigns( $campaigns, $atts ){
 }
 
 function p4m_display_minutes( $time_committed ){
-    $days_committed = round( $time_committed / 60 / 24, 2 ) % 365;
     $years_committed = floor( $time_committed / 60 / 24 / 365 );
-    $string = "";
+    $days_committed = floor( fmod( $time_committed / 60 / 24, 365 ) );
+    $hours_committed = round( fmod( $time_committed / 60, 24 ) );
+    $string = '';
     if ( !empty( $years_committed ) ){
-        $string .= $years_committed . ' year' . ( $years_committed > 1 ? 's' : '' );
+        $string .= $years_committed . ' ' .( $years_committed > 1 ? __( 'years', 'disciple-tools-prayer-campaigns' ) : __( 'year', 'disciple-tools-prayer-campaigns' ) );
+        $string  .= ' ';
     }
-    $string .= ' ' . $days_committed . ' day' .( $days_committed > 1 ? 's' : '' );
+    if ( $days_committed >= 1 ){
+        $string .= $days_committed . ' ' . ( (int) $days_committed === 1 ? __( 'day', 'disciple-tools-prayer-campaigns' ) : __( 'days', 'disciple-tools-prayer-campaigns' ) );
+        $string  .= ' ';
+    }
+    if ( empty( $years_committed ) && !empty( $hours_committed ) ){
+        $string .= $hours_committed . ' ' . ( (int) $hours_committed === 1 ? __( 'hour', 'disciple-tools-prayer-campaigns' ) : __( 'hours', 'disciple-tools-prayer-campaigns' ) );
+    }
+    if ( empty( $string ) ){
+        $string = "0 " . __( 'hours', 'disciple-tools-prayer-campaigns' );
+    }
     return $string;
 }
-
 
 add_shortcode( 'p4m-campaigns-list', function ( $atts ){
 
@@ -601,7 +611,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
     uasort( $campaigns, function ( $a, $b ) use ( $sort ){
         return $a[$sort] <=> $b[$sort];
     });
-    if ( $sort === "campaign_progress" ){
+    if ( $sort === "campaign_progress" || $sort === 'minutes_committed'){
         $campaigns = array_reverse( $campaigns );
     }
 
@@ -615,7 +625,21 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                 <th style="width:60px" class="hide-mobile"></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="label">Campaign <span style="color:#dc3822">&#9650;</span></button></form></th>
                 <th><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span></button></form></th>
-                <th style="min-width: 66px"><form action="#campaigns-list"><button class="sort-button" name="sort_table" value="campaign_progress"><span class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span style="color:#dc3822">&#9660;</span></button></form></th>
+                <th style="min-width: 66px">
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="campaign_progress"><span
+                                class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span
+                                style="color:#dc3822">&#9660;</span></button>
+                    </form>
+                </th>
+                <th style="min-width: 66px">
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="minutes_committed">
+                            <span class="hide-mobile">Time Committed</span><span class="show-mobile">Committed</span>
+                            <span style="color:#dc3822">&#9660;</span>
+                        </button>
+                    </form>
+                </th>
                 <th>
                     <form action='#campaigns-list'>
                         <button class='sort-button' name='sort_table' value='focus'>Type <span style='color:#dc3822'>&#9650;</span>
@@ -669,6 +693,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
                         </td>
                         <td><?php echo esc_html( $campaign['location_focus'] ); ?></td>
                         <td><?php echo esc_html( $campaign["campaign_progress"] ); ?></td>
+                        <td><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed']) ); ?></td>
                         <td><?php echo esc_html( join(', ', $campaign["focus"] ?? '' ) ); ?></td>
                         <td><?php echo esc_html( date_i18n( 'Y-m-d', $campaign["start_date"] ) ); ?></td>
 
