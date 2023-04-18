@@ -298,6 +298,9 @@ function p4m_ramadan_campaign_list( $atts ){
 
     $total_percent = 0;
     $time_committed = 0;
+    $intercessors = 0;
+    $countries_prayed_for = [];
+    $time_slots = 0;
     foreach ( $campaigns as &$c ){
         $c['focus'] = $c['people_group'];
         $campaign_locations = '';
@@ -312,6 +315,13 @@ function p4m_ramadan_campaign_list( $atts ){
         }
         $total_percent += (int)$c['campaign_progress'];
         $time_committed += $c['minutes_committed'];
+        $intercessors += $c['prayers_count'];
+        foreach( $c['location_grid'] ?? [] as $location ){
+            if ( !in_array( $location['country_name'], $countries_prayed_for ) ){
+                $countries_prayed_for[] = $location['country_name'];
+            }
+        }
+        $time_slots += $c['minutes_committed'] / 15;
     }
     $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
@@ -349,6 +359,20 @@ function p4m_ramadan_campaign_list( $atts ){
                     <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
                 </span>
             </div>
+        </div>
+    </div>
+    <div class='campaigns-stats'>
+        <div>
+            <div class='stats-title'><h4>Intercessors</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $intercessors ) ); ?></div>
+        </div>
+        <div>
+            <div class='stats-title'><h4>Countries Prayed For</h4></div>
+            <div class='stats-content'><?php echo esc_html( sizeof( $countries_prayed_for ) ); ?></div>
+        </div>
+        <div>
+            <div class='stats-title'><h4>15 Minute Time Slots Filled</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $time_slots ) ); ?></div>
         </div>
     </div>
     <!-- CAMPAIGNS STATUS: END -->

@@ -190,6 +190,7 @@ require get_template_directory() . '/functions/p4n-block-patterns.php';
 require get_template_directory() . '/functions/p4network-post-type.php';
 require_once( get_template_directory() . '/functions/global-functions.php' );
 require_once( get_template_directory() . '/functions/shortcodes.php' );
+require_once( get_template_directory() . '/functions/campaigns-rest.php' );
 
 /**
  * Register and Enqueue Styles.
