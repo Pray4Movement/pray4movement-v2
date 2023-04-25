@@ -550,7 +550,7 @@ function p4m_get_all_campaigns( $refresh = false ){
     $url = null;
     foreach( $site_keys as $key ){
         if ( $key['dev_key'] === 'campaigns_stats' ){
-            $token = md5( md5( $key['token'] . $key['site_1'] . $key['site_2'] ) . current_time( 'Y-m-dH', 1 ) );
+            $token = md5( md5( $key['token'] . $key['site1'] . $key['site2'] ) . current_time( 'Y-m-dH', 1 ) );
             $url = strpos( home_url(), $key['site1'] ) !== false ? $key['site2'] : $key['site1'];
         }
     }
