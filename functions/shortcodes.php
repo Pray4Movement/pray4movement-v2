@@ -235,20 +235,26 @@ function p4m_stats( WP_REST_Request $request = null ){
 }
 
 function p4m_map_stats_ramadan( $refresh = false ){
+    $site_keys = get_option( 'site_link_system_api_keys', [] );
+    $token = null;
+    $url = null;
+    foreach( $site_keys as $key ){
+        if ( $key['dev_key'] === 'campaigns_stats' ){
+            $token = md5( md5( $key['token'] . $key['site1'] . $key['site2'] ) . current_time( 'Y-m-dH', 1 ) );
+            $url = strpos( home_url(), $key['site1'] ) !== false ? $key['site2'] : $key['site1'];
+        }
+    }
 
-    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
-    if ( !empty( $site_link_settings ) ){
-        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
-        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+    if ( !empty( $token ) && !empty( $url ) ){
         $args = [
             'method' => 'POST',
             'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "247_campaign" ] ] ],
             'headers' => [
-                'Authorization' => 'Bearer ' . $transfer_token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ];
         $refresh = WP_DEBUG || $refresh;
-        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, MINUTE_IN_SECONDS * 5, !$refresh );
+        $response = dt_cached_api_call( "https://" . $url . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, MINUTE_IN_SECONDS * 5, !$refresh );
         return json_decode( $response, true ) ?? [];
     }
     return [];
@@ -321,7 +327,7 @@ function p4m_ramadan_campaign_list( $atts ){
                 $countries_prayed_for[] = $location['country_name'];
             }
         }
-        $time_slots += $c['minutes_committed'] / 15;
+        $time_slots += $c['time_slots_covered'];
     }
     $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
