@@ -565,7 +565,7 @@ function p4m_get_all_campaigns( $refresh = false ){
         ];
         $refresh = strpos( home_url(), "pray4movement" ) === false || $refresh;
         $response = dt_cached_api_call(
-            "http://" . $url . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
+            "https://" . $url . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
             MINUTE_IN_SECONDS * 5,
             !$refresh );
