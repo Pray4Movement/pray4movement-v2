@@ -545,20 +545,27 @@ add_shortcode( "p4m-initiatives-list", "pm4_initiatives_list" );
 
 
 function p4m_get_all_campaigns( $refresh = false ){
-    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
-    if ( !empty( $site_link_settings ) ){
-        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
-        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+    $site_keys = get_option( 'site_link_system_api_keys', [] );
+    $token = null;
+    $url = null;
+    foreach( $site_keys as $key ){
+        if ( $key['dev_key'] === 'campaigns_stats' ){
+            $token = md5( md5( $key['token'] . $key['site_1'] . $key['site_2'] ) . current_time( 'Y-m-dH', 1 ) );
+            $url = strpos( home_url(), $key['site1'] ) !== false ? $key['site2'] : $key['site1'];
+        }
+    }
+
+    if ( !empty( $token ) && !empty( $url ) ){
         $args = [
             'method' => 'GET',
             'body' => [],
             'headers' => [
-                'Authorization' => 'Bearer ' . $transfer_token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ];
         $refresh = strpos( home_url(), "pray4movement" ) === false || $refresh;
         $response = dt_cached_api_call(
-            "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
+            "http://" . $url . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
             MINUTE_IN_SECONDS * 5,
             !$refresh );
