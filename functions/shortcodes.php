@@ -327,7 +327,8 @@ function p4m_ramadan_campaign_list( $atts ){
                 $countries_prayed_for[] = $location['country_name'];
             }
         }
-        $time_slots += $c['time_slots_covered'];
+//        $time_slots += $c['time_slots_covered'];
+        $time_slots += $c['minutes_committed'] / 15;
     }
     $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
