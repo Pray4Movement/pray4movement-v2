@@ -25,7 +25,7 @@
 								_x( 'Y', 'copyright date format', 'pray4movement' )
 							);
 							?>
-							<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
+							<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>. A project of <a href='https://GospelAmbition.org' target='_blank'>GospelAmbition.org</a>
 						</p><!-- .footer-copyright -->
 
 

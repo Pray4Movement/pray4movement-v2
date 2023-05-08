@@ -4499,9 +4499,9 @@ ul.footer-social li {
     text-decoration: underline;
 }
 
-.footer-copyright a,
-.powered-by-wordpress a {
+#site-footer .footer-copyright a {
     color: inherit;
+    text-decoration: underline;
 }
 
 .powered-by-wordpress,
@@ -4514,7 +4514,6 @@ a.to-the-top > * {
 }
 
 .footer-copyright {
-    font-weight: 600;
     margin: 0;
 }
 
@@ -5633,11 +5632,11 @@ a.to-the-top > * {
     }
 
     .footer-credits {
-        display: flex;
+        flex-basis: 60%;
     }
 
-    .footer-copyright {
-        font-weight: 700;
+    #site-footer .footer-copyright a {
+        text-decoration: underline;
     }
 
     .powered-by-wordpress {
