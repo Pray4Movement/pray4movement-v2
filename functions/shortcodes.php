@@ -235,45 +235,36 @@ function p4m_stats( WP_REST_Request $request = null ){
 }
 
 function p4m_map_stats_ramadan( $refresh = false ){
-    $site_keys = get_option( 'site_link_system_api_keys', [] );
-    $token = null;
-    $url = null;
-    foreach( $site_keys as $key ){
-        if ( $key['dev_key'] === 'campaigns_stats' ){
-            $token = md5( md5( $key['token'] . $key['site1'] . $key['site2'] ) . current_time( 'Y-m-dH', 1 ) );
-            $url = strpos( home_url(), $key['site1'] ) !== false ? $key['site2'] : $key['site1'];
-        }
-    }
+    $site_link = p4m_get_site_link();
 
-    if ( !empty( $token ) && !empty( $url ) ){
+    if ( !empty( $site_link['token'] ) && !empty( $site_link['url'] ) ){
         $args = [
             'method' => 'POST',
             'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "247_campaign" ] ] ],
             'headers' => [
-                'Authorization' => 'Bearer ' . $token,
+                'Authorization' => 'Bearer ' . $site_link['token'],
             ],
         ];
         $refresh = WP_DEBUG || $refresh;
-        $response = dt_cached_api_call( "https://" . $url . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, MINUTE_IN_SECONDS * 5, !$refresh );
+        $response = dt_cached_api_call( "https://" . $site_link['url'] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals", "POST", $args, MINUTE_IN_SECONDS * 5, !$refresh );
         return json_decode( $response, true ) ?? [];
     }
     return [];
 }
 
 function p4m_map_stats_world_networks( $refresh = false ){
-    $site_link_settings = get_option( "p4m_map_site_link_data", [] );
-    if ( !empty( $site_link_settings ) ){
-        $site_key = md5( $site_link_settings["token"] . $site_link_settings["site_1"] . $site_link_settings["site_2"] );
-        $transfer_token = md5( $site_key . current_time( 'Y-m-dH', 1 ) );
+    $site_link = p4m_get_site_link();
+
+    if ( !empty( $site_link['token'] ) && !empty( $site_link['url'] ) ){
         $args = [
             'method' => 'POST',
             'body' => [ "post_type" => "prayer_initiatives", "query" => [ 'initiative_type' => [ "ongoing" ] ] ],
             'headers' => [
-                'Authorization' => 'Bearer ' . $transfer_token,
+                'Authorization' => 'Bearer ' . $site_link['token'],
             ],
         ];
         $refresh = WP_DEBUG || $refresh;
-        $response = dt_cached_api_call( "http://" . $site_link_settings["site_1"] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals?type=ongoing", "POST", $args, DAY_IN_SECONDS, !$refresh );
+        $response = dt_cached_api_call( "https://" . $site_link['url'] . "/wp-json/dt-metrics/prayer-initiatives/get_grid_totals?type=ongoing", "POST", $args, DAY_IN_SECONDS, !$refresh );
         return json_decode( $response, true );
     }
     return [];
@@ -551,7 +542,7 @@ function pm4_initiatives_list( $atts ){
 add_shortcode( "p4m-initiatives-list", "pm4_initiatives_list" );
 
 
-function p4m_get_all_campaigns( $refresh = false ){
+function p4m_get_site_link(){
     $site_keys = get_option( 'site_link_system_api_keys', [] );
     $token = null;
     $url = null;
@@ -561,18 +552,26 @@ function p4m_get_all_campaigns( $refresh = false ){
             $url = strpos( home_url(), $key['site1'] ) !== false ? $key['site2'] : $key['site1'];
         }
     }
+    return [
+        'token' => $token,
+        'url' => $url
+    ];
+}
 
-    if ( !empty( $token ) && !empty( $url ) ){
+function p4m_get_all_campaigns( $refresh = false ){
+    $site_link = p4m_get_site_link();
+
+    if ( !empty( $site_link['token'] ) && !empty( $site_link['url'] ) ){
         $args = [
             'method' => 'GET',
             'body' => [],
             'headers' => [
-                'Authorization' => 'Bearer ' . $token,
+                'Authorization' => 'Bearer ' . $site_link['token'],
             ],
         ];
         $refresh = strpos( home_url(), "pray4movement" ) === false || $refresh;
         $response = dt_cached_api_call(
-            "https://" . $url . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
+            "https://" . $site_link['url'] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
             MINUTE_IN_SECONDS * 5,
             !$refresh );
