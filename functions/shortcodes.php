@@ -324,7 +324,7 @@ function p4m_ramadan_campaign_list( $atts ){
     $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
 
-    $sort = 'label';
+    $sort = 'campaign_progress';
     if ( isset( $_GET['sort_table'] ) ){
         $sort = sanitize_text_field( wp_unslash( $_GET['sort_table'] ) );
     }
