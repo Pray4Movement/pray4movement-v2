@@ -398,6 +398,14 @@ function p4m_ramadan_campaign_list( $atts ){
                                 style="color:#dc3822">&#9660;</span></button>
                     </form>
                 </th>
+                <th style="min-width: 66px">
+                    <form action="#campaigns-list">
+                        <button class="sort-button" name="sort_table" value="minutes_committed">
+                            <span class="hide-mobile">Time Committed</span><span class="show-mobile">Committed</span>
+                            <span style="color:#dc3822">&#9660;</span>
+                        </button>
+                    </form>
+                </th>
                 <th style="min-width: 80px;" class="wrap-header hide-mobile">
                     <button type="button" class="sort-button">Prayer Fuel</button>
                 </th>
@@ -445,6 +453,7 @@ function p4m_ramadan_campaign_list( $atts ){
                     </td>
                     <td><?php echo esc_html( $campaign['focus'] ); ?></td>
                     <td><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
+                    <td><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?></td>
                     <td class="hide-mobile"><?php echo esc_html( $flags ); ?></td>
                     <td class="hide-mobile">
                         <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
