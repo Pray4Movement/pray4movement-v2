@@ -6498,7 +6498,7 @@ a.to-the-top > * {
     justify-content: space-around;
 }
 .campaigns-stats div {
-    flex-basis: 33%;
+    flex-basis: 50%;
 }
 .campaigns-stats .stats-title {
     text-transform: uppercase;

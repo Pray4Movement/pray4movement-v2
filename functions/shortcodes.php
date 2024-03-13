@@ -341,14 +341,20 @@ function p4m_ramadan_campaign_list( $atts ){
     <!-- CAMPAIGNS STATUS: START -->
     <div class='campaigns-stats'>
         <div>
-            <div class='stats-title'><h4>24/7 prayer goal</h4></div>
-            <div class='stats-content'>100% coverage for 100+ campaigns</div>
+            <div class='stats-title'><h4>Campaigns</h4></div>
+            <div class='stats-content'>
+                <?php echo esc_html( sizeof( $campaigns ) ); ?> for <?php echo esc_html( sizeof( $countries_prayed_for ) ); ?> countries
+            </div>
         </div>
         <div>
-            <div class='stats-title'><h4>Current Status</h4></div>
-            <div class='stats-content'><?php echo esc_html( $goal_progress ); ?>% coverage
-                of <?php echo esc_html( sizeof( $campaigns ) ); ?> campaigns
-            </div>
+            <div class='stats-title'><h4>Intercessors</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $intercessors ) ); ?></div>
+        </div>
+    </div>
+    <div class='campaigns-stats'>
+        <div>
+            <div class='stats-title'><h4>15 Minute Time Slots Filled</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $time_slots ) ); ?></div>
         </div>
         <div>
             <div class="stats-title"><h4>Total Time Committed</h4></div>
@@ -357,20 +363,6 @@ function p4m_ramadan_campaign_list( $atts ){
                     <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
                 </span>
             </div>
-        </div>
-    </div>
-    <div class='campaigns-stats'>
-        <div>
-            <div class='stats-title'><h4>Intercessors</h4></div>
-            <div class='stats-content'><?php echo esc_html( number_format( $intercessors ) ); ?></div>
-        </div>
-        <div>
-            <div class='stats-title'><h4>Countries Prayed For</h4></div>
-            <div class='stats-content'><?php echo esc_html( sizeof( $countries_prayed_for ) ); ?></div>
-        </div>
-        <div>
-            <div class='stats-title'><h4>15 Minute Time Slots Filled</h4></div>
-            <div class='stats-content'><?php echo esc_html( number_format( $time_slots ) ); ?></div>
         </div>
     </div>
     <!-- CAMPAIGNS STATUS: END -->
