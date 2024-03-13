@@ -425,7 +425,7 @@ function p4m_ramadan_campaign_list( $atts ){
                     if ( $campaign['campaign_progress'] > 0 ){
                         $background_color = 'lightyellow';
                     }
-                    if ( $campaign['campaign_progress'] >= 100 ){
+                    if ( $campaign['minutes_committed'] >= 43200 ){ //minutes in 30 days
                         $background_color = 'lightgreen';
                     }
                     $campaign['campaign_progress'] .= '%';
