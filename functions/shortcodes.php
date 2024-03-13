@@ -840,7 +840,7 @@ add_shortcode('p4m-campaigns-map', function ( $atts ){
         ]
     );
 
-    $return = "<div id='chart' style='max-width: 100%;'></div>";
+    $return = "<div id='chart' ></div>";
     if ( is_user_logged_in() && !$small ){
         $return .= "<div style='text-align: right'><button id='refresh_map_data' style='background-color: white; color: #dc3822; text-transform: lowercase;'>refresh data</button></div>";
     }
