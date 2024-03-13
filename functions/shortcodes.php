@@ -394,7 +394,7 @@ function p4m_ramadan_campaign_list( $atts ){
                 <th style="min-width: 66px">
                     <form action="#campaigns-list">
                         <button class="sort-button" name="sort_table" value="campaign_progress"><span
-                                class="hide-mobile">Progress</span><span class="show-mobile">%</span> <span
+                                class="hide-mobile">Coverage</span><span class="show-mobile">%</span> <span
                                 style="color:#dc3822">&#9660;</span></button>
                     </form>
                 </th>
@@ -409,7 +409,7 @@ function p4m_ramadan_campaign_list( $atts ){
                 <th style="min-width: 80px;" class="wrap-header hide-mobile">
                     <button type="button" class="sort-button">Prayer Fuel</button>
                 </th>
-                <th class="hide-mobile" style="min-width: 70px;">Intro</th>
+                <th class="hide-mobile" style="min-width: 70px;">Video</th>
                 <th style="min-width: 70px;">Join<span class="hide-mobile"> in Prayer</span></th>
             </tr>
             </thead>
