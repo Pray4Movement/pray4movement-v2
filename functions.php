@@ -799,3 +799,14 @@ function pray4movement_get_elements_array() {
 	 */
 	return apply_filters( 'pray4movement_get_elements_array', $elements );
 }
+
+add_action('template_redirect', 'my_custom_disable_author_page');
+
+function my_custom_disable_author_page() {
+    if ( is_author() ) {
+        // Redirect to homepage, set status to 301 permenant redirect.
+        // Function defaults to 302 temporary redirect.
+        wp_redirect(get_option('home'), 301);
+        exit;
+    }
+}
