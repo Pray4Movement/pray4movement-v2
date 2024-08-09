@@ -191,6 +191,7 @@ require get_template_directory() . '/functions/p4network-post-type.php';
 require_once( get_template_directory() . '/functions/global-functions.php' );
 require_once( get_template_directory() . '/functions/shortcodes.php' );
 require_once( get_template_directory() . '/functions/campaigns-rest.php' );
+require_once( get_template_directory() . '/functions/menu.php' );
 
 /**
  * Register and Enqueue Styles.
