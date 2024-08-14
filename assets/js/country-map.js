@@ -8,6 +8,9 @@ jQuery(document).ready(function($) {
        }
        return 'admin1'
    }
+  window.mapbox_library_api.map.scrollZoom.disable();
+  const nav = new window.mapboxgl.NavigationControl({showCompass: false})
+  window.mapbox_library_api.map.addControl(nav, 'bottom-right');
     window.mapbox_library_api.map.setCenter([-119.6737077761656, 47.856600497757086])
     window.mapbox_library_api.map.setZoom(2.61);
     window.mapbox_library_api.area_map.load_detail_panel = function(location_id, name){

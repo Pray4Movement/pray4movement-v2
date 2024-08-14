@@ -5,6 +5,9 @@ jQuery(document).ready(function($) {
    window.mapbox_library_api.get_level = function (){
      return 'world';
    }
+  window.mapbox_library_api.map.scrollZoom.disable();
+  const nav = new window.mapboxgl.NavigationControl({showCompass: false})
+  window.mapbox_library_api.map.addControl(nav, 'bottom-right');
     window.mapbox_library_api.area_map.load_detail_panel = function(location_id, name){
         let location_data = window.p4m_ramadan.data.locations[location_id] || []
         let initiatives = location_data.initiatives || []
