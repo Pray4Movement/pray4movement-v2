@@ -1671,7 +1671,7 @@ ul.primary-menu {
     top: calc(100% + 2rem);
     transition: opacity 0.15s linear, transform 0.15s linear, right 0s 0.15s;
     transform: translateY(0.6rem);
-    width: 20rem;
+    width: 25rem;
     z-index: 1;
 }
 
@@ -1713,7 +1713,7 @@ ul.primary-menu {
     transition: background-color 0.15s linear;
     width: 100%;
 }
-.primary-menu ul .description, .mobile-menu ul .description{
+.primary-menu ul .description, .mobile-menu ul .description {
     display: block;
     padding-top: 0.5rem;
     font-size: 70%;
