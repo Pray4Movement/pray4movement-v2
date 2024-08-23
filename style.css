@@ -1,7 +1,7 @@
 /*
 Theme Name: Pray4Movement
 Text Domain: pray4movement
-Version: 2024.08.23
+Version: 2024.08.23.1
 Requires at least: 4.7
 Requires PHP: 5.2.4
 Description: Pray4Movement
@@ -1660,7 +1660,8 @@ ul.primary-menu {
 /* SUB MENU */
 
 .primary-menu ul {
-    background: rgba(241, 241, 241, 0.45);
+    background: white;
+    border: 1px solid #eee;
     border-radius: 0.4rem;
     color: black;
     font-size: 1.7rem;
