@@ -1,7 +1,7 @@
 /*
 Theme Name: Pray4Movement
 Text Domain: pray4movement
-Version: 2024.08.23.1
+Version: 2024.08.23.2
 Requires at least: 4.7
 Requires PHP: 5.2.4
 Description: Pray4Movement
@@ -1681,12 +1681,12 @@ ul.primary-menu {
     border-radius: 5px;
 
 }
-.primary-menu .sub-menu a {
+.primary-menu .sub-menu a, .mobile-menu .sub-menu a {
     font-weight: 500;
     display: flex;
     column-gap: 1rem;
 }
-.primary-menu .sub-menu a img {
+.primary-menu .sub-menu a img, .mobile-menu .sub-menu a img  {
     width: 50px;
     min-width: 50px;
     filter: invert(40%) sepia(94%) saturate(728%) hue-rotate(333deg) brightness(98%) contrast(106%);
