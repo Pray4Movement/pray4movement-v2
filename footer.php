@@ -33,7 +33,7 @@
 					</div><!-- .footer-credits -->
                     <div>
                         <p>
-                            <a href="/about">About</a> | <a href="/join">Join</a> | <a href="/give">Give</a>
+                            <a href="/about">About</a> | <a href="/join">Join</a> | <a href="/give" target="_blank">Give</a> | <a href="https://forum.prayer.tools/" target="_blank">Forum</a>
                         </p>
                     </div>
 
