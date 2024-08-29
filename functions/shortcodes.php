@@ -473,7 +473,7 @@ function p4m_ramadan_campaign_list( $atts ){
         </table>
         <div style="text-align: center">
             Don’t see a city, country, or people groups you have on your heart? Champion one with us <a
-                href="https://campaigns.pray4movement.org/">here</a>.
+                href="https://campaigns.prayer.tools/">here</a>.
         </div>
     </div>
     <?php
@@ -740,7 +740,7 @@ add_shortcode( 'p4m-campaigns-list', function ( $atts ){
             </tbody>
         </table>
         <div style="text-align: center">
-            Don’t see a city, country, or people groups you have on your heart? Champion one with us <a href="https://campaigns.pray4movement.org/">here</a>.
+            Don’t see a city, country, or people groups you have on your heart? Champion one with us <a href="https://campaigns.prayer.tools/">here</a>.
         </div>
     </div>
     <?php
