@@ -367,7 +367,7 @@ function p4m_ramadan_campaign_list( $atts ){
     </div>
     <!-- CAMPAIGNS STATUS: END -->
     <div class="campaign-list-wrapper">
-        <table id="campaigns-list" style="overflow-x:scroll">
+        <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;box-shadow: 0 0 0 1px #dbdbdb;">
             <thead>
             <tr>
                 <th style="width:60px" class="hide-mobile"></th>
