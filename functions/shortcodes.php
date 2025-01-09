@@ -373,14 +373,8 @@ function p4m_ramadan_campaign_list( $atts ){
                 <th style="width:60px" class="hide-mobile"></th>
                 <th>
                     <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="label">Campaign <span
+                        <button class="sort-button" name="sort_table" value="label">Join<span class="hide-mobile"> in Prayer</span><span
                                 style="color:#dc3822">&#9650;</span></button>
-                    </form>
-                </th>
-                <th>
-                    <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="focus">Focus <span style="color:#dc3822">&#9650;</span>
-                        </button>
                     </form>
                 </th>
                 <th style="min-width: 66px">
@@ -398,11 +392,7 @@ function p4m_ramadan_campaign_list( $atts ){
                         </button>
                     </form>
                 </th>
-                <th style="min-width: 80px;" class="wrap-header hide-mobile">
-                    <button type="button" class="sort-button">Prayer Fuel</button>
-                </th>
                 <th class="hide-mobile" style="min-width: 70px;">Video</th>
-                <th style="min-width: 70px;">Join<span class="hide-mobile"> in Prayer</span></th>
             </tr>
             </thead>
             <tbody>
@@ -415,7 +405,7 @@ function p4m_ramadan_campaign_list( $atts ){
                 $background_color = 'white';
                 if ( !empty( $campaign['campaign_progress'] ) && is_numeric( $campaign['campaign_progress'] ) ){
                     if ( $campaign['campaign_progress'] > 0 ){
-                        $background_color = 'lightyellow';
+                        $background_color = '#90ee9087';
                     }
                     if ( $campaign['minutes_committed'] >= 43200 ){ //minutes in 30 days
                         $background_color = 'lightgreen';
@@ -440,6 +430,7 @@ function p4m_ramadan_campaign_list( $atts ){
                         <?php else : ?>
                             <?php echo esc_html( $campaign['label'] ); ?>
                         <?php endif; ?>
+                        <br />
                         <span class="show-mobile"><?php echo esc_html( $flags ); ?></span>
 
                     </td>
