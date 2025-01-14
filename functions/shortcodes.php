@@ -392,7 +392,7 @@ function p4m_ramadan_campaign_list( $atts ){
                         </button>
                     </form>
                 </th>
-                <th class="hide-mobile" style="min-width: 70px;">Video</th>
+                <th class="hide-mobile" style="min-width: 70px;">Promo</th>
             </tr>
             </thead>
             <tbody>
