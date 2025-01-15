@@ -293,11 +293,6 @@ function p4m_ramadan_campaign_list( $atts ){
     $campaigns = p4m_get_all_campaigns();
     $campaigns = filter_campaigns( $campaigns, $atts );
 
-    $total_percent = 0;
-    $time_committed = 0;
-    $intercessors = 0;
-    $countries_prayed_for = [];
-    $time_slots = 0;
     foreach ( $campaigns as &$c ){
         $c['focus'] = $c['people_group'];
         $campaign_locations = '';
@@ -310,18 +305,7 @@ function p4m_ramadan_campaign_list( $atts ){
         if ( empty( $c['focus'] ) ){
             $c['focus'] = $campaign_locations;
         }
-        $total_percent += (int)$c['campaign_progress'];
-        $time_committed += $c['minutes_committed'];
-        $intercessors += $c['prayers_count'];
-        foreach( $c['location_grid'] ?? [] as $location ){
-            if ( !in_array( $location['country_name'], $countries_prayed_for ) ){
-                $countries_prayed_for[] = $location['country_name'];
-            }
-        }
-//        $time_slots += $c['time_slots_covered'];
-        $time_slots += $c['minutes_committed'] / 15;
     }
-    $goal_progress = sizeof( $campaigns ) > 0 ? round( $total_percent / sizeof( $campaigns ), 2 ) : 0;
 
 
     $sort = 'campaign_progress';
@@ -338,34 +322,6 @@ function p4m_ramadan_campaign_list( $atts ){
 
     ob_start();
     ?>
-    <!-- CAMPAIGNS STATUS: START -->
-    <div class='campaigns-stats'>
-        <div>
-            <div class='stats-title'><h4>Campaigns</h4></div>
-            <div class='stats-content'>
-                <?php echo esc_html( sizeof( $campaigns ) ); ?> for <?php echo esc_html( sizeof( $countries_prayed_for ) ); ?> countries
-            </div>
-        </div>
-        <div>
-            <div class='stats-title'><h4>Intercessors</h4></div>
-            <div class='stats-content'><?php echo esc_html( number_format( $intercessors ) ); ?></div>
-        </div>
-    </div>
-    <div class='campaigns-stats'>
-        <div>
-            <div class='stats-title'><h4>15 Minute Time Slots Filled</h4></div>
-            <div class='stats-content'><?php echo esc_html( number_format( $time_slots ) ); ?></div>
-        </div>
-        <div>
-            <div class="stats-title"><h4>Total Time Committed</h4></div>
-            <div class="stats-content">
-                <span class="p4m-carousel">
-                    <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
-                </span>
-            </div>
-        </div>
-    </div>
-    <!-- CAMPAIGNS STATUS: END -->
     <div class="campaign-list-wrapper">
         <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;box-shadow: 0 0 0 1px #dbdbdb;">
             <thead>
@@ -458,6 +414,78 @@ function p4m_ramadan_campaign_list( $atts ){
 }
 add_shortcode( "p4m-ramadan-campaign-list", "p4m_ramadan_campaign_list" );
 
+function p4m_ramadan_campaign_stats( $atts ){
+    $campaigns = p4m_get_all_campaigns();
+    $campaigns = filter_campaigns( $campaigns, $atts );
+    $campaigns = array_filter( $campaigns, function ( $campaign ){
+        return in_array( 'ramadan', $campaign["focus"] ?? [] ) || in_array( 'ramadan-global', $campaign["focus"] ?? [] );
+    } );
+
+    $total_percent = 0;
+    $time_committed = 0;
+    $intercessors = 0;
+    $countries_prayed_for = [];
+    $time_slots = 0;
+    foreach ( $campaigns as &$c ){
+        $c['focus'] = $c['people_group'];
+        $campaign_locations = '';
+        foreach ( $c['location_grid'] ?? [] as $location ){
+            if ( !empty( $campaign_locations ) ){
+                $campaign_locations .= ', ';
+            }
+            $campaign_locations .= $location['matched_search'] ?? $location['label'];
+        }
+        if ( empty( $c['focus'] ) ){
+            $c['focus'] = $campaign_locations;
+        }
+        $total_percent += (int)$c['campaign_progress'];
+        $time_committed += $c['minutes_committed'];
+        $intercessors += $c['prayers_count'];
+        foreach( $c['location_grid'] ?? [] as $location ){
+            if ( !in_array( $location['country_name'], $countries_prayed_for ) ){
+                $countries_prayed_for[] = $location['country_name'];
+            }
+        }
+//        $time_slots += $c['time_slots_covered'];
+        $time_slots += $c['minutes_committed'] / 15;
+    }
+
+    ob_start();
+    ?>
+    <!-- CAMPAIGNS STATUS: START -->
+    <div class='campaigns-stats'>
+        <div>
+            <div class='stats-title'><h4>Campaigns</h4></div>
+            <div class='stats-content'>
+                <?php echo esc_html( sizeof( $campaigns ) ); ?> for <?php echo esc_html( sizeof( $countries_prayed_for ) ); ?> countries
+            </div>
+        </div>
+        <div>
+            <div class='stats-title'><h4>Intercessors</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $intercessors ) ); ?></div>
+        </div>
+    </div>
+    <div class='campaigns-stats'>
+        <div>
+            <div class='stats-title'><h4>15 Minute Time Slots Filled</h4></div>
+            <div class='stats-content'><?php echo esc_html( number_format( $time_slots ) ); ?></div>
+        </div>
+        <div>
+            <div class="stats-title"><h4>Total Time Committed</h4></div>
+            <div class="stats-content">
+                <span class="p4m-carousel">
+                    <?php echo esc_html( p4m_display_minutes( $time_committed ) ); ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- CAMPAIGNS STATS: END -->
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( "p4m-ramadan-campaign-stats", "p4m_ramadan_campaign_stats" );
+
 
 function p4m_languages_list(){
     return dt_get_global_languages_list();
@@ -546,7 +574,7 @@ function p4m_get_all_campaigns( $refresh = false ){
                 'Authorization' => 'Bearer ' . $site_link['token'],
             ],
         ];
-        $refresh = strpos( home_url(), "pray4movement" ) === false || $refresh;
+        $refresh = strpos( home_url(), "prayer.tools" ) === false || $refresh;
         $response = dt_cached_api_call(
             "https://" . $site_link['url'] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
