@@ -403,10 +403,6 @@ function p4m_ramadan_campaign_list( $atts ){
             <?php endforeach; ?>
             </tbody>
         </table>
-        <div style="text-align: center">
-            Don’t see a city, country, or people groups you have on your heart? Champion one with us <a
-                href="https://campaigns.prayer.tools/">here</a>.
-        </div>
     </div>
     <?php
 
