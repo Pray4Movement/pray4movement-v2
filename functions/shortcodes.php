@@ -386,7 +386,6 @@ function p4m_ramadan_campaign_list( $atts ){
                         <?php else : ?>
                             <?php echo esc_html( $campaign['label'] ); ?>
                         <?php endif; ?>
-                        <br />
                         <span><?php echo esc_html( $flags ); ?></span>
 
                     </td>
