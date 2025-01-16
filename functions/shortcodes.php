@@ -322,6 +322,12 @@ function p4m_ramadan_campaign_list( $atts ){
 
     ob_start();
     ?>
+    <style>
+        .video-button {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
     <div class="campaign-list-wrapper">
         <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;box-shadow: 0 0 0 1px #dbdbdb;">
             <thead>
