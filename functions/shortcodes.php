@@ -389,9 +389,9 @@ function p4m_ramadan_campaign_list( $atts ){
                         <span><?php echo esc_html( $flags ); ?></span>
 
                     </td>
-                    <td><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
-                    <td><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?></td>
-                    <td class="hide-mobile">
+                    <td class="center"><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
+                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?></td>
+                    <td class="hide-mobile center">
                         <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
                             <a target="_blank" class="video-button" href="<?php echo esc_html( $campaign['promo_video'] ); ?>">
                                 <img class="video-icon" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/video.svg' ) ?>"/>
