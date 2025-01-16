@@ -592,6 +592,7 @@ function filter_campaigns( $campaigns, $atts ){
             return true;
         }
         $in_filter = empty( $atts['focus'] ) || in_array( $atts['focus'], $campaign["focus"] ?? [] );
+        $in_filter = $in_filter && ( empty( $atts['one-focus'] ) || count( $campaign['focus'] ?? [] ) === 1 );
         $in_filter = $in_filter && ( empty( $atts['type'] ) || $atts['type'] === $campaign["campaign_type"]['key'] ?? '' );
         $in_filter = $in_filter && ( empty( $atts['start_date'] ) || $campaign["start_date"] >= strtotime( $atts['start_date'] ) );
         $in_filter = $in_filter && ( empty( $atts['end_date'] ) || $campaign["end_date"] <= strtotime( $atts['end_date'] ) );
