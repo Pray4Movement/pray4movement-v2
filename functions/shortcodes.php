@@ -339,7 +339,7 @@ function p4m_ramadan_campaign_list( $atts ){
                                 style="color:#dc3822">&#9650;</span></button>
                     </form>
                 </th>
-                <th style="min-width: 66px">
+                <th style="min-width: 66px" class="hide-mobile">
                     <form action="#campaigns-list">
                         <button class="sort-button" name="sort_table" value="campaign_progress"><span
                                 class="hide-mobile">Coverage</span><span class="show-mobile">%</span> <span
@@ -354,7 +354,7 @@ function p4m_ramadan_campaign_list( $atts ){
                         </button>
                     </form>
                 </th>
-                <th class="hide-mobile" style="min-width: 70px;">Promo</th>
+                <th style="min-width: 70px;">Promo</th>
             </tr>
             </thead>
             <tbody>
@@ -395,9 +395,13 @@ function p4m_ramadan_campaign_list( $atts ){
                         <span><?php echo esc_html( $flags ); ?></span>
 
                     </td>
-                    <td class="center"><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
-                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?></td>
-                    <td class="hide-mobile center">
+                    <td class="center hide-mobile"><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
+                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?>
+                        <span class="show-mobile">
+                            (<?php echo esc_html( $campaign['campaign_progress'] ); ?>)
+                        </span>
+                    </td>
+                    <td class="center">
                         <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
                             <a target="_blank" class="video-button" href="<?php echo esc_html( $campaign['promo_video'] ); ?>">
                                 <img class="video-icon" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/video.svg' ) ?>"/>
