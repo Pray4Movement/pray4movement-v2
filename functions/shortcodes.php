@@ -372,8 +372,8 @@ function p4m_ramadan_campaign_list( $atts ){
                     if ( $campaign['minutes_committed'] >= 43200 ){ //minutes in 30 days
                         $background_color = 'lightgreen';
                     }
-                    $campaign['campaign_progress'] .= '%';
                 }
+                $campaign['campaign_progress'] .= '%';
                 foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
                     if ( !empty( $languages[$installed_fuel]['flag'] ) ){
                         $flags .= $languages[$installed_fuel]['flag'];
