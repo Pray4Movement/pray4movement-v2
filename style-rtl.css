@@ -312,39 +312,6 @@ h6,
     margin: 3.5rem 0 2rem;
 }
 
-h1,
-.heading-size-1 {
-    font-size: 3.6rem;
-    font-weight: 800;
-    line-height: 1.138888889;
-}
-
-h2,
-.heading-size-2 {
-    font-size: 3.2rem;
-}
-
-h3,
-.heading-size-3 {
-    font-size: 2.8rem;
-}
-
-h4,
-.heading-size-4 {
-    font-size: 2.4rem;
-}
-
-h5,
-.heading-size-5 {
-    font-size: 2.1rem;
-}
-
-h6,
-.heading-size-6 {
-    font-size: 1.6rem;
-    letter-spacing: 0.03125em;
-    text-transform: uppercase;
-}
 
 p {
     line-height: 1.5;
