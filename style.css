@@ -1,7 +1,7 @@
 /*
 Theme Name: Pray4Movement
 Text Domain: pray4movement
-Version: 2024.08.23.2
+Version: 2025.01.30
 Requires at least: 4.7
 Requires PHP: 5.2.4
 Description: Pray4Movement
@@ -6533,6 +6533,7 @@ a.to-the-top > * {
 }
 .campaigns-stats .stats-content {
     font-weight: bold;
+    font-size:2.5rem;
 }
 .campaigns-stats div div {
     text-align: center;
