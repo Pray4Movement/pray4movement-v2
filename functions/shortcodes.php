@@ -293,22 +293,7 @@ function p4m_ramadan_campaign_list( $atts ){
     $campaigns = p4m_get_all_campaigns();
     $campaigns = filter_campaigns( $campaigns, $atts );
 
-    foreach ( $campaigns as &$c ){
-        $c['focus'] = $c['people_group'];
-        $campaign_locations = '';
-        foreach ( $c['location_grid'] ?? [] as $location ){
-            if ( !empty( $campaign_locations ) ){
-                $campaign_locations .= ', ';
-            }
-            $campaign_locations .= $location['matched_search'] ?? $location['label'];
-        }
-        if ( empty( $c['focus'] ) ){
-            $c['focus'] = $campaign_locations;
-        }
-    }
-
-
-    $sort = 'campaign_progress';
+    $sort = 'minutes_committed';
     if ( isset( $_GET['sort_table'] ) ){
         $sort = sanitize_text_field( wp_unslash( $_GET['sort_table'] ) );
     }
@@ -320,23 +305,23 @@ function p4m_ramadan_campaign_list( $atts ){
         $campaigns = array_reverse( $campaigns );
     }
 
+    //global campaigns at end
+    uasort( $campaigns, function ( $a, $b ){
+        return (int) ( in_array( 'ramadan-global', $a['focus'] ?? [] ) ) <=> (int) ( in_array( 'ramadan-global', $b['focus'] ?? [] ) );
+    } );
+
     ob_start();
     ?>
-    <style>
-        .video-button {
-            display: flex;
-            justify-content: center;
-        }
-    </style>
+
     <div class="campaign-list-wrapper">
-        <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;box-shadow: 0 0 0 1px #dbdbdb;">
+        <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;">
             <thead>
             <tr>
-                <th style="width:60px" class="hide-mobile"></th>
                 <th>
                     <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="label">Join<span class="hide-mobile"> in Prayer</span><span
-                                style="color:#dc3822">&#9650;</span></button>
+                        <button class="sort-button" name="sort_table" value="label">
+                            Campaign <span class="hide-mobile"> and Languages</span>
+                            <span style="color:#dc3822">&#9650;</span></button>
                     </form>
                 </th>
                 <th style="min-width: 66px" class="hide-mobile">
@@ -354,25 +339,16 @@ function p4m_ramadan_campaign_list( $atts ){
                         </button>
                     </form>
                 </th>
-                <th style="min-width: 70px;">Promo</th>
+                <th style="min-width: 60px"></th>
+                <th class="hide-mobile">Promo</th>
+
             </tr>
             </thead>
             <tbody>
             <?php
-            $row_index = 0;
             $languages = p4m_languages_list();
-            foreach ( $campaigns as $campaign ) :
+            foreach ( $campaigns as $campaign ):
                 $flags = '';
-                $row_index++;
-                $background_color = 'white';
-                if ( !empty( $campaign['campaign_progress'] ) && is_numeric( $campaign['campaign_progress'] ) ){
-                    if ( $campaign['campaign_progress'] > 0 ){
-                        $background_color = '#90ee9087';
-                    }
-                    if ( $campaign['minutes_committed'] >= 43200 ){ //minutes in 30 days
-                        $background_color = 'lightgreen';
-                    }
-                }
                 $campaign['campaign_progress'] .= '%';
                 foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
                     if ( !empty( $languages[$installed_fuel]['flag'] ) ){
@@ -381,14 +357,16 @@ function p4m_ramadan_campaign_list( $atts ){
                 }
 
                 ?>
-                <tr style="background-color: <?php echo esc_html( $background_color ); ?>">
-                    <td class="hide-mobile">
-                        <?php echo esc_html( $row_index ); ?><span class="hide-mobile">.</span>
-                    </td>
+                <tr style="border: none">
                     <td>
                         <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
                             <a target="_blank"
-                               href="<?php echo esc_html( $campaign['campaign_link'] ); ?>"> <?php echo esc_html( $campaign['label'] ); ?></a>
+                               href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
+                                <?php if ( in_array( 'ramadan-global', $campaign['focus'] ?? [] ) ) : ?>
+                                    <span class="hide-mobile">Global - </span>
+                                <?php endif; ?>
+                                <?php echo esc_html( $campaign['label'] ); ?>
+                            </a>
                         <?php else : ?>
                             <?php echo esc_html( $campaign['label'] ); ?>
                         <?php endif; ?>
@@ -396,12 +374,17 @@ function p4m_ramadan_campaign_list( $atts ){
 
                     </td>
                     <td class="center hide-mobile"><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
-                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'] ) ); ?>
-                        <span class="show-mobile">
+                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'], true ) ); ?>
+                        <div class="show-mobile show-mobile-block">
                             (<?php echo esc_html( $campaign['campaign_progress'] ); ?>)
-                        </span>
+                        </div>
                     </td>
                     <td class="center">
+                        <button class="view-button">
+                            View
+                        </button>
+                    </td>
+                    <td class="center hide-mobile">
                         <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
                             <a target="_blank" class="video-button" href="<?php echo esc_html( $campaign['promo_video'] ); ?>">
                                 <img class="video-icon" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/video.svg' ) ?>"/>
@@ -462,7 +445,7 @@ function p4m_ramadan_campaign_stats( $atts ){
         <div>
             <div class='stats-title'><h4>Campaigns</h4></div>
             <div class='stats-content'>
-                <?php echo esc_html( sizeof( $campaigns ) ); ?> for <?php echo esc_html( sizeof( $countries_prayed_for ) ); ?> countries
+                <?php echo esc_html( sizeof( $campaigns ) ); ?>
             </div>
         </div>
         <div>
@@ -612,9 +595,12 @@ function filter_campaigns( $campaigns, $atts ){
 
 }
 
-function p4m_display_minutes( $time_committed ){
+function p4m_display_minutes( $time_committed, $short = false ){
     $years_committed = floor( $time_committed / 60 / 24 / 365 );
     $days_committed = floor( fmod( $time_committed / 60 / 24, 365 ) );
+    if ( $short ){
+        $days_committed = round( fmod( $time_committed / 60 / 24, 365 ), 1);
+    }
     $hours_committed = round( fmod( $time_committed / 60, 24 ) );
     $string = '';
     if ( !empty( $years_committed ) ){
@@ -623,9 +609,9 @@ function p4m_display_minutes( $time_committed ){
     }
     if ( $days_committed >= 1 ){
         $string .= $days_committed . ' ' . ( (int) $days_committed === 1 ? __( 'day', 'disciple-tools-prayer-campaigns' ) : __( 'days', 'disciple-tools-prayer-campaigns' ) );
-        $string  .= ' ';
+        $string .= ' ';
     }
-    if ( empty( $years_committed ) && !empty( $hours_committed ) ){
+    if ( empty( $years_committed ) && !empty( $hours_committed ) && ( !$short || empty( floor( $days_committed ) ) ) ){
         $string .= $hours_committed . ' ' . ( (int) $hours_committed === 1 ? __( 'hour', 'disciple-tools-prayer-campaigns' ) : __( 'hours', 'disciple-tools-prayer-campaigns' ) );
     }
     if ( empty( $string ) ){

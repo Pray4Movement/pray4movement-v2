@@ -6525,11 +6525,11 @@ a.to-the-top > * {
 }
 .campaigns-stats .stats-title {
     text-transform: uppercase;
-    color: #dc3822;
+    /*color: #dc3822;*/
     font-size: 3rem;
 }
 .campaigns-stats .stats-title h4 {
-    margin: 10px 0;
+    margin: 2rem 0 0 0;
 }
 .campaigns-stats .stats-content {
     font-weight: bold;
@@ -6543,7 +6543,17 @@ a.to-the-top > * {
     margin-top: 5px;
 }
 .video-button {
-    display: inline;
+    display: flex;
+    justify-content: center;
+}
+#campaigns-list th, #campaigns-list td {
+    border: none;
+    padding: 0.8rem 0;
+}
+#campaigns-list .view-button {
+    padding:5px;
+    font-size: 1.1rem;
+    border-radius: 5px
 }
 @media (max-width: 782px) {
     .hide-mobile {
@@ -6551,6 +6561,9 @@ a.to-the-top > * {
     }
     .show-mobile {
         display: inline-block;
+    }
+    .show-mobile-block {
+        display: block;
     }
     #campaigns-list table {
         font-size: 14px;
@@ -6566,6 +6579,9 @@ a.to-the-top > * {
     }
     #campaigns-list {
         font-size: 14px;
+    }
+    #campaigns-list th, #campaigns-list td {
+        border-bottom: 1px solid #dbdbdb;
     }
 }
 
