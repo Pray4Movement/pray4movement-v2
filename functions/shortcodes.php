@@ -339,7 +339,7 @@ function p4m_ramadan_campaign_list( $atts ){
                         </button>
                     </form>
                 </th>
-                <th style="min-width: 60px"></th>
+                <th style="min-width: 60px"><span class="hide-mobile">Get Started</span></th>
                 <th class="hide-mobile">Promo</th>
 
             </tr>
