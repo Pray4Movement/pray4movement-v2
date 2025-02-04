@@ -360,8 +360,7 @@ function p4m_ramadan_campaign_list( $atts ){
                 <tr style="border: none">
                     <td>
                         <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
-                            <a target="_blank"
-                               href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
+                            <a href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
                                 <?php if ( in_array( 'ramadan-global', $campaign['focus'] ?? [] ) ) : ?>
                                     <span class="hide-mobile">Global - </span>
                                 <?php endif; ?>
@@ -380,9 +379,9 @@ function p4m_ramadan_campaign_list( $atts ){
                         </div>
                     </td>
                     <td class="center">
-                        <button class="view-button">
+                        <a class="view-button" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
                             View
-                        </button>
+                        </a>
                     </td>
                     <td class="center hide-mobile">
                         <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
@@ -562,7 +561,7 @@ function p4m_get_all_campaigns( $refresh = false ){
                 'Authorization' => 'Bearer ' . $site_link['token'],
             ],
         ];
-        $refresh = strpos( home_url(), "prayer.tools" ) === false || $refresh;
+//        $refresh = strpos( home_url(), "prayer.tools" ) === false || $refresh;
         $response = dt_cached_api_call(
             "https://" . $site_link['url'] . "/wp-json/dt-metrics/prayer-campaigns/all_campaigns",
             "GET", $args,
@@ -839,7 +838,7 @@ add_shortcode('p4m-campaigns-map', function ( $atts ){
         ]
     );
 
-    $return = "<div id='chart' ></div>";
+    $return = "<div id='chart' style='margin-top: 10px;'></div>";
     if ( is_user_logged_in() && !$small ){
         $return .= "<div style='text-align: right'><button id='refresh_map_data' style='background-color: white; color: #dc3822; text-transform: lowercase;'>refresh data</button></div>";
     }

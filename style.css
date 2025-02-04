@@ -6552,11 +6552,20 @@ a.to-the-top > * {
 #campaigns-list th, #campaigns-list td {
     border: none;
     padding: 0.8rem 0;
+    border-bottom: 1px solid #dbdbdb;
 }
 #campaigns-list .view-button {
     padding:5px;
     font-size: 1.1rem;
-    border-radius: 5px
+    border-radius: 5px;
+    background-color: #dc3822;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.flags-line a {
+    text-decoration: none;
 }
 @media (max-width: 782px) {
     .hide-mobile {
@@ -6582,9 +6591,6 @@ a.to-the-top > * {
     }
     #campaigns-list {
         font-size: 14px;
-    }
-    #campaigns-list th, #campaigns-list td {
-        border-bottom: 1px solid #dbdbdb;
     }
 }
 
