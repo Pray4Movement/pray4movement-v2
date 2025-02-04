@@ -6593,6 +6593,24 @@ a.to-the-top > * {
         font-size: 14px;
     }
 }
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 6rem auto;
+}
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dc3822;
+}
+.separator:not(:empty)::before {
+    margin-right: 1.25em;
+}
+.separator:not(:empty)::after {
+    margin-left: 1.25em;
+}
 
 /**
  * Spinner
