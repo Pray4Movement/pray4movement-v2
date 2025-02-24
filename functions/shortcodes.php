@@ -348,6 +348,10 @@ function p4m_ramadan_campaign_list( $atts ){
             <?php
             $languages = p4m_languages_list();
             foreach ( $campaigns as $campaign ):
+                if ( $campaign['label'] === 'Hidden' ){
+                    continue;
+                }
+
                 $flags = '';
                 $campaign['campaign_progress'] .= '%';
                 foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
