@@ -312,92 +312,57 @@ function p4m_ramadan_campaign_list( $atts ){
 
     ob_start();
     ?>
-
-    <div class="campaign-list-wrapper">
-        <table id="campaigns-list" style="overflow-x:scroll;border-radius: 5px;border-collapse: collapse;border-style: hidden;">
-            <thead>
-            <tr>
-                <th>
-                    <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="label">
-                            Campaign <span class="hide-mobile"> and Languages</span>
-                            <span style="color:#dc3822">&#9650;</span></button>
-                    </form>
-                </th>
-                <th style="min-width: 66px" class="hide-mobile">
-                    <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="campaign_progress"><span
-                                class="hide-mobile">Coverage</span><span class="show-mobile">%</span> <span
-                                style="color:#dc3822">&#9660;</span></button>
-                    </form>
-                </th>
-                <th style="min-width: 66px">
-                    <form action="#campaigns-list">
-                        <button class="sort-button" name="sort_table" value="minutes_committed">
-                            <span class="hide-mobile">Time Committed</span><span class="show-mobile">Committed</span>
-                            <span style="color:#dc3822">&#9660;</span>
-                        </button>
-                    </form>
-                </th>
-                <th style="min-width: 60px"><span class="hide-mobile">Get Started</span></th>
-                <th class="hide-mobile">Promo</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            $languages = p4m_languages_list();
-            foreach ( $campaigns as $campaign ):
-                if ( $campaign['label'] === 'Hidden' ){
-                    continue;
+    <!-- ============================================ -->
+    <!-- LAYOUT 3: Card List View -->
+    <!-- ============================================ -->
+    <div class="campaigns-card-grid">
+        <?php foreach ( $campaigns as $campaign ):
+            if ( $campaign['label'] === 'Hidden' ){
+                continue;
+            }
+            $flags = '';
+            $progress_num = (int) $campaign['campaign_progress'];
+            $progress_color = $progress_num >= 100 ? '#22c55e' : ($progress_num > 50 ? '#eab308' : '#dc3822');
+            foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
+                if ( !empty( $languages[$installed_fuel]['flag'] ) ){
+                    $flags .= $languages[$installed_fuel]['flag'];
                 }
-
-                $flags = '';
-                $campaign['campaign_progress'] .= '%';
-                foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
-                    if ( !empty( $languages[$installed_fuel]['flag'] ) ){
-                        $flags .= $languages[$installed_fuel]['flag'];
-                    }
-                }
-
-                ?>
-                <tr style="border: none">
-                    <td>
+            }
+            $is_global = in_array( 'ramadan-global', $campaign['focus'] ?? [] );
+            ?>
+            <div class="campaign-card <?php echo $is_global ? 'campaign-card-global' : ''; ?>">
+                <?php if ( $is_global ) : ?>
+                    <div class="card-global-ribbon">GLOBAL</div>
+                <?php endif; ?>
+                <div class="card-header">
+                    <h4 class="card-title">
                         <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
                             <a href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
-                                <?php if ( in_array( 'ramadan-global', $campaign['focus'] ?? [] ) ) : ?>
-                                    <span class="hide-mobile">Global - </span>
-                                <?php endif; ?>
                                 <?php echo esc_html( $campaign['label'] ); ?>
                             </a>
                         <?php else : ?>
                             <?php echo esc_html( $campaign['label'] ); ?>
                         <?php endif; ?>
-                        <span><?php echo esc_html( $flags ); ?></span>
-
-                    </td>
-                    <td class="center hide-mobile"><?php echo esc_html( $campaign['campaign_progress'] ); ?></td>
-                    <td class="center"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'], true ) ); ?>
-                        <div class="show-mobile show-mobile-block">
-                            (<?php echo esc_html( $campaign['campaign_progress'] ); ?>)
+                    </h4>
+                    <div class="card-flags"><?php echo esc_html( $flags ); ?></div>
+                </div>
+                <div class="card-stats">
+                    <div class="card-stat">
+                        <span class="card-stat-label">Coverage</span>
+                        <div class="card-progress-ring" style="--progress: <?php echo min( 100, $progress_num ); ?>; --color: <?php echo esc_attr( $progress_color ); ?>;">
+                            <span class="card-progress-value"><?php echo esc_html( $progress_num ); ?>%</span>
                         </div>
-                    </td>
-                    <td class="center">
-                        <a class="view-button" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
-                            View
-                        </a>
-                    </td>
-                    <td class="center hide-mobile">
-                        <?php if ( !empty( $campaign['promo_video'] ) ) : ?>
-                            <a target="_blank" class="video-button" href="<?php echo esc_html( $campaign['promo_video'] ); ?>">
-                                <img class="video-icon" src="<?php echo esc_html( get_template_directory_uri() . '/assets/images/video.svg' ) ?>"/>
-                            </a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+                    </div>
+                    <div class="card-stat">
+                        <span class="card-stat-label">Time<br>Committed</span>
+                        <span class="card-stat-value"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'], true ) ); ?></span>
+                    </div>
+                </div>
+                <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                    <a class="card-cta" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">View Campaign</a>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
     <?php
 
