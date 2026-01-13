@@ -292,7 +292,7 @@ function p4m_map_stats_usa_states( $refresh = false ){
 function p4m_ramadan_campaign_list( $atts ){
     $campaigns = p4m_get_all_campaigns();
     $campaigns = filter_campaigns( $campaigns, $atts );
-
+    $languages = p4m_languages_list();
     $sort = 'minutes_committed';
     if ( isset( $_GET['sort_table'] ) ){
         $sort = sanitize_text_field( wp_unslash( $_GET['sort_table'] ) );
@@ -313,9 +313,9 @@ function p4m_ramadan_campaign_list( $atts ){
     ob_start();
     ?>
     <!-- ============================================ -->
-    <!-- LAYOUT 3: Card List View -->
+    <!-- LAYOUT: Row List View -->
     <!-- ============================================ -->
-    <div class="campaigns-card-grid">
+    <div class="campaigns-row-list">
         <?php foreach ( $campaigns as $campaign ):
             if ( $campaign['label'] === 'Hidden' ){
                 continue;
@@ -323,19 +323,16 @@ function p4m_ramadan_campaign_list( $atts ){
             $flags = '';
             $progress_num = (int) $campaign['campaign_progress'];
             $progress_color = $progress_num >= 100 ? '#22c55e' : ($progress_num > 50 ? '#eab308' : '#dc3822');
+            $is_global = in_array( 'ramadan-global', $campaign['focus'] ?? [] );
             foreach ( $campaign['prayer_fuel_languages'] ?? [] as $installed_fuel ){
                 if ( !empty( $languages[$installed_fuel]['flag'] ) ){
                     $flags .= $languages[$installed_fuel]['flag'];
                 }
             }
-            $is_global = in_array( 'ramadan-global', $campaign['focus'] ?? [] );
             ?>
-            <div class="campaign-card <?php echo $is_global ? 'campaign-card-global' : ''; ?>">
-                <?php if ( $is_global ) : ?>
-                    <div class="card-global-ribbon">GLOBAL</div>
-                <?php endif; ?>
-                <div class="card-header">
-                    <h4 class="card-title">
+            <div class="campaign-row <?php echo $is_global ? 'campaign-row-global' : ''; ?>">
+                <div class="row-left">
+                    <h4 class="row-title">
                         <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
                             <a href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">
                                 <?php echo esc_html( $campaign['label'] ); ?>
@@ -345,22 +342,25 @@ function p4m_ramadan_campaign_list( $atts ){
                         <?php endif; ?>
                     </h4>
                     <div class="card-flags"><?php echo esc_html( $flags ); ?></div>
+                    <?php if ( $is_global ) : ?>
+                        <span class="row-global-badge">GLOBAL</span>
+                    <?php endif; ?>
                 </div>
-                <div class="card-stats">
-                    <div class="card-stat">
-                        <span class="card-stat-label">Coverage</span>
-                        <div class="card-progress-ring" style="--progress: <?php echo min( 100, $progress_num ); ?>; --color: <?php echo esc_attr( $progress_color ); ?>;">
-                            <span class="card-progress-value"><?php echo esc_html( $progress_num ); ?>%</span>
+                <div class="row-right">
+                    <div class="row-stat">
+                        <span class="row-stat-label">Coverage</span>
+                        <div class="row-progress-ring" style="--progress: <?php echo min( 100, $progress_num ); ?>; --color: <?php echo esc_attr( $progress_color ); ?>;">
+                            <span class="row-progress-value"><?php echo esc_html( $progress_num ); ?>%</span>
                         </div>
                     </div>
-                    <div class="card-stat">
-                        <span class="card-stat-label">Time<br>Committed</span>
-                        <span class="card-stat-value"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'], true ) ); ?></span>
+                    <div class="row-stat">
+                        <span class="row-stat-label">Time Committed</span>
+                        <span class="row-stat-value"><?php echo esc_html( p4m_display_minutes( $campaign['minutes_committed'], true ) ); ?></span>
                     </div>
+                    <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
+                        <a class="row-cta" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">View Campaign</a>
+                    <?php endif; ?>
                 </div>
-                <?php if ( !empty( $campaign['campaign_link'] ) ) : ?>
-                    <a class="card-cta" href="<?php echo esc_html( $campaign['campaign_link'] ); ?>">View Campaign</a>
-                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
