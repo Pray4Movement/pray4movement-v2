@@ -6720,7 +6720,7 @@ h4.row-title {
 .row-right {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 3.5rem;
     flex-shrink: 0;
 }
 .row-stat {
