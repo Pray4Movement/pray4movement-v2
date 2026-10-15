@@ -58,7 +58,7 @@
 
 		<style>
 			helpinator-widget {
-				--helpinator-primary: #cd2653;
+				--helpinator-primary: #DC3822;
 				--helpinator-on-primary: #ffffff;
 				--helpinator-bg: #ffffff;
 				--helpinator-text: #000000;
