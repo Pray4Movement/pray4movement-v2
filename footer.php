@@ -56,6 +56,24 @@
 
 			</footer><!-- #site-footer -->
 
+		<style>
+			helpinator-widget {
+				--helpinator-primary: #cd2653;
+				--helpinator-on-primary: #ffffff;
+				--helpinator-bg: #ffffff;
+				--helpinator-text: #000000;
+				--helpinator-muted: #6d6d6d;
+				--helpinator-border: #dcd7ca;
+				--helpinator-bot-bubble: #f5efe0;
+				--helpinator-font: inherit;
+				--helpinator-radius: 0;
+				--helpinator-offset-x: 20px;
+				--helpinator-offset-y: 20px;
+			}
+		</style>
+		<script src="https://apps.gospelambition.org/js/helpinator-widget.iife.js" defer></script>
+		<helpinator-widget host="https://apps.gospelambition.org" widget-id="40db5f2e-f8a9-45d6-871b-05ed93146b8a"></helpinator-widget>
+
 		<?php wp_footer(); ?>
 
 	</body>
